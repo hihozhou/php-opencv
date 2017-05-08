@@ -34,9 +34,11 @@ extern zend_module_entry opencv_module_entry;
 #	define PHP_OPENCV_API
 #endif
 
-#ifdef ZTS
-#include "TSRM.h"
-#endif
+extern "C" {
+    #ifdef ZTS
+    #include "TSRM.h"
+    #endif
+}
 
 /*
   	Declare any global variables you may need between the BEGIN

@@ -18,13 +18,15 @@
 
 /* $Id$ */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+extern "C" {
+	#ifdef HAVE_CONFIG_H
+	#include "config.h"
+	#endif
 
-#include "php.h"
-#include "php_ini.h"
-#include "ext/standard/info.h"
+	#include "php.h"
+	#include "php_ini.h"
+	#include "ext/standard/info.h"
+}
 #include "php_opencv.h"
 
 /* If you declare any globals in php_opencv.h uncomment this:

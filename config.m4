@@ -57,7 +57,9 @@ if test "$PHP_OPENCV" != "no"; then
   dnl   -L$OPENCV_DIR/$PHP_LIBDIR -lm
   dnl ])
   dnl
-  dnl PHP_SUBST(OPENCV_SHARED_LIBADD)
 
-  PHP_NEW_EXTENSION(opencv, opencv.c, $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
+  PHP_REQUIRE_CXX()
+  PHP_SUBST(OPENCV_SHARED_LIBADD)
+  PHP_ADD_LIBRARY(stdc++, 1, OPENCV_SHARED_LIBADD)
+  PHP_NEW_EXTENSION(opencv, opencv.cc, $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
 fi

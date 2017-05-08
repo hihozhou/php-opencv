@@ -8,6 +8,6 @@
 // ARG_ENABLE("opencv", "enable opencv support", "no");
 
 if (PHP_OPENCV != "no") {
-	EXTENSION("opencv", "opencv.c", PHP_EXTNAME_SHARED, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1");
+	EXTENSION("opencv", "opencv.cc", PHP_EXTNAME_SHARED, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1");
 }
 

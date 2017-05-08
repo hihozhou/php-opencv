@@ -7,9 +7,9 @@ dnl without editing.
 
 dnl If your extension references something external, use with:
 
-dnl PHP_ARG_WITH(opencv, for opencv support,
+PHP_ARG_WITH(opencv, for opencv support,
 dnl Make sure that the comment is aligned:
-dnl [  --with-opencv             Include opencv support])
+[  --with-opencv             Include opencv support])
 
 dnl Otherwise use enable:
 

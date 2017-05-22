@@ -43,10 +43,12 @@ extern zend_module_entry opencv_module_entry;
 
 //inclue opencv code
 #include <opencv2/core/core.hpp>
+#include<opencv2/highgui/highgui.hpp>
 
 using namespace cv;
 
 extern void mat_init();
+extern void cv_init();
 
 
 

@@ -11,7 +11,7 @@ if test "$PHP_OPENCV" != "no"; then
     PHP_ADD_LIBRARY(stdc++, 1, OPENCV_SHARED_LIBADD)
     PHP_SUBST(OPENCV_SHARED_LIBADD)
 
-    PHP_NEW_EXTENSION(opencv, opencv.cc mat.cc, $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
+    PHP_NEW_EXTENSION(opencv, opencv.cc mat.cc cv.cc, $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
 
     dnl Checking for pkg-config
     AC_MSG_CHECKING(for pkg-config)

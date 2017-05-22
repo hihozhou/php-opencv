@@ -6,7 +6,7 @@
 
 zend_class_entry *mat_ce;
 
-#define Z_PHP7OBJ_P(zv)  get_mat_obj(Z_OBJ_P((zv)))
+#define Z_PHP_MAT_OBJ_P(zv)  get_mat_obj(Z_OBJ_P(zv))
 
 zend_object_handlers mat_object_handlers;
 
@@ -38,6 +38,7 @@ zend_object* mat_create_handler(zend_class_entry *type TSRMLS_DC)
     object_properties_init(&obj->std, type);
     obj->std.ce = type;
     obj->std.handlers = &mat_object_handlers;
+//    imread();
     return &obj->std;
 }
 
@@ -51,7 +52,7 @@ PHP_METHOD(Mat, __construct)
         RETURN_NULL();
     }
     mat = new Mat(rows, cols, type);
-    mat_object *obj = Z_PHP7OBJ_P(object);
+    mat_object *obj = Z_PHP_MAT_OBJ_P(object);
     //    car_object *obj = (car_object *)zend_object_store_get_object(object TSRMLS_CC);
     obj->mat = mat;
 //        zend_update_property_long(mat_ce, getThis(), "speed", sizeof("speed")-1, obj->car->speed TSRMLS_CC);
@@ -62,7 +63,7 @@ PHP_METHOD(Mat, __construct)
  */
 const zend_function_entry mat_methods[] = {
         PHP_ME(Mat, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
-        {NULL, NULL, NULL}
+        PHP_FE_END
 };
 /* }}} */
 

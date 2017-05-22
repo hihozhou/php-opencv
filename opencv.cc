@@ -94,6 +94,7 @@ PHP_MINIT_FUNCTION(opencv)
 	REGISTER_INI_ENTRIES();
 	*/
     mat_init();
+    cv_init();
 	return SUCCESS;
 }
 /* }}} */

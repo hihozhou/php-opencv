@@ -21,6 +21,13 @@
 #ifndef PHP_OPENCV_H
 #define PHP_OPENCV_H
 
+extern "C" {
+    #include "php.h"
+    #ifdef ZTS
+    #include "TSRM.h"
+    #endif
+}
+
 extern zend_module_entry opencv_module_entry;
 #define phpext_opencv_ptr &opencv_module_entry
 
@@ -34,9 +41,16 @@ extern zend_module_entry opencv_module_entry;
 #	define PHP_OPENCV_API
 #endif
 
-#ifdef ZTS
-#include "TSRM.h"
-#endif
+//inclue opencv code
+#include <opencv2/core/core.hpp>
+#include<opencv2/highgui/highgui.hpp>
+
+using namespace cv;
+
+extern void mat_init();
+extern void cv_init();
+
+
 
 /*
   	Declare any global variables you may need between the BEGIN

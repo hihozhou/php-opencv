@@ -67,6 +67,82 @@ PHP_FUNCTION(confirm_opencv_compiled)
 
 	RETURN_STR(strg);
 }
+
+PHP_FUNCTION(cv_8uc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_8UC(num));
+}
+
+PHP_FUNCTION(cv_8sc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_8SC(num));
+}
+
+
+PHP_FUNCTION(cv_16uc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_16UC(num));
+}
+
+PHP_FUNCTION(cv_16sc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_16SC(num));
+}
+
+PHP_FUNCTION(cv_32sc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_32SC(num));
+}
+
+PHP_FUNCTION(cv_32fc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_32FC(num));
+}
+
+
+PHP_FUNCTION(cv_64fc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_64FC(num));
+}
+
+
+
+
 /* }}} */
 /* The previous line is meant for vim and emacs, so it can correctly fold and
    unfold functions in source code. See the corresponding marks just before
@@ -87,7 +163,6 @@ static void php_opencv_init_globals(zend_opencv_globals *opencv_globals)
 /* }}} */
 
 
-
 /* {{{ PHP_MINIT_FUNCTION
  */
 PHP_MINIT_FUNCTION(opencv)
@@ -95,14 +170,7 @@ PHP_MINIT_FUNCTION(opencv)
 	/* If you have INI entries, uncomment these lines
 	REGISTER_INI_ENTRIES();
 	*/
-    REGISTER_LONG_CONSTANT("CV_8U", CV_8U, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("CV_8S", CV_8S, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("CV_16U", CV_16U, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("CV_16S", CV_16S, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("CV_32S", CV_32S, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("CV_32F", CV_32F, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("CV_64F", CV_64F, CONST_CS | CONST_PERSISTENT);
-    REGISTER_LONG_CONSTANT("CV_USRTYPE1", CV_USRTYPE1, CONST_CS | CONST_PERSISTENT);
+    interface_init(module_number TSRMLS_CC);
     mat_init();
     cv_init();
 	return SUCCESS;
@@ -161,6 +229,13 @@ PHP_MINFO_FUNCTION(opencv)
  */
 const zend_function_entry opencv_functions[] = {
 	PHP_FE(confirm_opencv_compiled,	NULL)		/* For testing, remove later. */
+	PHP_FE(cv_8uc_n,	NULL)
+	PHP_FE(cv_8sc_n,	NULL)
+	PHP_FE(cv_16uc_n,	NULL)
+	PHP_FE(cv_16sc_n,	NULL)
+	PHP_FE(cv_32sc_n,	NULL)
+	PHP_FE(cv_32fc_n,	NULL)
+	PHP_FE(cv_64fc_n,	NULL)
 	PHP_FE_END	/* Must be the last line in opencv_functions[] */
 };
 /* }}} */

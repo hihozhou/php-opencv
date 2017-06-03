@@ -4,14 +4,14 @@ Check for opencv constant
 <?php if (!extension_loaded("opencv")) print "skip"; ?>
 --FILE--
 <?php 
-var_dump(CV_8U);
-var_dump(CV_8S);
-var_dump(CV_16U);
-var_dump(CV_16S);
-var_dump(CV_32S);
-var_dump(CV_32F);
-var_dump(CV_64F);
-var_dump(CV_USRTYPE1);
+var_dump(CV_8UC1);
+var_dump(CV_8SC1);
+var_dump(CV_16UC1);
+var_dump(CV_16SC1);
+var_dump(CV_32SC1);
+var_dump(CV_32FC1);
+var_dump(CV_64FC1);
+var_dump(cv_8uc_n(1));
 
 ?>
 --EXPECT--
@@ -22,4 +22,4 @@ int(3)
 int(4)
 int(5)
 int(6)
-int(7)
+int(0)

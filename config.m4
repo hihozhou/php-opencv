@@ -5,6 +5,27 @@ PHP_ARG_WITH(opencv, for opencv support,
 dnl Make sure that the comment is aligned:
 [  --with-opencv             Include opencv support])
 
+
+AC_MSG_CHECKING(for php debug)
+
+
+if test -z "$PHP_DEBUG"; then
+    AC_ARG_ENABLE(debug,
+    [   --enable-debug          compile with debugging symbols],[
+        PHP_DEBUG=$enableval
+    ],[ PHP_DEBUG=no
+    ])
+else
+    AC_MSG_RESULT(no)
+fi
+
+dnl 检测是否启用调试
+if test "$PHP_OPENCV_DEBUG" != "no"; then
+    dnl 是，则设置 C 语言宏指令
+    AC_DEFINE(USE_OPENCV_DEBUG,1,[Include debugging support in example])
+fi
+
+dnl AC_MSG_ERROR(Ooops ! no pkg-config found .... )
 if test "$PHP_OPENCV" != "no"; then
     dnl Compile using c++
     PHP_REQUIRE_CXX()
@@ -50,4 +71,6 @@ if test "$PHP_OPENCV" != "no"; then
           AC_MSG_RESULT(not found)
           AC_MSG_ERROR(Ooops ! no pkg-config found .... )
     fi
+
+
 fi

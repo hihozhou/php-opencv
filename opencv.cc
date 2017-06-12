@@ -141,8 +141,6 @@ PHP_FUNCTION(cv_64fc_n)
 }
 
 
-
-
 /* }}} */
 /* The previous line is meant for vim and emacs, so it can correctly fold and
    unfold functions in source code. See the corresponding marks just before
@@ -170,7 +168,7 @@ PHP_MINIT_FUNCTION(opencv)
 	/* If you have INI entries, uncomment these lines
 	REGISTER_INI_ENTRIES();
 	*/
-    interface_init(module_number TSRMLS_CC);
+    interface_init(module_number);
     mat_init();
     cv_init();
 	return SUCCESS;

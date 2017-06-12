@@ -3,44 +3,36 @@
 #endif
 
 #include "php_opencv.h"
-
-zend_class_entry *mat_ce;
-
-#define Z_PHP_MAT_OBJ_P(zv)  get_mat_obj(Z_OBJ_P(zv))
+#include "mat.h"
 
 zend_object_handlers mat_object_handlers;
 
-typedef struct _mat_object{
-    zend_object std;
-    Mat *mat;
-}mat_object;
-
-
-/**
- * @param obj
- * @return
- */
-static inline mat_object* get_mat_obj(zend_object *obj) {
-    return (mat_object*)((char*)(obj) - XtOffsetOf(mat_object, std));
-}
+zend_class_entry *mat_ce;
 
 /**
  * @param type
  * @return
  */
-zend_object* mat_create_handler(zend_class_entry *type TSRMLS_DC)
+zend_object* mat_create_handler(zend_class_entry *type)
 {
     int size = sizeof(mat_object);
     mat_object *obj = (mat_object *)ecalloc(1,size);
     memset(obj, 0, sizeof(mat_object));
-    zend_object_std_init(&obj->std, type TSRMLS_CC);
+    zend_object_std_init(&obj->std, type);
     object_properties_init(&obj->std, type);
     obj->std.ce = type;
     obj->std.handlers = &mat_object_handlers;
-//    imread();
     return &obj->std;
 }
 
+
+void mat_free_handler(zend_object *object)
+{
+    mat_object *obj;
+    obj = get_mat_obj(object);
+    delete obj->mat;
+    zend_object_std_dtor(object);
+}
 
 /**
  * Mat __construct
@@ -51,14 +43,14 @@ PHP_METHOD(Mat, __construct)
 {
     long rows, cols, type;
     //获取请求的参数
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll", &rows, &cols, &type) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "lll", &rows, &cols, &type) == FAILURE) {
         RETURN_NULL();
     }
     mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
     obj->mat = new Mat((int)rows, (int)cols, (int)type, Scalar(0));
-    zend_update_property_long(mat_ce, getThis(), "rows", sizeof("rows")-1, rows TSRMLS_CC);
-    zend_update_property_long(mat_ce, getThis(), "cols", sizeof("cols")-1, cols TSRMLS_CC);
-    zend_update_property_long(mat_ce, getThis(), "type", sizeof("type")-1, type TSRMLS_CC);
+    zend_update_property_long(mat_ce, getThis(), "rows", sizeof("rows")-1, rows);
+    zend_update_property_long(mat_ce, getThis(), "cols", sizeof("cols")-1, cols);
+    zend_update_property_long(mat_ce, getThis(), "type", sizeof("type")-1, type);
 }
 
 /**
@@ -113,13 +105,14 @@ void mat_write_property(zval *object, zval *member, zval *value, void **cache_sl
 void mat_init(){
     zend_class_entry ce;
     INIT_NS_CLASS_ENTRY(ce,"OpenCV", "Mat", mat_methods);
-    mat_ce = zend_register_internal_class(&ce TSRMLS_CC);
+    mat_ce = zend_register_internal_class(&ce);
 //    zend_declare_property_long(mat_ce,"rows",sizeof("rows") - 1,0,ZEND_ACC_PUBLIC);
     mat_ce->create_object = mat_create_handler;
     memcpy(&mat_object_handlers,
            zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     mat_object_handlers.clone_obj = NULL;
     mat_object_handlers.write_property = mat_write_property;
+//    mat_object_handlers.free_obj = mat_free_handler;
 }
 
 

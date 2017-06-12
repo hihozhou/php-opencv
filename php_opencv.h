@@ -48,9 +48,10 @@ extern zend_module_entry opencv_module_entry;
 
 using namespace cv;
 
+
 extern void mat_init();
 extern void cv_init();
-extern void interface_init(int module_number TSRMLS_DC);
+extern void interface_init(int module_number);
 
 
 /*

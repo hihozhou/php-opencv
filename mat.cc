@@ -48,6 +48,7 @@ PHP_METHOD(Mat, __construct)
     }
     mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
     obj->mat = new Mat((int)rows, (int)cols, (int)type, Scalar(0));
+    //obj->mat = new Mat((int)rows, (int)cols, (int)type); //TODO Why Mat array not correct
     zend_update_property_long(mat_ce, getThis(), "rows", sizeof("rows")-1, rows);
     zend_update_property_long(mat_ce, getThis(), "cols", sizeof("cols")-1, cols);
     zend_update_property_long(mat_ce, getThis(), "type", sizeof("type")-1, type);

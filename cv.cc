@@ -16,14 +16,16 @@ PHP_METHOD(CV, imread)
 {
     long flags;
     char *filename;
+    long filename_len;
 
-    //todo flags default value.
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "sl", &filename, &flags) == FAILURE) {
+    flags = IMREAD_COLOR;//flags default value
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s|l", &filename,filename_len, &flags) == FAILURE) {
         RETURN_NULL();
     }
     zval *instance,rv={{0}};
     object_init_ex(instance,mat_ce);
     mat_object *obj = Z_PHP_MAT_OBJ_P(instance);
+
     Mat im=imread(filename,(int)flags);
     obj->mat=new Mat(im);
 

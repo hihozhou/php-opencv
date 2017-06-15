@@ -52,6 +52,7 @@ using namespace cv;
 extern void mat_init();
 extern void cv_init();
 extern void interface_init(int module_number);
+extern void imgcodecs_init(int module_number);
 
 
 /*

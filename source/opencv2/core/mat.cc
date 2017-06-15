@@ -2,7 +2,7 @@
 #include "config.h"
 #endif
 
-#include "php_opencv.h"
+#include "../../../php_opencv.h"
 #include "mat.h"
 
 zend_object_handlers mat_object_handlers;

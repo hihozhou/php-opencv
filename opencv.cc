@@ -169,6 +169,7 @@ PHP_MINIT_FUNCTION(opencv)
 	REGISTER_INI_ENTRIES();
 	*/
     interface_init(module_number);
+	imgcodecs_init(module_number);
     mat_init();
     cv_init();
 	return SUCCESS;

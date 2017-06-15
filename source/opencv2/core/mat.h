@@ -6,7 +6,7 @@
 #define OPENCV_MAT_H
 
 #endif //OPENCV_MAT_H
-#include "php_opencv.h"
+#include "../../../php_opencv.h"
 
 extern zend_class_entry *mat_ce;
 

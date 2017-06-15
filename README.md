@@ -20,17 +20,24 @@ make
 make install
 ```
 
-### edit php.ini
+### Configure
+
+php.ini
+
 ```
-extension="opencv.so路径"
+extension="opencv.so path"
 ```
 
 
-##开发计划
+## Development plan
+- Mat类（存放图片结构）
+- CV基本方法
 
-
-## 结构
+## Structure
 - OpenCV(namespace)
     - CV(class)
+        - imread
+        - imshow
     - Mat(class)
-        - __construct 
+        - __construct
+        - print

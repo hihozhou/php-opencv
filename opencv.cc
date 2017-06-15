@@ -67,6 +67,80 @@ PHP_FUNCTION(confirm_opencv_compiled)
 
 	RETURN_STR(strg);
 }
+
+PHP_FUNCTION(cv_8uc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_8UC(num));
+}
+
+PHP_FUNCTION(cv_8sc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_8SC(num));
+}
+
+
+PHP_FUNCTION(cv_16uc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_16UC(num));
+}
+
+PHP_FUNCTION(cv_16sc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_16SC(num));
+}
+
+PHP_FUNCTION(cv_32sc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_32SC(num));
+}
+
+PHP_FUNCTION(cv_32fc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_32FC(num));
+}
+
+
+PHP_FUNCTION(cv_64fc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_64FC(num));
+}
+
+
 /* }}} */
 /* The previous line is meant for vim and emacs, so it can correctly fold and
    unfold functions in source code. See the corresponding marks just before
@@ -86,6 +160,7 @@ static void php_opencv_init_globals(zend_opencv_globals *opencv_globals)
 */
 /* }}} */
 
+
 /* {{{ PHP_MINIT_FUNCTION
  */
 PHP_MINIT_FUNCTION(opencv)
@@ -93,6 +168,7 @@ PHP_MINIT_FUNCTION(opencv)
 	/* If you have INI entries, uncomment these lines
 	REGISTER_INI_ENTRIES();
 	*/
+    interface_init(module_number);
     mat_init();
     cv_init();
 	return SUCCESS;
@@ -151,6 +227,13 @@ PHP_MINFO_FUNCTION(opencv)
  */
 const zend_function_entry opencv_functions[] = {
 	PHP_FE(confirm_opencv_compiled,	NULL)		/* For testing, remove later. */
+	PHP_FE(cv_8uc_n,	NULL)
+	PHP_FE(cv_8sc_n,	NULL)
+	PHP_FE(cv_16uc_n,	NULL)
+	PHP_FE(cv_16sc_n,	NULL)
+	PHP_FE(cv_32sc_n,	NULL)
+	PHP_FE(cv_32fc_n,	NULL)
+	PHP_FE(cv_64fc_n,	NULL)
 	PHP_FE_END	/* Must be the last line in opencv_functions[] */
 };
 /* }}} */

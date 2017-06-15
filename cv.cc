@@ -30,7 +30,7 @@ PHP_METHOD(CV, imread)
     Mat im=imread(filename,(int)flags);
     obj->mat=new Mat(im);
 
-    //TODO object_init_ex() memory leaks detected on RETURN_ZVAL(instance,1,0)
+    //todo object_init_ex() memory leaks detected on RETURN_ZVAL(instance,1,0)
     RETURN_ZVAL(instance,0,0); //return php Mat object
 
 }
@@ -53,20 +53,24 @@ PHP_METHOD(CV, imshow)
     mat_object *obj = Z_PHP_MAT_OBJ_P(object);
     namedWindow(window_name);
     imshow(window_name,*(obj->mat));
-    waitKey(0);
-    RETURN_TRUE;
+    RETURN_NULL();
 }
 
 /**
- * CV::imwrite
+ * CV::waitKey
  * @param execute_data
  * @param return_value
  */
-//PHP_METHOD(CV,waitKey)
-//{
-//    waitKey(0);
-//    RETURN_TRUE;
-//}
+PHP_METHOD(CV,waitKey)
+{
+    long delay = 0;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "|l", &delay) == FAILURE) {
+        RETURN_NULL();
+    }
+    waitKey((int)(delay*1000));//seconds
+    RETURN_NULL();
+}
 
 PHP_METHOD(CV,imwrite)
 {
@@ -86,7 +90,7 @@ const zend_function_entry cv_methods[] = {
         PHP_ME(CV, imread, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
         PHP_ME(CV, imshow, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
         PHP_ME(CV, imwrite, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-//        PHP_ME(CV, waitKey, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+        PHP_ME(CV, waitKey, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
         PHP_FE_END
 };
 

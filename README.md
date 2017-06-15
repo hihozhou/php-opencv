@@ -20,13 +20,15 @@ make
 make install
 ```
 
-### Configure
+## Configure
 
 php.ini
 
 ```
 extension="opencv.so path"
 ```
+## Example
+
 
 
 ## Development plan
@@ -38,6 +40,8 @@ extension="opencv.so path"
     - CV(class)
         - imread
         - imshow
+        - imwrite
+        - waitKey
     - Mat(class)
         - __construct
         - print

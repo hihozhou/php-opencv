@@ -17,9 +17,9 @@ PHP_METHOD(CV, imread)
     long flags;
     char *filename;
     long filename_len;
-
     flags = IMREAD_COLOR;//flags default value
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s|l", &filename,filename_len, &flags) == FAILURE) {
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s|l", &filename,&filename_len, &flags) == FAILURE) {
         RETURN_NULL();
     }
     zval *instance,rv={{0}};
@@ -34,10 +34,22 @@ PHP_METHOD(CV, imread)
 
 }
 
+/**
+ * CV::imshow
+ * @param execute_data
+ * @param return_value
+ */
 PHP_METHOD(CV, imshow)
 {
-    Mat im;
-    RETURN_NULL();
+    zval *object;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "O", &object,mat_ce) == FAILURE) {
+        RETURN_NULL();
+    }
+    mat_object *obj = Z_PHP_MAT_OBJ_P(object);
+    namedWindow("图片");
+    imshow("图片",*(obj->mat));
+    waitKey(0);
+    RETURN_TRUE;
 }
 
 PHP_METHOD(CV,imsave)

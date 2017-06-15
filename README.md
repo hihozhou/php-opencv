@@ -31,12 +31,13 @@ extension="opencv.so path"
 
 ## Development plan
 - Mat类（存放图片结构）
-
+- CV基本方法
 
 ## Structure
 - OpenCV(namespace)
     - CV(class)
         - imread
+        - imshow
     - Mat(class)
         - __construct
         - print

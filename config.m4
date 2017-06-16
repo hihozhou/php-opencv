@@ -36,6 +36,7 @@ if test "$PHP_OPENCV" != "no"; then
     source/opencv2/core/mat.cc \
     cv.cc \
     source/opencv2/core/hal/interface.cc \
+    source/opencv2/highgui.cc \
     source/opencv2/imgcodecs/imgcodecs_c.cc"
 
 

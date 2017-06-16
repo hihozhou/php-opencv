@@ -22,16 +22,16 @@ PHP_METHOD(CV, imread)
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "s|l", &filename,&filename_len, &flags) == FAILURE) {
         RETURN_NULL();
     }
-    zval *instance,rv={{0}};
-    object_init_ex(instance,mat_ce);
-    mat_object *obj = Z_PHP_MAT_OBJ_P(instance);
+    zval instance;
+    object_init_ex(&instance,mat_ce);
+    mat_object *obj = Z_PHP_MAT_OBJ_P(&instance);
 
     //todo check file exist and throw exception on not exist
     Mat im=imread(filename,(int)flags);
     obj->mat=new Mat(im);
 
     //todo object_init_ex() memory leaks detected on RETURN_ZVAL(instance,1,0)
-    RETURN_ZVAL(instance,0,0); //return php Mat object
+    RETURN_ZVAL(&instance,0,0); //return php Mat object
 
 }
 

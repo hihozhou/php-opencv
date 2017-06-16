@@ -42,7 +42,7 @@ extern zend_module_entry opencv_module_entry;
 #endif
 
 #include <iostream>
-//inclue opencv code
+//include opencv code
 #include <opencv2/core/core.hpp>
 #include<opencv2/highgui/highgui.hpp>
 
@@ -53,6 +53,7 @@ extern void mat_init();
 extern void cv_init();
 extern void interface_init(int module_number);
 extern void imgcodecs_init(int module_number);
+extern void highgui_init(int module_number);
 
 
 /*

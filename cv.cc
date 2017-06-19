@@ -4,6 +4,7 @@
 
 #include "php_opencv.h"
 #include "source/opencv2/core/mat.h"
+#include "opencv_exception.h"
 
 zend_class_entry *cv_ce;
 
@@ -26,9 +27,21 @@ PHP_METHOD(CV, imread)
     object_init_ex(&instance,mat_ce);
     mat_object *obj = Z_PHP_MAT_OBJ_P(&instance);
 
-    //todo check file exist and throw exception on not exist
-    Mat im=imread(filename,(int)flags);
+    Mat im = imread(filename,(int)flags);
+    if(im.empty()){//check file exist
+        char *error_message = (char*)malloc(strlen("Can not load image : ") + strlen(filename) + 1);
+        strcpy(error_message,"Can not load image : ");
+        strcat(error_message,filename);
+        php_opencv_throw_exception(error_message);//throw exception
+        free(error_message);
+    }
+
     obj->mat=new Mat(im);
+
+    //update php Mat object property
+    zend_update_property_long(mat_ce, &instance, "rows", sizeof("rows")-1, obj->mat->rows);
+    zend_update_property_long(mat_ce, &instance, "cols", sizeof("cols")-1, obj->mat->cols);
+    zend_update_property_long(mat_ce, &instance, "type", sizeof("type")-1, obj->mat->type());
 
     //todo object_init_ex() memory leaks detected on RETURN_ZVAL(instance,1,0)
     RETURN_ZVAL(&instance,0,0); //return php Mat object
@@ -97,7 +110,7 @@ const zend_function_entry cv_methods[] = {
 /**
  * register CV class
  */
-void cv_init(){
+void cv_init(void){
     zend_class_entry ce;
     INIT_NS_CLASS_ENTRY(ce,"OpenCV", "CV", cv_methods);
     cv_ce = zend_register_internal_class(&ce);

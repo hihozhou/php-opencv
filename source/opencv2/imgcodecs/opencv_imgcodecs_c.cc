@@ -4,7 +4,7 @@
 #include "config.h"
 #endif
 
-void imgcodecs_init(int module_number)
+void opencv_imgcodecs_init(int module_number)
 {
     /**
      * imread const flags

@@ -4,7 +4,7 @@
 #include "config.h"
 #endif
 
-void highgui_init(int module_number)
+void opencv_highgui_init(int module_number)
 {
     /**
      * ! Flags for CV::imshow

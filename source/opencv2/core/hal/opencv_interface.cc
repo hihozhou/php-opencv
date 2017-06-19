@@ -5,7 +5,7 @@
 #endif
 
 
-void interface_init(int module_number)
+void opencv_interface_init(int module_number)
 {
     REGISTER_LONG_CONSTANT("CV_8U", CV_8U, CONST_CS | CONST_PERSISTENT);
     REGISTER_LONG_CONSTANT("CV_8S", CV_8S, CONST_CS | CONST_PERSISTENT);

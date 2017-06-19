@@ -3,11 +3,11 @@
 #endif
 
 #include "../../../php_opencv.h"
-#include "mat.h"
+#include "opencv_mat.h"
 
 zend_object_handlers mat_object_handlers;
 
-zend_class_entry *mat_ce;
+zend_class_entry *opencv_mat_ce;
 
 /**
  * @param type
@@ -42,16 +42,15 @@ void mat_free_handler(zend_object *object)
 PHP_METHOD(Mat, __construct)
 {
     long rows, cols, type;
-
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "lll", &rows, &cols, &type) == FAILURE) {
         RETURN_NULL();
     }
     mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
     obj->mat = new Mat((int)rows, (int)cols, (int)type, Scalar(0));
     //obj->mat = new Mat((int)rows, (int)cols, (int)type); //TODO Why Mat array not correct
-    zend_update_property_long(mat_ce, getThis(), "rows", sizeof("rows")-1, rows);
-    zend_update_property_long(mat_ce, getThis(), "cols", sizeof("cols")-1, cols);
-    zend_update_property_long(mat_ce, getThis(), "type", sizeof("type")-1, type);
+    zend_update_property_long(opencv_mat_ce, getThis(), "rows", sizeof("rows")-1, rows);
+    zend_update_property_long(opencv_mat_ce, getThis(), "cols", sizeof("cols")-1, cols);
+    zend_update_property_long(opencv_mat_ce, getThis(), "type", sizeof("type")-1, type);
 }
 
 /**
@@ -104,18 +103,18 @@ void mat_write_property(zval *object, zval *member, zval *value, void **cache_sl
 /**
  * Mat Init
  */
-void mat_init(){
+void opencv_mat_init(void){
     zend_class_entry ce;
     INIT_NS_CLASS_ENTRY(ce,"OpenCV", "Mat", mat_methods);
-    mat_ce = zend_register_internal_class(&ce);
+    opencv_mat_ce = zend_register_internal_class(&ce);
 
-    mat_ce->create_object = mat_create_handler;
+    opencv_mat_ce->create_object = mat_create_handler;
     memcpy(&mat_object_handlers,
            zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     mat_object_handlers.clone_obj = NULL;
     mat_object_handlers.write_property = mat_write_property;
 
-    zend_declare_property_null(mat_ce,"type",sizeof("type") - 1,ZEND_ACC_PRIVATE);//private Mat->type
+    zend_declare_property_null(opencv_mat_ce,"type",sizeof("type") - 1,ZEND_ACC_PRIVATE);//private Mat->type
 //    mat_object_handlers.free_obj = mat_free_handler;
 }
 

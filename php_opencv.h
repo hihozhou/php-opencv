@@ -50,11 +50,11 @@ using namespace cv;
 
 
 extern void opencv_exception_init(void);
-extern void mat_init(void);
-extern void cv_init(void);
-extern void interface_init(int module_number);
-extern void imgcodecs_init(int module_number);
-extern void highgui_init(int module_number);
+extern void opencv_mat_init(void);
+extern void opencv_cv_init(void);
+extern void opencv_interface_init(int module_number);
+extern void opencv_imgcodecs_init(int module_number);
+extern void opencv_highgui_init(int module_number);
 
 
 

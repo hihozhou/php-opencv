@@ -168,12 +168,12 @@ PHP_MINIT_FUNCTION(opencv)
 	/* If you have INI entries, uncomment these lines
 	REGISTER_INI_ENTRIES();
 	*/
-    interface_init(module_number);
-	imgcodecs_init(module_number);
-	highgui_init(module_number);
+    opencv_interface_init(module_number);
+    opencv_imgcodecs_init(module_number);
+    opencv_highgui_init(module_number);
     opencv_exception_init();
-    mat_init();
-    cv_init();
+    opencv_mat_init();
+    opencv_cv_init();
 	return SUCCESS;
 }
 /* }}} */

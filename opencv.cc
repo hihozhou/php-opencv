@@ -171,6 +171,7 @@ PHP_MINIT_FUNCTION(opencv)
     interface_init(module_number);
 	imgcodecs_init(module_number);
 	highgui_init(module_number);
+    opencv_exception_init();
     mat_init();
     cv_init();
 	return SUCCESS;

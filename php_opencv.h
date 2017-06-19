@@ -49,11 +49,13 @@ extern zend_module_entry opencv_module_entry;
 using namespace cv;
 
 
-extern void mat_init();
-extern void cv_init();
+extern void opencv_exception_init(void);
+extern void mat_init(void);
+extern void cv_init(void);
 extern void interface_init(int module_number);
 extern void imgcodecs_init(int module_number);
 extern void highgui_init(int module_number);
+
 
 
 /*

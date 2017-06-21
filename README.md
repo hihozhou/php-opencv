@@ -30,10 +30,32 @@ extension="opencv.so path"
 ## Example
 
 ```php
-use OpenCV\CV;
-$im=CV::imread('example.png');
+<?php 
+//Obama.php
+use function CV\{ imread, imshow, waitkey, namedWindow};
+
+$im = imread('Obama.png');//load image
+namedWindow('This is Obama id card',WINDOW_FULLSCREEN);//create window
+imshow('This is Obama id card',$im);//show image on window
+
+waitkey(0);
 
 ```
+
+result:
+
+![Obama](tests/Obama.png)
+
+Load image by gray
+
+```
+$im = imread('Obama.png',IMREAD_GRAYSCALE);
+
+```
+
+![Obama_gray](tests/Obama_gray.png)
+
+
 
 
 
@@ -66,5 +88,6 @@ $im=CV::imread('example.png');
         - print
     - imread(function)
     - imwrite(function)
+    - namedWindow(function)
     - imshow(function)
     - waitKey(function)

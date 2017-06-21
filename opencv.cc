@@ -241,7 +241,8 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, imread, ZEND_FN(opencv_imread), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, imwrite, ZEND_FN(opencv_imwrite), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, imshow, ZEND_FN(opencv_imshow), NULL)
-    ZEND_NS_NAMED_FE(OPENCV_NS, waitKey, ZEND_FN(opencv_waitKey), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, waitKey, ZEND_FN(opencv_wait_key), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, namedWindow, ZEND_FN(opencv_named_window), NULL)
 	PHP_FE_END	/* Must be the last line in opencv_functions[] */
 };
 /* }}} */

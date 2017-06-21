@@ -105,7 +105,7 @@ void mat_write_property(zval *object, zval *member, zval *value, void **cache_sl
  */
 void opencv_mat_init(void){
     zend_class_entry ce;
-    INIT_NS_CLASS_ENTRY(ce,"OpenCV", "Mat", mat_methods);
+    INIT_NS_CLASS_ENTRY(ce,OPENCV_NS, "Mat", mat_methods);
     opencv_mat_ce = zend_register_internal_class(&ce);
 
     opencv_mat_ce->create_object = mat_create_handler;

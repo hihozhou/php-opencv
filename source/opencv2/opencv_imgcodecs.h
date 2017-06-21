@@ -1,7 +1,7 @@
 #ifndef OPENCV_OPENCV_IMCODECS_H
 #define OPENCV_OPENCV_IMCODECS_H
 
-PHP_METHOD(CV, imread);
-PHP_METHOD(CV, imwrite);
+PHP_FUNCTION(opencv_imread);
+PHP_FUNCTION(opencv_imwrite);
 
 #endif //OPENCV_OPENCV_IMCODECS_H

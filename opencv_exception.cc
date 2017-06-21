@@ -13,7 +13,7 @@ zend_class_entry *opencv_exception_ce;
 void opencv_exception_init(void)
 {
     zend_class_entry ce;
-    INIT_NS_CLASS_ENTRY(ce, "OpenCV", "Exception", NULL);
+    INIT_NS_CLASS_ENTRY(ce, OPENCV_NS, "Exception", NULL);
     opencv_exception_ce = zend_register_internal_class_ex(&ce, zend_exception_get_default());
 }
 

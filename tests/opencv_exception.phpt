@@ -4,11 +4,10 @@ Mat __construct
 <?php if (!extension_loaded("opencv")) print "skip"; ?>
 --FILE--
 <?php
-use OpenCV\CV;
-//CV::imread('non-existent.png');
+use function CV\imread;
 try{
-    CV::imread('non-existent.png');
-}catch(OpenCV\Exception $e){
+    imread('non-existent.png');
+}catch(CV\Exception $e){
     echo $e->getMessage();
     exit;
 }

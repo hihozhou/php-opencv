@@ -4,15 +4,15 @@ Mat __construct
 <?php if (!extension_loaded("opencv")) print "skip"; ?>
 --FILE--
 <?php
-use OpenCV\Mat;
+use CV\Mat;
 $mat = new Mat(5,5,1);
 //$mat->rows=10;
 var_dump($mat);
 $mat->print();
 ?>
 --EXPECT--
-object(OpenCV\Mat)#1 (3) {
-  ["type":"OpenCV\Mat":private]=>
+object(CV\Mat)#1 (3) {
+  ["type":"CV\Mat":private]=>
   int(1)
   ["rows"]=>
   int(5)

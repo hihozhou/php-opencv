@@ -9,11 +9,11 @@
 
 /**
  * //todo only cli can call this function
- * CV::imshow
+ * CV\imshow
  * @param execute_data
  * @param return_value
  */
-PHP_METHOD(CV, imshow){
+PHP_FUNCTION(opencv_imshow){
     char *window_name;
     long window_name_len;
     zval *object;
@@ -27,13 +27,13 @@ PHP_METHOD(CV, imshow){
     RETURN_NULL();
 }
 
+
 /**
- * CV::waitKey
+ * CV\waitKey
  * @param execute_data
  * @param return_value
  */
-PHP_METHOD(CV,waitKey)
-{
+PHP_FUNCTION(opencv_waitKey){
     long delay = 0;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "|l", &delay) == FAILURE) {
@@ -42,6 +42,8 @@ PHP_METHOD(CV,waitKey)
     waitKey((int)(delay*1000));//seconds
     RETURN_NULL();
 }
+
+
 
 void opencv_highgui_init(int module_number)
 {

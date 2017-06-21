@@ -28,6 +28,8 @@ extern "C" {
 	#include "ext/standard/info.h"
 }
 #include "php_opencv.h"
+#include "source/opencv2/opencv_imgcodecs.h"
+#include "source/opencv2/opencv_highgui.h"
 
 /* If you declare any globals in php_opencv.h uncomment this:
 ZEND_DECLARE_MODULE_GLOBALS(opencv)
@@ -168,9 +170,11 @@ PHP_MINIT_FUNCTION(opencv)
 	/* If you have INI entries, uncomment these lines
 	REGISTER_INI_ENTRIES();
 	*/
-    interface_init(module_number);
-    mat_init();
-    cv_init();
+    opencv_interface_init(module_number);
+    opencv_imgcodecs_init(module_number);
+    opencv_highgui_init(module_number);
+    opencv_exception_init();
+    opencv_mat_init();
 	return SUCCESS;
 }
 /* }}} */
@@ -234,6 +238,10 @@ const zend_function_entry opencv_functions[] = {
 	PHP_FE(cv_32sc_n,	NULL)
 	PHP_FE(cv_32fc_n,	NULL)
 	PHP_FE(cv_64fc_n,	NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, imread, ZEND_FN(opencv_imread), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, imwrite, ZEND_FN(opencv_imwrite), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, imshow, ZEND_FN(opencv_imshow), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, waitKey, ZEND_FN(opencv_waitKey), NULL)
 	PHP_FE_END	/* Must be the last line in opencv_functions[] */
 };
 /* }}} */

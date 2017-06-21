@@ -20,24 +20,51 @@ make
 make install
 ```
 
-### Configure
+## Configure
 
 php.ini
 
 ```
 extension="opencv.so path"
 ```
+## Example
+
+```php
+use OpenCV\CV;
+$im=CV::imread('example.png');
+
+```
 
 
-## Development plan
-- Mat类（存放图片结构）
-- CV基本方法
+
+## Features
+- 1.calib3d
+- 2.contrib
+- 3.core
+- 4.imgproc
+- 5.features2d
+- 6.flann
+- 7.gpu
+- 8.highgui
+- 9.legacy
+- 10.ml
+- 11.nonfree
+- 12.objdetect
+- 13.ocl
+- 14.photo
+- 15.stitching
+- 16.superres
+- 17.ts
+- 18.video
+- 19.Videostab
 
 ## Structure
-- OpenCV(namespace)
-    - CV(class)
-        - imread
-        - imshow
+- CV(namespace)
+    - Exception(class)
     - Mat(class)
         - __construct
         - print
+    - imread(function)
+    - imwrite(function)
+    - imshow(function)
+    - waitKey(function)

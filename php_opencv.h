@@ -42,16 +42,20 @@ extern zend_module_entry opencv_module_entry;
 #endif
 
 #include <iostream>
-//inclue opencv code
+//include opencv code
 #include <opencv2/core/core.hpp>
 #include<opencv2/highgui/highgui.hpp>
 
 using namespace cv;
 
+#define OPENCV_NS "CV"
 
-extern void mat_init();
-extern void cv_init();
-extern void interface_init(int module_number);
+extern void opencv_exception_init(void);
+extern void opencv_mat_init(void);
+extern void opencv_interface_init(int module_number);
+extern void opencv_imgcodecs_init(int module_number);
+extern void opencv_highgui_init(int module_number);
+
 
 
 /*

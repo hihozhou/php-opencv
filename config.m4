@@ -33,9 +33,12 @@ if test "$PHP_OPENCV" != "no"; then
     PHP_SUBST(OPENCV_SHARED_LIBADD)
 
     opencv_source_file="opencv.cc \
-    mat.cc \
-    cv.cc \
-    source/core/interface.cc"
+    source/opencv2/core/opencv_mat.cc \
+    source/opencv2/opencv_imgcodecs.cc \
+    opencv_exception.cc \
+    source/opencv2/core/hal/opencv_interface.cc \
+    source/opencv2/opencv_highgui.cc \
+    source/opencv2/imgcodecs/opencv_imgcodecs_c.cc"
 
 
     PHP_NEW_EXTENSION(opencv, $opencv_source_file, $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)

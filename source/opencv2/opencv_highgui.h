@@ -1,0 +1,7 @@
+#ifndef OPENCV_OPENCV_HIGHGUI_H
+#define OPENCV_OPENCV_HIGHGUI_H
+
+PHP_FUNCTION(opencv_imshow);
+PHP_FUNCTION(opencv_waitKey);
+
+#endif //OPENCV_OPENCV_HIGHGUI_H

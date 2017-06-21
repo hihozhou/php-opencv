@@ -18,7 +18,7 @@ void opencv_exception_init(void)
 }
 
 
-PHP_OPENCV_API void php_opencv_throw_exception(char *error_message)
+PHP_OPENCV_API void opencv_throw_exception(char *error_message)
 {
 //    char * error_message;
 //    int status = cvGetErrStatus();

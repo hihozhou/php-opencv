@@ -175,6 +175,8 @@ PHP_MINIT_FUNCTION(opencv)
     opencv_highgui_init(module_number);
     opencv_exception_init();
     opencv_mat_init();
+    opencv_type_init(module_number);
+
 	return SUCCESS;
 }
 /* }}} */

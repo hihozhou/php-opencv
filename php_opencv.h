@@ -55,6 +55,7 @@ extern void opencv_mat_init(void);
 extern void opencv_interface_init(int module_number);
 extern void opencv_imgcodecs_init(int module_number);
 extern void opencv_highgui_init(int module_number);
+extern void opencv_type_init(int module_number);
 
 
 

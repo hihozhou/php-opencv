@@ -10,13 +10,36 @@ zend_class_entry *opencv_scalar_ce;
 zend_class_entry *opencv_size_ce;
 zend_class_entry *opencv_rect_ce;
 
+//-----------------------------------【CV\Point】--------------------------------------
+//
+//-------------------------------------------------------------------------------------
 
 zend_object_handlers point_object_handlers;
+
+/**
+ * Mat __construct
+ * @param execute_data
+ * @param return_value
+ */
+PHP_METHOD(Point, __construct)
+{
+    long x=0, y=0;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "|ll", &x, &y) == FAILURE) {
+        RETURN_NULL();
+    }
+    point_object *obj = Z_PHP_POINT_OBJ_P(getThis());
+    Point point = Point((int)x, (int)y);
+    obj->point = new Point(point);
+
+    zend_update_property_long(opencv_point_ce, getThis(), "x", sizeof("x")-1, x);
+    zend_update_property_long(opencv_point_ce, getThis(), "y", sizeof("y")-1, y);
+}
 
 /**
  * opencv_point_methods[]
  */
 const zend_function_entry opencv_point_methods[] = {
+        PHP_ME(Point, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
         PHP_FE_END
 };
 /* }}} */
@@ -51,3 +74,16 @@ void opencv_type_init(int module_number){
 //    zend_declare_property_null(opencv_point_ce,"type",sizeof("type") - 1,ZEND_ACC_PRIVATE);//private Mat->type
 //    mat_object_handlers.free_obj = mat_free_handler;
 }
+
+
+//-----------------------------------【CV\Scalar】--------------------------------------
+//
+//-------------------------------------------------------------------------------------
+
+//-----------------------------------【CV\Size】---------------------------------------
+//
+//-------------------------------------------------------------------------------------
+
+//-----------------------------------【CV\Rect】---------------------------------------
+//
+//-------------------------------------------------------------------------------------

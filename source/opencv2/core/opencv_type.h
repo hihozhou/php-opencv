@@ -16,22 +16,22 @@ extern zend_class_entry *opencv_rect_ce;
 
 typedef struct _point_object{
     zend_object std;
-    Point point;
+    Point *point;
 }point_object;
 
 typedef struct _scalar_object{
     zend_object std;
-    Scalar scalar;
+    Scalar *scalar;
 }scalar_object;
 
 typedef struct _size_object{
     zend_object std;
-    Size size;
+    Size *size;
 }size_object;
 
 typedef struct _rect_object{
     zend_object std;
-    Rect rect;
+    Rect *rect;
 }rect_object;
 
 

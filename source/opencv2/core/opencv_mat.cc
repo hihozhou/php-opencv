@@ -4,6 +4,7 @@
 
 #include "../../../php_opencv.h"
 #include "opencv_mat.h"
+#include "opencv_type.h"
 
 zend_object_handlers opencv_mat_object_handlers;
 
@@ -42,13 +43,22 @@ void mat_free_handler(zend_object *object)
 PHP_METHOD(opencv_mat, __construct)
 {
     long rows, cols, type;
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "lll", &rows, &cols, &type) == FAILURE) {
+    zval *scalar_zval = NULL;
+    Scalar scalar;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "lll|O", &rows, &cols, &type, &scalar_zval,opencv_scalar_ce) == FAILURE) {
         RETURN_NULL();
     }
+
     opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
+    if(scalar_zval!=NULL){
+        opencv_scalar_object *scalar_object = Z_PHP_SCALAR_OBJ_P(scalar_zval);
+        scalar = *(scalar_object->scalar);
+    }else{
+        scalar=Scalar(0);
+    }
     Mat M((int)rows, (int)cols, (int)type);
-    obj->mat = new Mat(M);
-//    obj->mat = new Mat((int)rows, (int)cols, (int)type, Scalar(0));
+//    obj->mat = new Mat(M);
+    obj->mat = new Mat((int)rows, (int)cols, (int)type, scalar);
     //obj->mat = new Mat((int)rows, (int)cols, (int)type); //TODO Why Mat array not correct
     zend_update_property_long(opencv_mat_ce, getThis(), "rows", sizeof("rows")-1, rows);
     zend_update_property_long(opencv_mat_ce, getThis(), "cols", sizeof("cols")-1, cols);
@@ -63,7 +73,7 @@ PHP_METHOD(opencv_mat, __construct)
 PHP_METHOD(opencv_mat, print)
 {
     opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
-    std::cout <<*(obj->mat)<< std::endl;
+    std::cout << format(*(obj->mat),Formatter::FMT_PYTHON) << std::endl;
     RETURN_NULL();
 }
 

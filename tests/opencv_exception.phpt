@@ -1,5 +1,5 @@
 --TEST--
-Mat __construct
+Exception
 --SKIPIF--
 <?php if (!extension_loaded("opencv")) print "skip"; ?>
 --FILE--

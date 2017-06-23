@@ -95,9 +95,13 @@ $im = imread('Obama.png',IMREAD_GRAYSCALE);
     - Size(class)
         - __construct
         - print
-    - Scalar(class)
+    - Rect(class)
         - __construct
         - print
+        - tl
+        - br
+        - size
+        - area
     - imread(function)
     - imwrite(function)
     - namedWindow(function)

@@ -37,12 +37,26 @@ PHP_METHOD(opencv_point, __construct)
     zend_update_property_long(opencv_point_ce, getThis(), "y", sizeof("y")-1, y);
 }
 
+/**
+ * print Mat data
+ * @param execute_data
+ * @param return_value
+ */
+PHP_METHOD(opencv_point, print)
+{
+    opencv_point_object *obj = Z_PHP_POINT_OBJ_P(getThis());
+    std::cout <<*(obj->point)<< std::endl;
+    RETURN_NULL();
+}
+
+
 
 /**
  * opencv_point_methods[]
  */
 const zend_function_entry opencv_point_methods[] = {
         PHP_ME(opencv_point, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+//        PHP_ME(opencv_point, print, NULL, ZEND_ACC_PUBLIC) //todo why Point print method can effect Mat print method
         PHP_FE_END
 };
 /* }}} */

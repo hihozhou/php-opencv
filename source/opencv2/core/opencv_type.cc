@@ -457,7 +457,7 @@ PHP_METHOD(opencv_rect, area)
 
 
 /**
- * opencv_point_methods[]
+ * opencv_rect_methods[]
  */
 const zend_function_entry opencv_rect_methods[] = {
         PHP_ME(opencv_rect, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
@@ -472,7 +472,7 @@ const zend_function_entry opencv_rect_methods[] = {
 
 
 /**
- * Point Class write_property
+ * Rect Class write_property
  * @param object
  * @param member
  * @param value

@@ -21,7 +21,7 @@ PHP_FUNCTION(opencv_imshow){
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "sO", &window_name, &window_name_len, &object,opencv_mat_ce) == FAILURE) {
         RETURN_NULL();
     }
-    mat_object *obj = Z_PHP_MAT_OBJ_P(object);
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(object);
 //    namedWindow(window_name);
     imshow(window_name,*(obj->mat));
     RETURN_NULL();

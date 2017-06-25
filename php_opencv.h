@@ -46,6 +46,7 @@ extern zend_module_entry opencv_module_entry;
 #include <opencv2/core/core.hpp>
 #include<opencv2/highgui/highgui.hpp>
 
+
 using namespace cv;
 
 #define OPENCV_NS "CV"
@@ -56,6 +57,7 @@ extern void opencv_interface_init(int module_number);
 extern void opencv_imgcodecs_init(int module_number);
 extern void opencv_highgui_init(int module_number);
 extern void opencv_type_init(int module_number);
+extern void opencv_imgproc_init(int module_number);
 
 
 

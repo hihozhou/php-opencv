@@ -14,48 +14,48 @@ extern zend_class_entry *opencv_rect_ce;
 #define Z_PHP_RECT_OBJ_P(zv)  get_rect_obj(Z_OBJ_P(zv))
 
 
-typedef struct _point_object{
+typedef struct _opencv_point_object{
     zend_object std;
     Point *point;
-}point_object;
+}opencv_point_object;
 
-typedef struct _scalar_object{
+typedef struct _opencv_scalar_object{
     zend_object std;
     Scalar *scalar;
-}scalar_object;
+}opencv_scalar_object;
 
-typedef struct _size_object{
+typedef struct _opencv_size_object{
     zend_object std;
     Size *size;
-}size_object;
+}opencv_size_object;
 
-typedef struct _rect_object{
+typedef struct _opencv_rect_object{
     zend_object std;
     Rect *rect;
-}rect_object;
+}opencv_rect_object;
 
 
 /**
  * @param obj
  * @return
  */
-static inline point_object* get_point_obj(zend_object *obj) {
-    return (point_object*)((char*)(obj) - XtOffsetOf(point_object, std));
+static inline opencv_point_object* get_point_obj(zend_object *obj) {
+    return (opencv_point_object*)((char*)(obj) - XtOffsetOf(opencv_point_object, std));
 }
 
 
-static inline scalar_object* get_scalar_obj(zend_object *obj) {
-    return (scalar_object*)((char*)(obj) - XtOffsetOf(scalar_object, std));
+static inline opencv_scalar_object* get_scalar_obj(zend_object *obj) {
+    return (opencv_scalar_object*)((char*)(obj) - XtOffsetOf(opencv_scalar_object, std));
 }
 
 
-static inline size_object* get_size_obj(zend_object *obj) {
-    return (size_object*)((char*)(obj) - XtOffsetOf(size_object, std));
+static inline opencv_size_object* get_size_obj(zend_object *obj) {
+    return (opencv_size_object*)((char*)(obj) - XtOffsetOf(opencv_size_object, std));
 }
 
 
-static inline rect_object* get_rect_obj(zend_object *obj) {
-    return (rect_object*)((char*)(obj) - XtOffsetOf(rect_object, std));
+static inline opencv_rect_object* get_rect_obj(zend_object *obj) {
+    return (opencv_rect_object*)((char*)(obj) - XtOffsetOf(opencv_rect_object, std));
 }
 
 

@@ -49,7 +49,10 @@ result:
 Load image by gray
 
 ```
-$im = imread('Obama.png',IMREAD_GRAYSCALE);
+$gray = imread('Obama.png',IMREAD_GRAYSCALE);
+//or
+use  function CV\{ cvtColor};
+$gray = cvtColor($im, COLOR_BGR2GRAY);
 
 ```
 
@@ -86,15 +89,32 @@ $im = imread('Obama.png',IMREAD_GRAYSCALE);
     - Mat(class)
         - __construct
         - print
+    - Point(class)
+        - __construct
+        - print
+    - Scalar(class)
+        - __construct
+        - print
+    - Size(class)
+        - __construct
+        - print
+    - Rect(class)
+        - __construct
+        - print
+        - tl
+        - br
+        - size
+        - area
     - imread(function)
     - imwrite(function)
     - namedWindow(function)
     - imshow(function)
     - waitKey(function)
+    - cvtColor(function)
     
     
 ## 感谢
 
-感谢[韩天峰](http://rango.swoole.com/)老大的指导，  
+感谢[韩天峰](https://github.com/matyhtf)老大的指导，  
 感谢[盘古大叔](https://github.com/pangudashu)的[php7-internal](https://github.com/pangudashu/php7-internal)项目以及平常的指导，  
 感谢`木桶技术升级交流群`和`黑夜路人技术群`、以及`PHP内核交流`的群友对技术的帮助。

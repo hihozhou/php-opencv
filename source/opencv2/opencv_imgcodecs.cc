@@ -23,7 +23,7 @@ PHP_FUNCTION(opencv_imread)
     }
     zval instance;
     object_init_ex(&instance,opencv_mat_ce);
-    mat_object *obj = Z_PHP_MAT_OBJ_P(&instance);
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(&instance);
 
     Mat im = imread(filename,(int)flags);
     if(im.empty()){//check file exist
@@ -57,7 +57,7 @@ PHP_FUNCTION(opencv_imwrite){
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "sO", &filename,&filename_len, &object,opencv_mat_ce) == FAILURE) {
         RETURN_NULL();
     }
-    mat_object *obj = Z_PHP_MAT_OBJ_P(object);
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(object);
     //todo throw exception can't save
     imwrite(filename,*(obj->mat));
     RETURN_TRUE;

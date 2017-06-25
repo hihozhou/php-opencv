@@ -11,18 +11,18 @@ extern zend_class_entry *opencv_mat_ce;
 
 #define Z_PHP_MAT_OBJ_P(zv)  get_mat_obj(Z_OBJ_P(zv))
 
-typedef struct _mat_object{
+typedef struct _opencv_mat_object{
     zend_object std;
     Mat *mat;
-}mat_object;
+}opencv_mat_object;
 
 
 /**
  * @param obj
  * @return
  */
-static inline mat_object* get_mat_obj(zend_object *obj) {
-    return (mat_object*)((char*)(obj) - XtOffsetOf(mat_object, std));
+static inline opencv_mat_object* get_mat_obj(zend_object *obj) {
+    return (opencv_mat_object*)((char*)(obj) - XtOffsetOf(opencv_mat_object, std));
 }
 
 #endif //OPENCV_MAT_H

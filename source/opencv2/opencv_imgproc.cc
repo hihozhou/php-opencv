@@ -1,11 +1,43 @@
 #include "../../php_opencv.h"
 #include "opencv_imgproc.h"
 #include <opencv2/imgproc.hpp>
+#include "core/opencv_mat.h"
 
 
 void opencv_imgproc_init(int module_number)
 {
     opencv_color_conversion_code_init(module_number);
+}
+
+/**
+ * CV\cvtColor
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_cv_t_color){
+    long code;
+    Mat dstImg;
+    zval *mat_zval;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Ol", &mat_zval,opencv_mat_ce, &code) == FAILURE) {
+        RETURN_NULL();
+    }
+    //get src mat object from mat_zval
+    opencv_mat_object *src_obj = Z_PHP_MAT_OBJ_P(mat_zval);
+    cvtColor(*(src_obj->mat),dstImg,code);
+
+    //new PHP Mat bing cv::cvtColor dstImg.
+    zval instance;
+    object_init_ex(&instance,opencv_mat_ce);
+    opencv_mat_object *dst_obj = Z_PHP_MAT_OBJ_P(&instance);
+
+    dst_obj->mat=new Mat(dstImg);
+
+    //update php Mat object property
+    zend_update_property_long(opencv_mat_ce, &instance, "rows", sizeof("rows")-1, dst_obj->mat->rows);
+    zend_update_property_long(opencv_mat_ce, &instance, "cols", sizeof("cols")-1, dst_obj->mat->cols);
+    zend_update_property_long(opencv_mat_ce, &instance, "type", sizeof("type")-1, dst_obj->mat->type());
+
+    RETURN_ZVAL(&instance,0,0); //return php Mat object
 }
 
 

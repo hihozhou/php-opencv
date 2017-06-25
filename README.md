@@ -49,7 +49,10 @@ result:
 Load image by gray
 
 ```
-$im = imread('Obama.png',IMREAD_GRAYSCALE);
+$gray = imread('Obama.png',IMREAD_GRAYSCALE);
+//or
+use  function CV\{ cvtColor};
+$gray = cvtColor($im, COLOR_BGR2GRAY);
 
 ```
 
@@ -107,6 +110,7 @@ $im = imread('Obama.png',IMREAD_GRAYSCALE);
     - namedWindow(function)
     - imshow(function)
     - waitKey(function)
+    - cvtColor(function)
     
     
 ## 感谢

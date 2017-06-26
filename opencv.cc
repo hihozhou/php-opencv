@@ -31,6 +31,7 @@ extern "C" {
 #include "source/opencv2/opencv_imgcodecs.h"
 #include "source/opencv2/opencv_highgui.h"
 #include "source/opencv2/opencv_imgproc.h"
+#include "source/opencv2/core/opencv_type.h"
 
 /* If you declare any globals in php_opencv.h uncomment this:
 ZEND_DECLARE_MODULE_GLOBALS(opencv)

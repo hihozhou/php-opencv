@@ -515,7 +515,6 @@ void opencv_rect_init(int module_number){
 }
 
 
-
 /**
  * Type Init
  */

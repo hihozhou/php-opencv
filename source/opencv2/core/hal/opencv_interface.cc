@@ -1,4 +1,5 @@
 #include "../../../../php_opencv.h"
+#include "opencv_interface.h"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,4 +52,76 @@ void opencv_interface_init(int module_number)
     REGISTER_LONG_CONSTANT("CV_64FC3", CV_64FC3, CONST_CS | CONST_PERSISTENT);
     REGISTER_LONG_CONSTANT("CV_64FC4", CV_64FC4, CONST_CS | CONST_PERSISTENT);
 
+}
+
+PHP_FUNCTION(cv_8uc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_8UC(num));
+}
+
+PHP_FUNCTION(cv_8sc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_8SC(num));
+}
+
+
+PHP_FUNCTION(cv_16uc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_16UC(num));
+}
+
+PHP_FUNCTION(cv_16sc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_16SC(num));
+}
+
+PHP_FUNCTION(cv_32sc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_32SC(num));
+}
+
+PHP_FUNCTION(cv_32fc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_32FC(num));
+}
+
+
+PHP_FUNCTION(cv_64fc_n)
+{
+    long num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(CV_64FC(num));
 }

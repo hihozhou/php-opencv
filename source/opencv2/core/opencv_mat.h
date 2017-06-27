@@ -7,6 +7,8 @@
 
 #include "../../../php_opencv.h"
 
+extern void opencv_mat_init(void);
+
 extern zend_class_entry *opencv_mat_ce;
 
 #define Z_PHP_MAT_OBJ_P(zv)  get_mat_obj(Z_OBJ_P(zv))

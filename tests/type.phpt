@@ -39,13 +39,18 @@ object(CV\Point)#1 (2) {
   int(8)
 }
 [20, 8]
-object(CV\Scalar)#2 (3) {
-  ["blue"]=>
-  int(2500)
-  ["green"]=>
-  int(0)
-  ["red"]=>
-  int(0)
+object(CV\Scalar)#2 (1) {
+  ["val"]=>
+  array(4) {
+    [0]=>
+    int(2500)
+    [1]=>
+    int(0)
+    [2]=>
+    int(0)
+    [3]=>
+    int(0)
+  }
 }
 [2500, 0, 0, 0]
 object(CV\Size)#3 (2) {

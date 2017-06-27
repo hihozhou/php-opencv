@@ -6,6 +6,7 @@ Mat __construct
 <?php
 use CV\Mat;
 use CV\Scalar;
+use const CV\CV_8UC3;
 $scalar = new Scalar(255,100,100);
 $mat = new Mat(5,5,CV_8UC3,$scalar);
 //$mat->rows=10;

@@ -111,6 +111,7 @@ $gray = cvtColor($im, COLOR_BGR2GRAY);
     - imshow(function)
     - waitKey(function)
     - cvtColor(function)
+    - ellipse(function)
     
     
 ## 感谢

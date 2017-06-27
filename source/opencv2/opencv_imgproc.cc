@@ -2,11 +2,13 @@
 #include "opencv_imgproc.h"
 #include <opencv2/imgproc.hpp>
 #include "core/opencv_mat.h"
+#include "core/opencv_type.h"
 
 
 void opencv_imgproc_init(int module_number)
 {
     opencv_color_conversion_code_init(module_number);
+    opencv_line_type_init(module_number);
 }
 
 /**
@@ -38,6 +40,34 @@ PHP_FUNCTION(opencv_cv_t_color){
     zend_update_property_long(opencv_mat_ce, &instance, "type", sizeof("type")-1, dst_obj->mat->type());
 
     RETURN_ZVAL(&instance,0,0); //return php Mat object
+}
+
+/**
+ * CV\ellipse
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_ellipse){
+
+    long angle, startAngle, endAngle, thickness = 1, lineType = LINE_8, shift = 0;
+    zval *mat_zval, *point_zval, *size_zval, *scalar_zval;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OOOlllO|lll",
+                              &mat_zval, opencv_mat_ce,
+                              &point_zval, opencv_point_ce,
+                              &size_zval, opencv_size_ce,
+                              &angle, &startAngle, &endAngle,
+                              &scalar_zval, opencv_scalar_ce,
+                              &thickness, &lineType, &shift) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *mat_obj = Z_PHP_MAT_OBJ_P(mat_zval);
+    opencv_point_object *point_obj = Z_PHP_POINT_OBJ_P(point_zval);
+    opencv_size_object *size_obj = Z_PHP_SIZE_OBJ_P(size_zval);
+    opencv_scalar_object *scalar_obj = Z_PHP_SCALAR_OBJ_P(scalar_zval);
+    ellipse(*(mat_obj->mat), *(point_obj->point), *(size_obj->size), angle, startAngle, endAngle, *(scalar_obj->scalar), thickness, lineType ,shift);
+
+    RETURN_NULL();
 }
 
 
@@ -298,4 +328,11 @@ void opencv_color_conversion_code_init(int module_number){
     REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "COLOR_BayerGR2RGB_EA", COLOR_BayerGR2RGB_EA, CONST_CS | CONST_PERSISTENT);
 
     REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "COLOR_COLORCVT_MAX", COLOR_COLORCVT_MAX, CONST_CS | CONST_PERSISTENT);
+}
+
+void opencv_line_type_init(int module_number){
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "FILLED", FILLED, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "LINE_4", LINE_4, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "LINE_8", LINE_8, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "LINE_AA", LINE_AA, CONST_CS | CONST_PERSISTENT);
 }

@@ -31,6 +31,10 @@ extern "C" {
 #include "source/opencv2/opencv_imgcodecs.h"
 #include "source/opencv2/opencv_highgui.h"
 #include "source/opencv2/opencv_imgproc.h"
+#include "source/opencv2/core/opencv_type.h"
+#include "source/opencv2/core/opencv_mat.h"
+#include "source/opencv2/core/hal/opencv_interface.h"
+#include "opencv_exception.h"
 
 /* If you declare any globals in php_opencv.h uncomment this:
 ZEND_DECLARE_MODULE_GLOBALS(opencv)
@@ -69,78 +73,6 @@ PHP_FUNCTION(confirm_opencv_compiled)
 	strg = strpprintf(0, "Congratulations! You have successfully modified ext/%.78s/config.m4. Module %.78s is now compiled into PHP.", "opencv", arg);
 
 	RETURN_STR(strg);
-}
-
-PHP_FUNCTION(cv_8uc_n)
-{
-    long num;
-
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
-        return;
-    }
-    RETURN_LONG(CV_8UC(num));
-}
-
-PHP_FUNCTION(cv_8sc_n)
-{
-    long num;
-
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
-        return;
-    }
-    RETURN_LONG(CV_8SC(num));
-}
-
-
-PHP_FUNCTION(cv_16uc_n)
-{
-    long num;
-
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
-        return;
-    }
-    RETURN_LONG(CV_16UC(num));
-}
-
-PHP_FUNCTION(cv_16sc_n)
-{
-    long num;
-
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
-        return;
-    }
-    RETURN_LONG(CV_16SC(num));
-}
-
-PHP_FUNCTION(cv_32sc_n)
-{
-    long num;
-
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
-        return;
-    }
-    RETURN_LONG(CV_32SC(num));
-}
-
-PHP_FUNCTION(cv_32fc_n)
-{
-    long num;
-
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
-        return;
-    }
-    RETURN_LONG(CV_32FC(num));
-}
-
-
-PHP_FUNCTION(cv_64fc_n)
-{
-    long num;
-
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &num) == FAILURE) {
-        return;
-    }
-    RETURN_LONG(CV_64FC(num));
 }
 
 
@@ -235,13 +167,13 @@ PHP_MINFO_FUNCTION(opencv)
  */
 const zend_function_entry opencv_functions[] = {
 	PHP_FE(confirm_opencv_compiled,	NULL)		/* For testing, remove later. */
-	PHP_FE(cv_8uc_n,	NULL)
-	PHP_FE(cv_8sc_n,	NULL)
-	PHP_FE(cv_16uc_n,	NULL)
-	PHP_FE(cv_16sc_n,	NULL)
-	PHP_FE(cv_32sc_n,	NULL)
-	PHP_FE(cv_32fc_n,	NULL)
-	PHP_FE(cv_64fc_n,	NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, cv_8uc_n, ZEND_FN(opencv_cv_8uc_n), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, cv_8sc_n, ZEND_FN(opencv_cv_8sc_n), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, cv_16uc_n, ZEND_FN(opencv_cv_16uc_n), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, cv_16sc_n, ZEND_FN(opencv_cv_16sc_n), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, cv_32sc_n, ZEND_FN(opencv_cv_32sc_n), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, cv_32fc_n, ZEND_FN(opencv_cv_32fc_n), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, cv_64fc_n, ZEND_FN(opencv_cv_64fc_n), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, imread, ZEND_FN(opencv_imread), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, imwrite, ZEND_FN(opencv_imwrite), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, imshow, ZEND_FN(opencv_imshow), NULL)

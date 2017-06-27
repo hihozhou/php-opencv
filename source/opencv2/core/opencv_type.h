@@ -1,6 +1,7 @@
 #ifndef OPENCV_OPENCV_TYPE_H
 #define OPENCV_OPENCV_TYPE_H
 
+void opencv_type_init(int module_number);
 
 extern zend_class_entry *opencv_point_ce;
 extern zend_class_entry *opencv_scalar_ce;

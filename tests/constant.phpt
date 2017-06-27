@@ -3,7 +3,9 @@ Check for opencv constant
 --SKIPIF--
 <?php if (!extension_loaded("opencv")) print "skip"; ?>
 --FILE--
-<?php 
+<?php
+use function CV\{cv_8uc_n};
+use const CV\{CV_8UC1,CV_8SC1,CV_16UC1,CV_16SC1,CV_32SC1,CV_32FC1,CV_64FC1};
 var_dump(CV_8UC1);
 var_dump(CV_8SC1);
 var_dump(CV_16UC1);

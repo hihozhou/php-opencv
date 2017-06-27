@@ -73,6 +73,14 @@ zend_object* opencv_point_create_handler(zend_class_entry *type)
     return &obj->std;
 }
 
+void opencv_point_free_obj(zend_object *object)
+{
+    opencv_point_object *obj;
+    obj = get_point_obj(object);
+    delete obj->point;
+    zend_object_std_dtor(object);
+}
+
 /**
  * Point Class write_property
  * @param object
@@ -109,6 +117,7 @@ void opencv_point_init(int module_number){
            zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     opencv_point_object_handlers.clone_obj = NULL;
     opencv_point_object_handlers.write_property = opencv_point_write_property;
+    opencv_point_object_handlers.free_obj = opencv_point_free_obj;
 }
 
 
@@ -133,6 +142,14 @@ zend_object* opencv_scalar_create_handler(zend_class_entry *type)
     obj->std.ce = type;
     obj->std.handlers = &opencv_scalar_object_handlers;
     return &obj->std;
+}
+
+void opencv_scalar_free_obj(zend_object *object)
+{
+    opencv_scalar_object *obj;
+    obj = get_scalar_obj(object);
+    delete obj->scalar;
+    zend_object_std_dtor(object);
 }
 
 
@@ -202,6 +219,7 @@ void opencv_scalar_init(int module_number){
     memcpy(&opencv_scalar_object_handlers,
            zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     opencv_scalar_object_handlers.clone_obj = NULL;
+    opencv_scalar_object_handlers.free_obj = opencv_scalar_free_obj;
 }
 
 
@@ -223,6 +241,14 @@ zend_object* opencv_size_create_handler(zend_class_entry *type)
     obj->std.ce = type;
     obj->std.handlers = &opencv_size_object_handlers;
     return &obj->std;
+}
+
+void opencv_size_free_obj(zend_object *object)
+{
+    opencv_size_object *obj;
+    obj = get_size_obj(object);
+    delete obj->size;
+    zend_object_std_dtor(object);
 }
 
 
@@ -307,6 +333,7 @@ void opencv_size_init(int module_number){
            zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     opencv_size_object_handlers.clone_obj = NULL;
     opencv_size_object_handlers.write_property = opencv_size_write_property;
+    opencv_size_object_handlers.free_obj = opencv_size_free_obj;
 }
 
 
@@ -328,6 +355,14 @@ zend_object* opencv_rect_create_handler(zend_class_entry *type)
     obj->std.ce = type;
     obj->std.handlers = &opencv_rect_object_handlers;
     return &obj->std;
+}
+
+void opencv_rect_free_obj(zend_object *object)
+{
+    opencv_rect_object *obj;
+    obj = get_rect_obj(object);
+    delete obj->rect;
+    zend_object_std_dtor(object);
 }
 
 
@@ -494,6 +529,7 @@ void opencv_rect_init(int module_number){
            zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     opencv_rect_object_handlers.clone_obj = NULL;
     opencv_rect_object_handlers.write_property = opencv_rect_write_property;
+    opencv_rect_object_handlers.free_obj = opencv_rect_free_obj;
 }
 
 

@@ -48,7 +48,7 @@ result:
 
 Load image by gray
 
-```
+```php
 $gray = imread('Obama.png',IMREAD_GRAYSCALE);
 //or
 use  function CV\{ cvtColor};
@@ -138,6 +138,7 @@ result:
     - waitKey(function)
     - cvtColor(function)
     - ellipse(function)
+    - circle(function)
     
     
 ## 感谢

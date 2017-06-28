@@ -44,8 +44,16 @@ PHP_FUNCTION(opencv_cv_t_color){
 
 /**
  * CV\ellipse
- * @param execute_data
- * @param return_value
+ * @param CV\Mat $img, Mat of original picture
+ * @param CV\Point $center, Center Point of the ellipse
+ * @param CV\Size $size, axes Half of the size of the ellipse main axes.
+ * @param int $angle
+ * @param int $startAngle
+ * @param int $endAngle
+ * @param Scalar $scalar
+ * @param int thickness,
+ * @param int lineType, line type:FILLED=-1,LINE_4=4,LINE_8=8,LINE_AA=16
+ * @param int shift
  */
 PHP_FUNCTION(opencv_ellipse){
 
@@ -66,6 +74,31 @@ PHP_FUNCTION(opencv_ellipse){
     opencv_size_object *size_obj = Z_PHP_SIZE_OBJ_P(size_zval);
     opencv_scalar_object *scalar_obj = Z_PHP_SCALAR_OBJ_P(scalar_zval);
     ellipse(*(mat_obj->mat), *(point_obj->point), *(size_obj->size), angle, startAngle, endAngle, *(scalar_obj->scalar), thickness, lineType ,shift);
+
+    RETURN_NULL();
+}
+
+/**
+ * CV\circle
+ */
+PHP_FUNCTION(opencv_circle){
+
+    long radius, thickness = 1, lineType = LINE_8, shift = 0;
+    zval *mat_zval, *point_zval, *size_zval, *scalar_zval;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OOlO|lll",
+                              &mat_zval, opencv_mat_ce,
+                              &point_zval, opencv_point_ce,
+                              &radius,
+                              &scalar_zval, opencv_scalar_ce,
+                              &thickness, &lineType, &shift) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *mat_obj = Z_PHP_MAT_OBJ_P(mat_zval);
+    opencv_point_object *point_obj = Z_PHP_POINT_OBJ_P(point_zval);
+    opencv_scalar_object *scalar_obj = Z_PHP_SCALAR_OBJ_P(scalar_zval);
+
+    circle(*(mat_obj->mat),*(point_obj->point), radius, *(scalar_obj->scalar),thickness,lineType ,shift);
 
     RETURN_NULL();
 }

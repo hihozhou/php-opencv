@@ -76,8 +76,12 @@ PHP_METHOD(opencv_mat, __construct)
  */
 PHP_METHOD(opencv_mat, print)
 {
+    long type = Formatter::FMT_DEFAULT;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "|l", &type) == FAILURE) {
+        RETURN_NULL();
+    }
     opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
-    std::cout << format(*(obj->mat),Formatter::FMT_PYTHON) << std::endl;
+    std::cout << format(*(obj->mat),int(type)) << std::endl;
     RETURN_NULL();
 }
 
@@ -122,6 +126,86 @@ PHP_METHOD(opencv_mat, zeros)
 
 
 /**
+ * Mat->clone()
+ * @param execute_data
+ * @param return_value
+ */
+PHP_METHOD(opencv_mat, clone)
+{
+    zval instance;
+    object_init_ex(&instance, opencv_mat_ce);
+    opencv_mat_object *new_obj = Z_PHP_MAT_OBJ_P(&instance);
+    opencv_mat_object *old_obj = Z_PHP_MAT_OBJ_P(getThis());
+    Mat new_mat = old_obj->mat->clone();
+
+    new_obj->mat = new Mat(new_mat);
+    //update php Mat object property
+    opencv_mat_update_property_by_c_mat(&instance, new_obj->mat);
+
+    RETURN_ZVAL(&instance,0,0); //return php Mat object
+}
+
+/**
+ * Mat->isContinuous
+ * @param execute_data
+ * @param return_value
+ */
+PHP_METHOD(opencv_mat, is_continuous)
+{
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
+    bool isContinuous = obj->mat->isContinuous();
+    RETURN_BOOL(isContinuous);
+}
+
+/**
+ * Mat->row(y)
+ * @param execute_data
+ * @param return_value
+ */
+PHP_METHOD(opencv_mat, row)
+{
+    long y;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &y) == FAILURE) {
+        RETURN_NULL();
+    }
+    zval instance;
+    object_init_ex(&instance, opencv_mat_ce);
+    opencv_mat_object *new_obj = Z_PHP_MAT_OBJ_P(&instance);
+
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
+    Mat im = obj->mat->row(y);
+    new_obj->mat=new Mat(im);
+    opencv_mat_update_property_by_c_mat(&instance, new_obj->mat);
+
+    RETURN_ZVAL(&instance,0,0); //return php Mat object
+}
+
+/**
+ * Mat->col(x)
+ * @param execute_data
+ * @param return_value
+ */
+PHP_METHOD(opencv_mat, col)
+{
+    long x;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &x) == FAILURE) {
+        RETURN_NULL();
+    }
+    zval instance;
+    object_init_ex(&instance, opencv_mat_ce);
+    opencv_mat_object *new_obj = Z_PHP_MAT_OBJ_P(&instance);
+
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
+    Mat im = obj->mat->col(x);
+    new_obj->mat=new Mat(im);
+
+    opencv_mat_update_property_by_c_mat(&instance, new_obj->mat);
+
+    RETURN_ZVAL(&instance,0,0); //return php Mat object
+}
+
+
+/**
  * mat_methods[]
  */
 const zend_function_entry mat_methods[] = {
@@ -131,6 +215,9 @@ const zend_function_entry mat_methods[] = {
         PHP_ME(opencv_mat, channels, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, print, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, zeros, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+        PHP_MALIAS(opencv_mat, isContinuous ,is_continuous, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_mat, row, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_mat, col, NULL, ZEND_ACC_PUBLIC)
         PHP_FE_END
 };
 /* }}} */

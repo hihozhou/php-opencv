@@ -139,6 +139,7 @@ result:
     - cvtColor(function)
     - ellipse(function)
     - circle(function)
+    - line(function)
     
     
 ## 感谢

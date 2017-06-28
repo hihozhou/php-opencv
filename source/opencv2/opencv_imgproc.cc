@@ -103,6 +103,29 @@ PHP_FUNCTION(opencv_circle){
     RETURN_NULL();
 }
 
+PHP_FUNCTION(opencv_line){
+
+    long thickness = 1, lineType = LINE_8, shift = 0;
+    zval *mat_zval, *start_point_zval, *end_point_zval, *scalar_zval;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OOOO|lll",
+                              &mat_zval, opencv_mat_ce,
+                              &start_point_zval, opencv_point_ce,
+                              &end_point_zval, opencv_point_ce,
+                              &scalar_zval, opencv_scalar_ce,
+                              &thickness, &lineType, &shift) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *mat_obj = Z_PHP_MAT_OBJ_P(mat_zval);
+    opencv_point_object *start_point_obj = Z_PHP_POINT_OBJ_P(start_point_zval);
+    opencv_point_object *end_point_obj = Z_PHP_POINT_OBJ_P(end_point_zval);
+    opencv_scalar_object *scalar_obj = Z_PHP_SCALAR_OBJ_P(scalar_zval);
+
+    line(*(mat_obj->mat),*(start_point_obj->point),*(end_point_obj->point),*(scalar_obj->scalar),thickness,lineType);
+
+    RETURN_NULL();
+}
+
 
 /**
  * color conversion code in CV\cvtColor,opencv enum ColorConversionCodes

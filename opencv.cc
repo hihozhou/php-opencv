@@ -182,6 +182,7 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, cvtColor, ZEND_FN(opencv_cv_t_color), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, ellipse, ZEND_FN(opencv_ellipse), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, circle, ZEND_FN(opencv_circle), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, line, ZEND_FN(opencv_line), NULL)
 	PHP_FE_END	/* Must be the last line in opencv_functions[] */
 };
 /* }}} */

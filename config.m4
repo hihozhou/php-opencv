@@ -40,6 +40,7 @@ if test "$PHP_OPENCV" != "no"; then
     source/opencv2/opencv_highgui.cc \
     source/opencv2/imgcodecs/opencv_imgcodecs_c.cc \
     source/opencv2/core/opencv_type.cc \
+    source/opencv2/opencv_core.cc \
     source/opencv2/opencv_imgproc.cc"
 
 

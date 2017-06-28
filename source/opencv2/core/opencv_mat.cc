@@ -76,8 +76,12 @@ PHP_METHOD(opencv_mat, __construct)
  */
 PHP_METHOD(opencv_mat, print)
 {
+    long type = Formatter::FMT_DEFAULT;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "|l", &type) == FAILURE) {
+        RETURN_NULL();
+    }
     opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
-    std::cout << format(*(obj->mat),Formatter::FMT_PYTHON) << std::endl;
+    std::cout << format(*(obj->mat),int(type)) << std::endl;
     RETURN_NULL();
 }
 

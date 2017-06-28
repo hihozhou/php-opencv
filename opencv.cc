@@ -35,6 +35,7 @@ extern "C" {
 #include "source/opencv2/core/opencv_mat.h"
 #include "source/opencv2/core/hal/opencv_interface.h"
 #include "opencv_exception.h"
+#include "source/opencv2/opencv_core.h"
 
 /* If you declare any globals in php_opencv.h uncomment this:
 ZEND_DECLARE_MODULE_GLOBALS(opencv)
@@ -110,6 +111,7 @@ PHP_MINIT_FUNCTION(opencv)
     opencv_mat_init();
     opencv_type_init(module_number);
     opencv_imgproc_init(module_number);
+	opencv_core_init(module_number);
 
 	return SUCCESS;
 }

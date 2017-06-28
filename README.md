@@ -149,6 +149,8 @@ result:
     - rectangle(function)
     - rectangleByPoint(function)
     - rectangleByRect(function)
+    - Formatter(class)
+    
     
     
 ## 感谢

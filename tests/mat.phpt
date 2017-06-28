@@ -4,17 +4,17 @@ Mat __construct
 <?php if (!extension_loaded("opencv")) print "skip"; ?>
 --FILE--
 <?php
-use CV\Mat;
+use CV\{Mat,Formatter};
 use CV\Scalar;
 use const CV\{CV_8UC1, CV_8UC3};
 $scalar = new Scalar(255,100,100);
 $mat = new Mat(5,5,CV_8UC3,$scalar);
 //$mat->rows=10;
 var_dump($mat);
-$mat->print();
+$mat->print(Formatter::FMT_PYTHON);
 $zeros = Mat::zeros(10,10,CV_8UC1);
 var_dump($zeros);
-$zeros->print();
+$zeros->print(Formatter::FMT_PYTHON);
 ?>
 --EXPECT--
 object(CV\Mat)#2 (3) {

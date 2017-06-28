@@ -77,11 +77,33 @@ PHP_METHOD(opencv_mat, print)
     RETURN_NULL();
 }
 
+
+PHP_METHOD(opencv_mat, type)
+{
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
+    RETURN_LONG(obj->mat->type());
+}
+
+PHP_METHOD(opencv_mat, depth)
+{
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
+    RETURN_LONG(obj->mat->depth());
+}
+
+PHP_METHOD(opencv_mat, channels)
+{
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
+    RETURN_LONG(obj->mat->channels());
+}
+
 /**
  * mat_methods[]
  */
 const zend_function_entry mat_methods[] = {
         PHP_ME(opencv_mat, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+        PHP_ME(opencv_mat, type, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_mat, depth, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_mat, channels, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, print, NULL, ZEND_ACC_PUBLIC)
         PHP_FE_END
 };

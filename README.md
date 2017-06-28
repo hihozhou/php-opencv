@@ -118,6 +118,9 @@ result:
         - type
         - depth
         - channels
+        - isContinuous
+        - row
+        - col
     - Point(class)
         - __construct
         - print

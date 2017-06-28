@@ -27,4 +27,6 @@ static inline opencv_mat_object* get_mat_obj(zend_object *obj) {
     return (opencv_mat_object*)((char*)(obj) - XtOffsetOf(opencv_mat_object, std));
 }
 
+void opencv_mat_update_property_by_c_mat(zval *z,Mat *mat);
+
 #endif //OPENCV_MAT_H

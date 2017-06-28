@@ -35,6 +35,12 @@ void opencv_mat_free_obj(zend_object *object)
     zend_object_std_dtor(object);
 }
 
+void opencv_mat_update_property_by_c_mat(zval *z,Mat *mat){
+    zend_update_property_long(opencv_mat_ce, z, "rows", sizeof("rows")-1, mat->rows);
+    zend_update_property_long(opencv_mat_ce, z, "cols", sizeof("cols")-1, mat->cols);
+    zend_update_property_long(opencv_mat_ce, z, "type", sizeof("type")-1, mat->type());
+}
+
 /**
  * Mat __construct
  * @param execute_data
@@ -60,9 +66,7 @@ PHP_METHOD(opencv_mat, __construct)
 //    obj->mat = new Mat(M);
     obj->mat = new Mat((int)rows, (int)cols, (int)type, scalar);
     //obj->mat = new Mat((int)rows, (int)cols, (int)type); //TODO Why Mat array not correct
-    zend_update_property_long(opencv_mat_ce, getThis(), "rows", sizeof("rows")-1, rows);
-    zend_update_property_long(opencv_mat_ce, getThis(), "cols", sizeof("cols")-1, cols);
-    zend_update_property_long(opencv_mat_ce, getThis(), "type", sizeof("type")-1, type);
+    opencv_mat_update_property_by_c_mat(getThis(), obj->mat);
 }
 
 /**
@@ -96,6 +100,27 @@ PHP_METHOD(opencv_mat, channels)
     RETURN_LONG(obj->mat->channels());
 }
 
+
+PHP_METHOD(opencv_mat, zeros)
+{
+    long rows, cols, flags = IMREAD_COLOR;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ll|l", &rows, &cols, &flags) == FAILURE) {
+        RETURN_NULL();
+    }
+    zval instance;
+    object_init_ex(&instance, opencv_mat_ce);
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(&instance);
+
+    Mat im = Mat::zeros((int)rows, (int)cols, (int)flags);
+
+    obj->mat=new Mat(im);
+    //update php Mat object property
+    opencv_mat_update_property_by_c_mat(&instance, obj->mat);
+
+    RETURN_ZVAL(&instance,0,0); //return php Mat object
+}
+
+
 /**
  * mat_methods[]
  */
@@ -105,6 +130,7 @@ const zend_function_entry mat_methods[] = {
         PHP_ME(opencv_mat, depth, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, channels, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, print, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_mat, zeros, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
         PHP_FE_END
 };
 /* }}} */

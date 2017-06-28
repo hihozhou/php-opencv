@@ -30,7 +30,6 @@ extension="opencv.so path"
 ## Example
 
 ```php
-<?php 
 //Obama.php
 use function CV\{ imread, imshow, waitkey, namedWindow};
 
@@ -115,6 +114,10 @@ result:
     - Mat(class)
         - __construct
         - print
+        - zeros
+        - type
+        - depth
+        - channels
     - Point(class)
         - __construct
         - print
@@ -139,6 +142,10 @@ result:
     - cvtColor(function)
     - ellipse(function)
     - circle(function)
+    - line(function)
+    - rectangle(function)
+    - rectangleByPoint(function)
+    - rectangleByRect(function)
     
     
 ## 感谢

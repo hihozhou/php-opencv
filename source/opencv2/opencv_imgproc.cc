@@ -103,6 +103,114 @@ PHP_FUNCTION(opencv_circle){
     RETURN_NULL();
 }
 
+/**
+ * CV\line
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_line){
+
+    long thickness = 1, lineType = LINE_8, shift = 0;
+    zval *mat_zval, *start_point_zval, *end_point_zval, *scalar_zval;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OOOO|lll",
+                              &mat_zval, opencv_mat_ce,
+                              &start_point_zval, opencv_point_ce,
+                              &end_point_zval, opencv_point_ce,
+                              &scalar_zval, opencv_scalar_ce,
+                              &thickness, &lineType, &shift) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *mat_obj = Z_PHP_MAT_OBJ_P(mat_zval);
+    opencv_point_object *start_point_obj = Z_PHP_POINT_OBJ_P(start_point_zval);
+    opencv_point_object *end_point_obj = Z_PHP_POINT_OBJ_P(end_point_zval);
+    opencv_scalar_object *scalar_obj = Z_PHP_SCALAR_OBJ_P(scalar_zval);
+
+    line(*(mat_obj->mat),*(start_point_obj->point),*(end_point_obj->point),*(scalar_obj->scalar), thickness, lineType, shift);
+
+    RETURN_NULL();
+}
+
+/**
+ * CV\rectangle
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_rectangle){
+
+    long startX, startY, endX, endY;
+    long thickness = 1, lineType = LINE_8, shift = 0;
+    zval *mat_zval, *color_zval;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OllllO|lll",
+                              &mat_zval, opencv_mat_ce,
+                              &startX, &startY, &endX, &endY,
+                              &color_zval, opencv_scalar_ce,
+                              &thickness, &lineType, &shift) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *mat_obj = Z_PHP_MAT_OBJ_P(mat_zval);
+    opencv_scalar_object *scalar_obj = Z_PHP_SCALAR_OBJ_P(color_zval);
+
+    rectangle(*(mat_obj->mat), Point(startX, startY), Point(endX, endY), *(scalar_obj->scalar), thickness, lineType, shift);
+
+    RETURN_NULL();
+}
+
+/**
+ * CV\rectangleByPoint
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_rectangle_by_point){
+
+    long thickness = 1, lineType = LINE_8, shift = 0;
+    zval *mat_zval, *start_point_zval, *end_point_zval, *color_zval;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OOOO|lll",
+                              &mat_zval, opencv_mat_ce,
+                              &start_point_zval, opencv_point_ce,
+                              &end_point_zval, opencv_point_ce,
+                              &color_zval, opencv_scalar_ce,
+                              &thickness, &lineType, &shift) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *mat_obj = Z_PHP_MAT_OBJ_P(mat_zval);
+    opencv_point_object *start_point_obj = Z_PHP_POINT_OBJ_P(start_point_zval);
+    opencv_point_object *end_point_obj = Z_PHP_POINT_OBJ_P(end_point_zval);
+    opencv_scalar_object *scalar_obj = Z_PHP_SCALAR_OBJ_P(color_zval);
+
+    rectangle(*(mat_obj->mat), *(start_point_obj->point), *(end_point_obj->point), *(scalar_obj->scalar), thickness, lineType, shift);
+
+    RETURN_NULL();
+}
+
+/**
+ * CV\rectangleByRect
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_rectangle_by_rect){
+
+    long thickness = 1, lineType = LINE_8, shift = 0;
+    zval *mat_zval, *rect_zval, *color_zval;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OOO|lll",
+                              &mat_zval, opencv_mat_ce,
+                              &rect_zval, opencv_rect_ce,
+                              &color_zval, opencv_scalar_ce,
+                              &thickness, &lineType, &shift) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *mat_obj = Z_PHP_MAT_OBJ_P(mat_zval);
+    opencv_rect_object *rect_object = Z_PHP_RECT_OBJ_P(rect_zval);
+    opencv_scalar_object *scalar_obj = Z_PHP_SCALAR_OBJ_P(color_zval);
+
+    rectangle(*(mat_obj->mat), *(rect_object->rect), *(scalar_obj->scalar), thickness, lineType, shift);
+
+    RETURN_NULL();
+}
+
 
 /**
  * color conversion code in CV\cvtColor,opencv enum ColorConversionCodes

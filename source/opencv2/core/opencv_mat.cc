@@ -27,7 +27,7 @@ zend_object* mat_create_handler(zend_class_entry *type)
 }
 
 
-void mat_free_handler(zend_object *object)
+void opencv_mat_free_obj(zend_object *object)
 {
     opencv_mat_object *obj;
     obj = get_mat_obj(object);
@@ -127,7 +127,7 @@ void opencv_mat_init(void){
     opencv_mat_object_handlers.write_property = opencv_mat_write_property;
 
     zend_declare_property_null(opencv_mat_ce,"type",sizeof("type") - 1,ZEND_ACC_PRIVATE);//private Mat->type
-//    opencv_mat_object_handlers.free_obj = mat_free_handler;
+    opencv_mat_object_handlers.free_obj = opencv_mat_free_obj;
 }
 
 

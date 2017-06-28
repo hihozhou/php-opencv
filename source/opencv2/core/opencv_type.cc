@@ -73,6 +73,14 @@ zend_object* opencv_point_create_handler(zend_class_entry *type)
     return &obj->std;
 }
 
+void opencv_point_free_obj(zend_object *object)
+{
+    opencv_point_object *obj;
+    obj = get_point_obj(object);
+    delete obj->point;
+    zend_object_std_dtor(object);
+}
+
 /**
  * Point Class write_property
  * @param object
@@ -109,6 +117,7 @@ void opencv_point_init(int module_number){
            zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     opencv_point_object_handlers.clone_obj = NULL;
     opencv_point_object_handlers.write_property = opencv_point_write_property;
+    opencv_point_object_handlers.free_obj = opencv_point_free_obj;
 }
 
 
@@ -135,6 +144,14 @@ zend_object* opencv_scalar_create_handler(zend_class_entry *type)
     return &obj->std;
 }
 
+void opencv_scalar_free_obj(zend_object *object)
+{
+    opencv_scalar_object *obj;
+    obj = get_scalar_obj(object);
+    delete obj->scalar;
+    zend_object_std_dtor(object);
+}
+
 
 /**
  * Scalar __construct
@@ -143,17 +160,26 @@ zend_object* opencv_scalar_create_handler(zend_class_entry *type)
  */
 PHP_METHOD(opencv_scalar, __construct)
 {
-    long blue=0, green = 0, red = 0;//value:0~255
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "|lll", &blue, &green ,&red) == FAILURE) {
+    long value1 = 0, value2 = 0, value3 = 0, value4 = 0;//value: 8bit=0~255 16bit=0~65535...
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "|llll", &value1, &value2, &value3, &value4) == FAILURE) {
         RETURN_NULL();
     }
     opencv_scalar_object *obj = Z_PHP_SCALAR_OBJ_P(getThis());
-    Scalar scalar = Scalar((int)blue, (int)green, (int)red);
+    Scalar scalar = Scalar((int)value1, (int)value2, (int)value3, (int)value4);
     obj->scalar = new Scalar(scalar);
-
-    zend_update_property_long(opencv_scalar_ce, getThis(), "blue", sizeof("blue")-1, obj->scalar->val[0]);
-    zend_update_property_long(opencv_scalar_ce, getThis(), "green", sizeof("green")-1, obj->scalar->val[1]);
-    zend_update_property_long(opencv_scalar_ce, getThis(), "red", sizeof("red")-1, obj->scalar->val[2]);
+    zval val;
+    array_init(&val);
+    add_next_index_long(&val,value1);
+    add_next_index_long(&val,value2);
+    add_next_index_long(&val,value3);
+    add_next_index_long(&val,value4);
+    zend_update_property(opencv_scalar_ce, getThis(), "val", sizeof("val")-1, &val);
+    /**
+     * 数组val在array_init()后refcount=1，
+     * 插入成员属性zend_update_property()会自动加一次，变为2，
+     * 对象销毁后只会减1，需要要在zend_update_property()后主动减一次引用
+     */
+    Z_DELREF(val);
 }
 
 
@@ -171,7 +197,7 @@ PHP_METHOD(opencv_scalar, print)
 
 
 /**
- * opencv_point_methods[]
+ * opencv_scalar_methods[]
  */
 const zend_function_entry opencv_scalar_methods[] = {
         PHP_ME(opencv_scalar, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
@@ -179,32 +205,6 @@ const zend_function_entry opencv_scalar_methods[] = {
         PHP_FE_END
 };
 /* }}} */
-
-
-/**
- * Point Class write_property
- * @param object
- * @param member
- * @param value
- * @param cache_slot
- */
-void opencv_scalar_write_property(zval *object, zval *member, zval *value, void **cache_slot){
-
-    zend_string *str = zval_get_string(member);
-    char *memberName=ZSTR_VAL(str);
-    opencv_scalar_object *obj = Z_PHP_SCALAR_OBJ_P(object);
-
-    if(strcmp(memberName, "blue") == 0 && obj->scalar->val[0]!=(int)zval_get_long(value)){
-        obj->scalar->val[0]=(int)zval_get_long(value);
-    }else if(strcmp(memberName, "green") == 0 && obj->scalar->val[1]!=(int)zval_get_long(value)){
-        obj->scalar->val[1]=(int)zval_get_long(value);
-    }else if(strcmp(memberName, "red") == 0 && obj->scalar->val[2]!=(int)zval_get_long(value)){
-        obj->scalar->val[2]=(int)zval_get_long(value);
-    }
-    zend_string_release(str);//free zend_string not memberName(zend_string->val)
-    std_object_handlers.write_property(object,member,value,cache_slot);
-
-}
 
 
 /**
@@ -219,7 +219,7 @@ void opencv_scalar_init(int module_number){
     memcpy(&opencv_scalar_object_handlers,
            zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     opencv_scalar_object_handlers.clone_obj = NULL;
-    opencv_scalar_object_handlers.write_property = opencv_scalar_write_property;
+    opencv_scalar_object_handlers.free_obj = opencv_scalar_free_obj;
 }
 
 
@@ -241,6 +241,14 @@ zend_object* opencv_size_create_handler(zend_class_entry *type)
     obj->std.ce = type;
     obj->std.handlers = &opencv_size_object_handlers;
     return &obj->std;
+}
+
+void opencv_size_free_obj(zend_object *object)
+{
+    opencv_size_object *obj;
+    obj = get_size_obj(object);
+    delete obj->size;
+    zend_object_std_dtor(object);
 }
 
 
@@ -265,7 +273,7 @@ PHP_METHOD(opencv_size, __construct)
 
 
 /**
- * print Scalar data
+ * print Size data
  * @param execute_data
  * @param return_value
  */
@@ -278,7 +286,7 @@ PHP_METHOD(opencv_size, print)
 
 
 /**
- * opencv_point_methods[]
+ * opencv_size_methods[]
  */
 const zend_function_entry opencv_size_methods[] = {
         PHP_ME(opencv_size, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
@@ -289,7 +297,7 @@ const zend_function_entry opencv_size_methods[] = {
 
 
 /**
- * Point Class write_property
+ * Size Class write_property
  * @param object
  * @param member
  * @param value
@@ -313,7 +321,7 @@ void opencv_size_write_property(zval *object, zval *member, zval *value, void **
 
 
 /**
- * Scalar Init
+ * Size Init
  */
 void opencv_size_init(int module_number){
     zend_class_entry ce;
@@ -325,6 +333,7 @@ void opencv_size_init(int module_number){
            zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     opencv_size_object_handlers.clone_obj = NULL;
     opencv_size_object_handlers.write_property = opencv_size_write_property;
+    opencv_size_object_handlers.free_obj = opencv_size_free_obj;
 }
 
 
@@ -346,6 +355,14 @@ zend_object* opencv_rect_create_handler(zend_class_entry *type)
     obj->std.ce = type;
     obj->std.handlers = &opencv_rect_object_handlers;
     return &obj->std;
+}
+
+void opencv_rect_free_obj(zend_object *object)
+{
+    opencv_rect_object *obj;
+    obj = get_rect_obj(object);
+    delete obj->rect;
+    zend_object_std_dtor(object);
 }
 
 
@@ -512,6 +529,7 @@ void opencv_rect_init(int module_number){
            zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     opencv_rect_object_handlers.clone_obj = NULL;
     opencv_rect_object_handlers.write_property = opencv_rect_write_property;
+    opencv_rect_object_handlers.free_obj = opencv_rect_free_obj;
 }
 
 

@@ -124,6 +124,27 @@ PHP_METHOD(opencv_mat, zeros)
     RETURN_ZVAL(&instance,0,0); //return php Mat object
 }
 
+
+/**
+ * Mat->clone()
+ * @param execute_data
+ * @param return_value
+ */
+PHP_METHOD(opencv_mat, clone)
+{
+    zval instance;
+    object_init_ex(&instance, opencv_mat_ce);
+    opencv_mat_object *new_obj = Z_PHP_MAT_OBJ_P(&instance);
+    opencv_mat_object *old_obj = Z_PHP_MAT_OBJ_P(getThis());
+    Mat new_mat = old_obj->mat->clone();
+
+    new_obj->mat = new Mat(new_mat);
+    //update php Mat object property
+    opencv_mat_update_property_by_c_mat(&instance, new_obj->mat);
+
+    RETURN_ZVAL(&instance,0,0); //return php Mat object
+}
+
 /**
  * Mat->isContinuous
  * @param execute_data

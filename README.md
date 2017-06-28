@@ -110,46 +110,63 @@ result:
 
 ## Structure
 - CV(namespace)
-    - Exception(class)
-    - Mat(class)
-        - __construct
-        - print
-        - zeros
-        - type
-        - depth
-        - channels
-        - isContinuous
-        - row
-        - col
-    - Point(class)
-        - __construct
-        - print
-    - Scalar(class)
-        - __construct
-        - print
-    - Size(class)
-        - __construct
-        - print
-    - Rect(class)
-        - __construct
-        - print
-        - tl
-        - br
-        - size
-        - area
-    - imread(function)
-    - imwrite(function)
-    - namedWindow(function)
-    - imshow(function)
-    - waitKey(function)
-    - cvtColor(function)
-    - ellipse(function)
-    - circle(function)
-    - line(function)
-    - rectangle(function)
-    - rectangleByPoint(function)
-    - rectangleByRect(function)
-    - Formatter(class)
+    - CONSTANTS
+    - CLASSES 
+        - Exception(class)
+        - Mat(class)
+            - properties
+                - public int $rows
+                - public int $cols
+                - private int $type
+            - functions
+                - public __construct(int $rows, int $cols, int $type, Scalar $scalar)
+                - public print(int $type)
+                - public static zeros(int $rows, int $cols, int $type)
+                - public type()
+                - public depth()
+                - public channels()
+                - public isContinuous()
+                - public row(int $y)
+                - public col(int $x)
+                - public clone()
+        - Point(class)
+            - properties
+                - public int $x
+                - public int $y
+            - functions
+                - public __construct(int $x, int $y)
+                - public print()
+        - Scalar(class)
+            - public array $val
+            - public __construct(int $val1, int $val2, int $val3, int $valu4)
+            - public print()
+        - Size(class)
+            - functions
+                - public __construct(int $width, int $height);
+                - public print()
+        - Rect(class)
+            - functions
+                - public  __construct(int $x, int $y, int $width, int $height)
+                - public print()
+                - pubilc tl()
+                - public br()
+                - public size()
+                - public area()
+        - Formatter(class)
+
+    - FUNCTIONS
+        - imread(string $path, int $flags = CV\IMREAD_COLOR)
+        - imwrite(string $path, Mat $img)
+        - namedWindow(string $name, int $flags = 2)
+        - imshow(string $windowName, Mat $img)
+        - waitKey(int $sec)
+        - cvtColor(Mat $img, int $code)
+        - ellipse(Mat $img, Point $center, Size $size, int $angle, int $startAngle, int $endAngle, Scalar $color, int $thickness = 1, int $lineType = CV\LINE_8, int $shift = 0)
+        - circle(Mat $img, Point $center, int $radius, Scalar $color, int $thickness = 1, int $lineType = CV\LINE_8, int $shift = 0)
+        - line(Mat $img, Point $start, Point $end, Scalar $color, int $thickness = 1, int $lineType = CV\LINE_8, int $shift = 0)
+        - rectangle(Mat $img, int $startX, int $startY, int $endX, int $endY, Scalar $color, int $thickness = 1, int $lineType = CV\LINE_8, int $shift = 0)
+        - rectangleByPoint(Mat $img, Point $start, Point $end, Scalar $color, int $thickness = 1, int $lineType = CV\LINE_8, int $shift = 0)
+        - rectangleByRect(Mat $img, Rect $rect, Scalar $color, int $thickness = 1, int $lineType = CV\LINE_8, int $shift = 0)
     
     
     

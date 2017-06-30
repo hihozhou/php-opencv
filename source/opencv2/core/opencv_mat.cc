@@ -216,7 +216,6 @@ PHP_METHOD(opencv_mat, get_image_roi)
     zval instance;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "O", &rect_zval,opencv_rect_ce) == FAILURE) {
-        zend_restore_error_handling(&opencv_original_error_handling);
         RETURN_NULL();
     }
     opencv_rect_object *rect_object = Z_PHP_RECT_OBJ_P(rect_zval);

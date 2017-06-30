@@ -5,6 +5,7 @@
 #include "../../../php_opencv.h"
 #include "opencv_mat.h"
 #include "opencv_type.h"
+#include "../../../opencv_exception.h"
 
 zend_object_handlers opencv_mat_object_handlers;
 
@@ -204,6 +205,39 @@ PHP_METHOD(opencv_mat, col)
     RETURN_ZVAL(&instance,0,0); //return php Mat object
 }
 
+/**
+ * Mat->getImageROI(x)
+ * @param execute_data
+ * @param return_value
+ */
+PHP_METHOD(opencv_mat, get_image_roi)
+{
+    zval *rect_zval;
+    zval instance;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "O", &rect_zval,opencv_rect_ce) == FAILURE) {
+        RETURN_NULL();
+    }
+    opencv_rect_object *rect_object = Z_PHP_RECT_OBJ_P(rect_zval);
+
+    object_init_ex(&instance, opencv_mat_ce);
+    opencv_mat_object *new_obj = Z_PHP_MAT_OBJ_P(&instance);
+
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
+    try {
+        Mat roi = (*obj->mat)(*rect_object->rect);
+        new_obj->mat=new Mat(roi);
+    }catch (Exception exception){
+        const char* err_msg = exception.what();
+        opencv_throw_exception(err_msg);//throw exception
+        RETURN_NULL();
+    }
+
+    opencv_mat_update_property_by_c_mat(&instance, new_obj->mat);
+
+    RETURN_ZVAL(&instance,0,0); //return php Mat object
+}
+
 
 /**
  * mat_methods[]
@@ -218,6 +252,7 @@ const zend_function_entry mat_methods[] = {
         PHP_MALIAS(opencv_mat, isContinuous ,is_continuous, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, row, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, col, NULL, ZEND_ACC_PUBLIC)
+        PHP_MALIAS(opencv_mat, getImageROI ,get_image_roi, NULL, ZEND_ACC_PUBLIC)
         PHP_FE_END
 };
 /* }}} */

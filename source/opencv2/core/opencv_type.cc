@@ -267,8 +267,8 @@ PHP_METHOD(opencv_size, __construct)
     Size size = Size((int)width, (int)height);
     obj->size = new Size(size);
 
-    zend_update_property_long(opencv_scalar_ce, getThis(), "width", sizeof("width")-1, obj->size->width);
-    zend_update_property_long(opencv_scalar_ce, getThis(), "height", sizeof("height")-1, obj->size->height);
+    zend_update_property_long(opencv_size_ce, getThis(), "width", sizeof("width")-1, obj->size->width);
+    zend_update_property_long(opencv_size_ce, getThis(), "height", sizeof("height")-1, obj->size->height);
 }
 
 

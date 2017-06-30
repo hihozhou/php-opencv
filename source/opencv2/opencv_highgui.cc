@@ -69,8 +69,8 @@ int php_window_flags_to_c_flags(int flags){
 
 /**
  * CV\namedWindow
- * @param execute_data
- * @param return_value
+ * @param window_name
+ * @param flags
  */
 PHP_FUNCTION(opencv_named_window){
     char *window_name;

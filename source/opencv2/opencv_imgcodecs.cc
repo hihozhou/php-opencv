@@ -34,7 +34,7 @@ PHP_FUNCTION(opencv_imread)
         free(error_message);
     }
 
-    obj->mat=new Mat(im);
+    obj->mat = new Mat(im);
 
     //update php Mat object property
     zend_update_property_long(opencv_mat_ce, &instance, "rows", sizeof("rows")-1, obj->mat->rows);

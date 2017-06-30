@@ -247,7 +247,6 @@ PHP_METHOD(opencv_mat, get_image_roi)
 PHP_METHOD(opencv_mat, copy_to)
 {
     zval *mat_zval, *mask_zval = NULL;
-    zval instance;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "O|O", &mat_zval, opencv_mat_ce, &mask_zval, opencv_mat_ce) == FAILURE) {
         RETURN_NULL();
@@ -262,7 +261,6 @@ PHP_METHOD(opencv_mat, copy_to)
         }catch (Exception exception){
             const char* err_msg = exception.what();
             opencv_throw_exception(err_msg);//throw exception
-            RETURN_NULL();
         }
     }else{
         try {
@@ -270,11 +268,10 @@ PHP_METHOD(opencv_mat, copy_to)
         }catch (Exception exception){
             const char* err_msg = exception.what();
             opencv_throw_exception(err_msg);//throw exception
-            RETURN_NULL();
         }
     }
+    RETURN_NULL();
 
-    RETURN_ZVAL(&instance,0,0); //return php Mat object
 }
 
 

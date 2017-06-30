@@ -18,17 +18,9 @@ void opencv_exception_init(void)
 }
 
 
-PHP_OPENCV_API void opencv_throw_exception(char *error_message)
+PHP_OPENCV_API void opencv_throw_exception(const char *error_message)
 {
-//    char * error_message;
-//    int status = cvGetErrStatus();
-//
-//    if (status >= 0) {
-//        return;
-//    }
     int status = 1;
-//    error_message = estrdup(cvErrorStr(status));
-    zend_throw_exception(opencv_exception_ce, error_message, status TSRMLS_CC);
-//    efree(error_message);
+    zend_throw_exception(opencv_exception_ce, error_message, status);
     return;
 }

@@ -25,8 +25,8 @@ PHP_FUNCTION(opencv_imread)
     object_init_ex(&instance,opencv_mat_ce);
     opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(&instance);
 
-    Mat im = imread(filename,(int)flags);
-    if(im.empty()){//check file exist
+    Mat im = imread(filename, (int)flags);
+    if(im.empty() || !im.data){//check file exist
         char *error_message = (char*)malloc(strlen("Can not load image : ") + strlen(filename) + 1);
         strcpy(error_message,"Can not load image : ");
         strcat(error_message,filename);

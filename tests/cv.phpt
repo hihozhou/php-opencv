@@ -6,6 +6,7 @@ CV test
 <?php
 use function CV\imread;
 use CV\Mat;
+use const CV\{IMREAD_COLOR};
 $im = imread('./tests/cv.png',IMREAD_COLOR);
 var_dump($im);
 //$im->print();

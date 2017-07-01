@@ -37,9 +37,7 @@ PHP_FUNCTION(opencv_imread)
     obj->mat = new Mat(im);
 
     //update php Mat object property
-    zend_update_property_long(opencv_mat_ce, &instance, "rows", sizeof("rows")-1, obj->mat->rows);
-    zend_update_property_long(opencv_mat_ce, &instance, "cols", sizeof("cols")-1, obj->mat->cols);
-    zend_update_property_long(opencv_mat_ce, &instance, "type", sizeof("type")-1, obj->mat->type());
+    opencv_mat_update_property_by_c_mat(&instance, obj->mat);
 
     //todo object_init_ex() memory leaks detected on RETURN_ZVAL(instance,1,0)
     RETURN_ZVAL(&instance,0,0); //return php Mat object

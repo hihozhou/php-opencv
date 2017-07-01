@@ -188,6 +188,7 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, rectangle, ZEND_FN(opencv_rectangle), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, rectangleByPoint, ZEND_FN(opencv_rectangle_by_point), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, rectangleByRect, ZEND_FN(opencv_rectangle_by_rect), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, addWeighted, ZEND_FN(opencv_add_weighted), NULL)
 	PHP_FE_END	/* Must be the last line in opencv_functions[] */
 };
 /* }}} */

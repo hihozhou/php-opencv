@@ -254,22 +254,19 @@ PHP_METHOD(opencv_mat, copy_to)
     opencv_mat_object *mat_object = Z_PHP_MAT_OBJ_P(mat_zval);
     opencv_mat_object *this_object = Z_PHP_MAT_OBJ_P(getThis());
 
-    if(mask_zval != NULL){
-        opencv_mat_object *mask_object = Z_PHP_MAT_OBJ_P(mask_zval);
-        try {
+    try {
+        if(mask_zval != NULL){
+            opencv_mat_object *mask_object = Z_PHP_MAT_OBJ_P(mask_zval);
             this_object->mat->copyTo(*mat_object->mat, *mask_object->mat);
-        }catch (Exception exception){
-            const char* err_msg = exception.what();
-            opencv_throw_exception(err_msg);//throw exception
-        }
-    }else{
-        try {
+        }else{
             this_object->mat->copyTo(*mat_object->mat);
-        }catch (Exception exception){
-            const char* err_msg = exception.what();
-            opencv_throw_exception(err_msg);//throw exception
         }
+    }catch (Exception exception){
+        const char* err_msg = exception.what();
+        opencv_throw_exception(err_msg);//throw exception
     }
+
+
     RETURN_NULL();
 
 }

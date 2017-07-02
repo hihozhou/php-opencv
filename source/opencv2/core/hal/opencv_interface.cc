@@ -54,7 +54,7 @@ void opencv_interface_init(int module_number)
 
 }
 
-PHP_FUNCTION(opencv_cv_8uc_n)
+PHP_FUNCTION(opencv_cv_8uc)
 {
     long num;
 
@@ -64,7 +64,7 @@ PHP_FUNCTION(opencv_cv_8uc_n)
     RETURN_LONG(CV_8UC(num));
 }
 
-PHP_FUNCTION(opencv_cv_8sc_n)
+PHP_FUNCTION(opencv_cv_8sc)
 {
     long num;
 
@@ -75,7 +75,7 @@ PHP_FUNCTION(opencv_cv_8sc_n)
 }
 
 
-PHP_FUNCTION(opencv_cv_16uc_n)
+PHP_FUNCTION(opencv_cv_16uc)
 {
     long num;
 
@@ -85,7 +85,7 @@ PHP_FUNCTION(opencv_cv_16uc_n)
     RETURN_LONG(CV_16UC(num));
 }
 
-PHP_FUNCTION(opencv_cv_16sc_n)
+PHP_FUNCTION(opencv_cv_16sc)
 {
     long num;
 
@@ -95,7 +95,7 @@ PHP_FUNCTION(opencv_cv_16sc_n)
     RETURN_LONG(CV_16SC(num));
 }
 
-PHP_FUNCTION(opencv_cv_32sc_n)
+PHP_FUNCTION(opencv_cv_32sc)
 {
     long num;
 
@@ -105,7 +105,7 @@ PHP_FUNCTION(opencv_cv_32sc_n)
     RETURN_LONG(CV_32SC(num));
 }
 
-PHP_FUNCTION(opencv_cv_32fc_n)
+PHP_FUNCTION(opencv_cv_32fc)
 {
     long num;
 
@@ -116,7 +116,7 @@ PHP_FUNCTION(opencv_cv_32fc_n)
 }
 
 
-PHP_FUNCTION(opencv_cv_64fc_n)
+PHP_FUNCTION(opencv_cv_64fc)
 {
     long num;
 

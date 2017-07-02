@@ -85,7 +85,50 @@ PHP_FUNCTION(opencv_add_weighted){
         opencv_mat_update_property_by_c_mat(&instance, new_obj->mat);
         RETURN_ZVAL(&instance,0,0);
     }
-
-
-
 }
+
+/**
+ * CV\split
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_split){
+    double alpha, beta, gamma;
+    long dtype = -1;
+    zval *src_zval;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "O", &src_zval, opencv_mat_ce) == FAILURE) {
+        RETURN_NULL();
+    }
+    opencv_mat_object *src_obj = Z_PHP_MAT_OBJ_P(src_zval);
+    std::vector<Mat> channels;
+    split(*src_obj->mat,channels);
+    zval return_val,blue_zval,green_zval,red_zval;
+    Mat blue,green,red;
+    array_init(&return_val);
+
+    object_init_ex(&blue_zval,opencv_mat_ce);
+    opencv_mat_object *blue_mat_object = Z_PHP_MAT_OBJ_P(&blue_zval);
+    blue = channels.at(0);
+    blue_mat_object->mat = new Mat(blue);
+    opencv_mat_update_property_by_c_mat(&blue_zval,blue_mat_object->mat);
+
+    object_init_ex(&green_zval,opencv_mat_ce);
+    opencv_mat_object *green_mat_object = Z_PHP_MAT_OBJ_P(&green_zval);
+    green = channels.at(1);
+    green_mat_object->mat = new Mat(green);
+    opencv_mat_update_property_by_c_mat(&green_zval,green_mat_object->mat);
+
+    object_init_ex(&red_zval,opencv_mat_ce);
+    opencv_mat_object *red_mat_object = Z_PHP_MAT_OBJ_P(&red_zval);
+    red = channels.at(2);
+    red_mat_object->mat = new Mat(red);
+    opencv_mat_update_property_by_c_mat(&red_zval,red_mat_object->mat);
+
+    add_next_index_zval(&return_val,&blue_zval);
+    add_next_index_zval(&return_val,&green_zval);
+    add_next_index_zval(&return_val,&red_zval);
+
+    RETURN_ZVAL(&return_val,0,0);
+}
+

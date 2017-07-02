@@ -12,5 +12,6 @@ extern void opencv_core_init(int module_number);
 extern zend_class_entry *opencv_formatter_ce;
 
 PHP_FUNCTION(opencv_add_weighted);
+PHP_FUNCTION(opencv_split);
 
 #endif //OPENCV_CORE_H

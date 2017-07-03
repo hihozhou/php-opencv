@@ -57,7 +57,7 @@ PHP_METHOD(opencv_mat, __construct)
     }
 
     opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
-    if(scalar_zval!=NULL){
+    if(scalar_zval != NULL){
         opencv_scalar_object *scalar_object = Z_PHP_SCALAR_OBJ_P(scalar_zval);
         scalar = *(scalar_object->scalar);
     }else{
@@ -240,6 +240,39 @@ PHP_METHOD(opencv_mat, get_image_roi)
 
 
 /**
+ * Mat->copyTo(Mat $mat,Mat $mask=NULL)
+ * @param execute_data
+ * @param return_value
+ */
+PHP_METHOD(opencv_mat, copy_to)
+{
+    zval *mat_zval, *mask_zval = NULL;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "O|O", &mat_zval, opencv_mat_ce, &mask_zval, opencv_mat_ce) == FAILURE) {
+        RETURN_NULL();
+    }
+    opencv_mat_object *mat_object = Z_PHP_MAT_OBJ_P(mat_zval);
+    opencv_mat_object *this_object = Z_PHP_MAT_OBJ_P(getThis());
+
+    try {
+        if(mask_zval != NULL){
+            opencv_mat_object *mask_object = Z_PHP_MAT_OBJ_P(mask_zval);
+            this_object->mat->copyTo(*mat_object->mat, *mask_object->mat);
+        }else{
+            this_object->mat->copyTo(*mat_object->mat);
+        }
+    }catch (Exception exception){
+        const char* err_msg = exception.what();
+        opencv_throw_exception(err_msg);//throw exception
+    }
+
+
+    RETURN_NULL();
+
+}
+
+
+/**
  * mat_methods[]
  */
 const zend_function_entry mat_methods[] = {
@@ -253,6 +286,7 @@ const zend_function_entry mat_methods[] = {
         PHP_ME(opencv_mat, row, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, col, NULL, ZEND_ACC_PUBLIC)
         PHP_MALIAS(opencv_mat, getImageROI ,get_image_roi, NULL, ZEND_ACC_PUBLIC)
+        PHP_MALIAS(opencv_mat, copyTo ,copy_to, NULL, ZEND_ACC_PUBLIC)
         PHP_FE_END
 };
 /* }}} */

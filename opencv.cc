@@ -169,13 +169,13 @@ PHP_MINFO_FUNCTION(opencv)
  */
 const zend_function_entry opencv_functions[] = {
 	PHP_FE(confirm_opencv_compiled,	NULL)		/* For testing, remove later. */
-    ZEND_NS_NAMED_FE(OPENCV_NS, cv_8uc_n, ZEND_FN(opencv_cv_8uc_n), NULL)
-    ZEND_NS_NAMED_FE(OPENCV_NS, cv_8sc_n, ZEND_FN(opencv_cv_8sc_n), NULL)
-    ZEND_NS_NAMED_FE(OPENCV_NS, cv_16uc_n, ZEND_FN(opencv_cv_16uc_n), NULL)
-    ZEND_NS_NAMED_FE(OPENCV_NS, cv_16sc_n, ZEND_FN(opencv_cv_16sc_n), NULL)
-    ZEND_NS_NAMED_FE(OPENCV_NS, cv_32sc_n, ZEND_FN(opencv_cv_32sc_n), NULL)
-    ZEND_NS_NAMED_FE(OPENCV_NS, cv_32fc_n, ZEND_FN(opencv_cv_32fc_n), NULL)
-    ZEND_NS_NAMED_FE(OPENCV_NS, cv_64fc_n, ZEND_FN(opencv_cv_64fc_n), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, CV_8UC, ZEND_FN(opencv_cv_8uc), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, CV_8SC, ZEND_FN(opencv_cv_8sc), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, CV_16UC, ZEND_FN(opencv_cv_16uc), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, CV_16SC, ZEND_FN(opencv_cv_16sc), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, CV_32SC, ZEND_FN(opencv_cv_32sc), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, CV_32FC, ZEND_FN(opencv_cv_32fc), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, CV_64FC, ZEND_FN(opencv_cv_64fc), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, imread, ZEND_FN(opencv_imread), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, imwrite, ZEND_FN(opencv_imwrite), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, imshow, ZEND_FN(opencv_imshow), NULL)
@@ -188,6 +188,8 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, rectangle, ZEND_FN(opencv_rectangle), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, rectangleByPoint, ZEND_FN(opencv_rectangle_by_point), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, rectangleByRect, ZEND_FN(opencv_rectangle_by_rect), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, addWeighted, ZEND_FN(opencv_add_weighted), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, split, ZEND_FN(opencv_split), NULL)
 	PHP_FE_END	/* Must be the last line in opencv_functions[] */
 };
 /* }}} */

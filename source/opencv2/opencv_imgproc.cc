@@ -34,10 +34,7 @@ PHP_FUNCTION(opencv_cv_t_color){
 
     dst_obj->mat=new Mat(dstImg);
 
-    //update php Mat object property
-    zend_update_property_long(opencv_mat_ce, &instance, "rows", sizeof("rows")-1, dst_obj->mat->rows);
-    zend_update_property_long(opencv_mat_ce, &instance, "cols", sizeof("cols")-1, dst_obj->mat->cols);
-    zend_update_property_long(opencv_mat_ce, &instance, "type", sizeof("type")-1, dst_obj->mat->type());
+    opencv_mat_update_property_by_c_mat(&instance,dst_obj->mat);
 
     RETURN_ZVAL(&instance,0,0); //return php Mat object
 }

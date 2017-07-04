@@ -14,4 +14,14 @@ extern zend_class_entry *opencv_formatter_ce;
 PHP_FUNCTION(opencv_add_weighted);
 PHP_FUNCTION(opencv_split);
 
+ZEND_BEGIN_ARG_INFO_EX(opencv_add_weighted_arginfo, 0, 0, 1)
+                ZEND_ARG_INFO(0, src1)
+                ZEND_ARG_INFO(0, alpha)
+                ZEND_ARG_INFO(0, src2)
+                ZEND_ARG_INFO(0, beta)
+                ZEND_ARG_INFO(0, gamma)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, dtype)
+ZEND_END_ARG_INFO()
+
 #endif //OPENCV_CORE_H

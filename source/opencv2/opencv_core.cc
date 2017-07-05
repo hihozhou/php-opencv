@@ -37,6 +37,9 @@ void opencv_core_init(int module_number)
     opencv_formatter_const_init(module_number);
 }
 
+
+
+
 /**
  * CV\addWeighted
  * @param execute_data
@@ -46,45 +49,43 @@ PHP_FUNCTION(opencv_add_weighted){
     double alpha, beta, gamma;
     long dtype = -1;
     zval *src1_zval, *src2_zval, *dst_zval = NULL;
+    opencv_mat_object *dst_object;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OdOdd|Ol",
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OdOddz|l",
                               &src1_zval, opencv_mat_ce, &alpha,
                               &src2_zval, opencv_mat_ce, &beta,
                               &gamma,
-                              &dst_zval, opencv_mat_ce,
+                              &dst_zval,
                               &dtype) == FAILURE) {
         RETURN_NULL();
     }
+
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
     opencv_mat_object *src1_obj = Z_PHP_MAT_OBJ_P(src1_zval);
     opencv_mat_object *src2_obj = Z_PHP_MAT_OBJ_P(src2_zval);
 
-    if(dst_zval != NULL){
-        opencv_mat_object *dst_obj = Z_PHP_MAT_OBJ_P(dst_zval);
-        try{
-            addWeighted(*src1_obj->mat, alpha, *src2_obj->mat, beta, gamma, *dst_obj->mat, dtype);
-        }catch (Exception e){
-            opencv_throw_exception(e.what());//throw exception
-        }
 
-        opencv_mat_update_property_by_c_mat(dst_zval, dst_obj->mat);
-
-        RETURN_NULL();
-    }else{
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval)==opencv_mat_ce){
+        // is Mat object
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        // isn't Mat object
         zval instance;
         Mat dst;
-        try{
-            addWeighted(*src1_obj->mat, alpha, *src2_obj->mat, beta, gamma, dst, dtype);
-        }catch (Exception e){
-            opencv_throw_exception(e.what());//throw exception
-        }
-
         object_init_ex(&instance,opencv_mat_ce);
-        opencv_mat_object *new_obj = Z_PHP_MAT_OBJ_P(&instance);
-        new_obj->mat = new Mat(dst);
-
-        opencv_mat_update_property_by_c_mat(&instance, new_obj->mat);
-        RETURN_ZVAL(&instance,0,0);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);// Cover dst_real_zval by Mat object
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
     }
+
+    try{
+        addWeighted(*src1_obj->mat, alpha, *src2_obj->mat, beta, gamma, *dst_object->mat, dtype);
+    }catch (Exception e){
+        opencv_throw_exception(e.what());
+    }
+    opencv_mat_update_property_by_c_mat(dst_real_zval, dst_object->mat);
+
+    RETURN_NULL();
 }
 
 /**

@@ -126,3 +126,70 @@ PHP_FUNCTION(opencv_split){
     RETURN_ZVAL(&return_val,0,0);
 }
 
+
+/**
+ * CV\merge
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_merge){
+    zval *channels_zval, *array_val_zval, *dst_zval;
+    zend_ulong _h;
+    opencv_mat_object *dst_object;
+
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "az", &channels_zval, &dst_zval) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    int channel_count = zend_hash_num_elements(Z_ARRVAL_P(channels_zval));
+    std::vector<Mat> channels;
+    if(channel_count == 0){
+        char *error_message = (char*)malloc(strlen("array lenght must be >=1") + 1);
+        strcpy(error_message,"array lenght must be >=1");
+        opencv_throw_exception(error_message);
+        free(error_message);
+        RETURN_NULL();
+    }
+
+    channels.reserve(channel_count);
+    opencv_mat_object *mat_obj;
+
+    ZEND_HASH_FOREACH_NUM_KEY_VAL(Z_ARRVAL_P(channels_zval),_h,array_val_zval){
+                //check array_val_zval is Mat object
+                if(Z_TYPE_P(array_val_zval) == IS_OBJECT && Z_OBJCE_P(array_val_zval)==opencv_mat_ce){
+                    mat_obj = Z_PHP_MAT_OBJ_P(array_val_zval);
+                    channels.push_back(*mat_obj->mat);
+                } else {
+                    char *error_message = (char*)malloc(strlen("array value just Mat object") + 1);
+                    strcpy(error_message,"array value just Mat object");
+                    opencv_throw_exception(error_message);
+                    free(error_message);
+                    RETURN_NULL();
+                }
+    }ZEND_HASH_FOREACH_END();
+
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval)==opencv_mat_ce){
+        // is Mat object
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        // isn't Mat object
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);// Cover dst_real_zval by Mat object
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+
+    try{
+        merge(channels, *dst_object->mat);
+    }catch (Exception e){
+        opencv_throw_exception(e.what());
+    }
+    opencv_mat_update_property_by_c_mat(dst_real_zval, dst_object->mat);
+    RETURN_NULL();
+
+}
+

@@ -191,6 +191,7 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, addWeighted, ZEND_FN(opencv_add_weighted), opencv_add_weighted_arginfo)
     ZEND_NS_NAMED_FE(OPENCV_NS, split, ZEND_FN(opencv_split), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, merge, ZEND_FN(opencv_merge), opencv_merge_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, createTrackbar, ZEND_FN(opencv_create_trackbar), NULL)
 	PHP_FE_END	/* Must be the last line in opencv_functions[] */
 };
 /* }}} */

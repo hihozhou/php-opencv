@@ -271,6 +271,32 @@ PHP_METHOD(opencv_mat, copy_to)
 
 }
 
+/**
+ * CV\Mat->at
+ * @param execute_data
+ * @param return_value
+ */
+PHP_METHOD(opencv_mat, at)
+{
+    long row, col, channel;
+    zval *value_zval = NULL;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "lll|z", &row, &col, &channel, &value_zval) == FAILURE) {
+        RETURN_NULL();
+    }
+    opencv_mat_object *this_object = Z_PHP_MAT_OBJ_P(getThis());
+    if(value_zval == NULL){
+        //get px value
+        RETURN_LONG(this_object->mat->at<Vec3b>((int)row,(int)col)[channel]/1);
+    }else{
+        //set px value
+        convert_to_long(value_zval);
+        zend_long value = Z_LVAL_P(value_zval);
+        this_object->mat->at<Vec3b>((int)row,(int)col)[channel]=saturate_cast<uchar>(value);
+    }
+    RETURN_NULL();
+}
+
 
 /**
  * mat_methods[]
@@ -285,6 +311,7 @@ const zend_function_entry mat_methods[] = {
         PHP_MALIAS(opencv_mat, isContinuous ,is_continuous, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, row, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, col, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_mat, at, NULL, ZEND_ACC_PUBLIC)
         PHP_MALIAS(opencv_mat, getImageROI ,get_image_roi, NULL, ZEND_ACC_PUBLIC)
         PHP_MALIAS(opencv_mat, copyTo ,copy_to, NULL, ZEND_ACC_PUBLIC)
         PHP_FE_END

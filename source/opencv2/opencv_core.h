@@ -29,5 +29,6 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_merge_arginfo, 0, 0, 1)
                 ZEND_ARG_INFO(1, dst)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_merge);
+PHP_FUNCTION(opencv_get_optimal_dft_size);
 
 #endif //OPENCV_CORE_H

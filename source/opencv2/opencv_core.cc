@@ -193,3 +193,16 @@ PHP_FUNCTION(opencv_merge){
 
 }
 
+/**
+ * CV\getOptimalDFTSize
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_get_optimal_dft_size){
+    long vecsize;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &vecsize) == FAILURE) {
+        RETURN_NULL();
+    }
+    RETURN_LONG(getOptimalDFTSize((int)vecsize));
+}
+

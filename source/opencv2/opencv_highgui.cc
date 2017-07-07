@@ -84,9 +84,21 @@ PHP_FUNCTION(opencv_named_window){
     RETURN_NULL();
 }
 
+struct opencv_fcall_info_struct{
+    zend_fcall_info *fci;
+    zend_fcall_info_cache *fci_cache;
+};
+
+void opencv_create_trackbar_callback(int pos, void* userdata){
+    opencv_fcall_info_struct *fci_s=(opencv_fcall_info_struct*)userdata;
+    //todo zend_call_function: Assertion `((zend_object*)func->op_array.prototype)->gc.u.v.type == 8' failed.
+    zend_call_function(fci_s->fci, fci_s->fci_cache);
+}
+
+opencv_fcall_info_struct *fci_s;
 
 /**
- * //todo c++ createTrackbar 跳转事件调用php传入的闭包
+ * //todo c++ createTrackbar 跳转事件调用php传入的闭包:1php全局变量，2c++闭包
  * CV\createTrackbar
  * @param execute_data
  * @param return_value
@@ -95,33 +107,36 @@ PHP_FUNCTION(opencv_create_trackbar){
     char *trackbarname, *winname;
     long value, count, trackbarname_len,winname_len;
     zval retval;
-    zend_fcall_info fci;
-    zend_fcall_info_cache fci_cache;
+
+    zend_fcall_info *fci = new zend_fcall_info;
+    zend_fcall_info_cache *fci_cache = new zend_fcall_info_cache;
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "ssll|f",
                               &trackbarname, &trackbarname_len,
                               &winname,&winname_len,
                               &value,&count,
-                              &fci, &fci_cache) == FAILURE) {
+                              fci, fci_cache) == FAILURE) {
         return;
     }
-    int *trackbar_value_ptr = new int(value);
-    createTrackbar(trackbarname, winname, trackbar_value_ptr, (int)count);
-    std::cout<<*trackbar_value_ptr<<std::endl;
-//    ContrastAndBright(*trackbar_value_ptr,0);
 
+    int *trackbar_value_ptr = new int(value);
+    zval args[1];
+    ZVAL_LONG(&args[0], 1);
+    fci->param_count = 1;
+    fci->params = args;
+    fci->retval = &retval;
+
+    fci_s = new opencv_fcall_info_struct;
+    fci_s->fci=fci;
+    fci_s->fci_cache = fci_cache;
+    createTrackbar(trackbarname, winname, trackbar_value_ptr, (int)count,opencv_create_trackbar_callback,fci_s);
+//    createTrackbar(trackbarname, winname, trackbar_value_ptr, (int)count);
+//    zend_call_function(fci_s->fci, fci_s->fci_cache);
     RETURN_NULL();
 
-//    zval args[1];
-//    ZVAL_LONG(&args[0], 1);
-//    fci.param_count = 1;
-//    fci.params = args;
-//    fci.retval = &retval;
-//
-//
-//    if (zend_call_function(&fci, &fci_cache) == SUCCESS && Z_TYPE(retval) != IS_UNDEF) {
+//    if (zend_call_function(fci, fci_cache) == SUCCESS && Z_TYPE(retval) != IS_UNDEF) {
 //        zval_ptr_dtor(&args[0]);
-////        RETURN_ZVAL(&retval,1,1);
-////        ZVAL_COPY_VALUE(return_value, &retval);
+//        RETURN_ZVAL(&retval,1,1);
+//        ZVAL_COPY_VALUE(return_value, &retval);
 //    } else {
 //        RETURN_FALSE;
 //    }

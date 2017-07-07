@@ -91,11 +91,19 @@ struct opencv_fcall_info_struct{
 
 void opencv_create_trackbar_callback(int pos, void* userdata){
     opencv_fcall_info_struct *fci_s=(opencv_fcall_info_struct*)userdata;
+
+    zval retval;
+    zval args[1];
+    ZVAL_LONG(&args[0], (long)pos);
+    fci_s->fci->param_count = 1;
+    fci_s->fci->params = args;
+    fci_s->fci->retval = &retval;
+
     //todo zend_call_function: Assertion `((zend_object*)func->op_array.prototype)->gc.u.v.type == 8' failed.
     zend_call_function(fci_s->fci, fci_s->fci_cache);
+    zval_ptr_dtor(&args[0]);
 }
 
-opencv_fcall_info_struct *fci_s;
 
 /**
  * //todo c++ createTrackbar 跳转事件调用php传入的闭包:1php全局变量，2c++闭包
@@ -119,16 +127,12 @@ PHP_FUNCTION(opencv_create_trackbar){
     }
 
     int *trackbar_value_ptr = new int(value);
-    zval args[1];
-    ZVAL_LONG(&args[0], 1);
-    fci->param_count = 1;
-    fci->params = args;
-    fci->retval = &retval;
 
-    fci_s = new opencv_fcall_info_struct;
+    opencv_fcall_info_struct *fci_s = new opencv_fcall_info_struct;
     fci_s->fci=fci;
     fci_s->fci_cache = fci_cache;
     createTrackbar(trackbarname, winname, trackbar_value_ptr, (int)count,opencv_create_trackbar_callback,fci_s);
+    opencv_create_trackbar_callback(*trackbar_value_ptr,fci_s);
 //    createTrackbar(trackbarname, winname, trackbar_value_ptr, (int)count);
 //    zend_call_function(fci_s->fci, fci_s->fci_cache);
     RETURN_NULL();

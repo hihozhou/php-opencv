@@ -13,7 +13,7 @@ extern zend_class_entry *opencv_formatter_ce;
 
 PHP_FUNCTION(opencv_add_weighted);
 
-ZEND_BEGIN_ARG_INFO_EX(opencv_add_weighted_arginfo, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(opencv_add_weighted_arginfo, 0, 0, 7)
                 ZEND_ARG_INFO(0, src1)
                 ZEND_ARG_INFO(0, alpha)
                 ZEND_ARG_INFO(0, src2)
@@ -24,11 +24,23 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_add_weighted_arginfo, 0, 0, 1)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_split);
 
-ZEND_BEGIN_ARG_INFO_EX(opencv_merge_arginfo, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(opencv_merge_arginfo, 0, 0, 2)
                 ZEND_ARG_INFO(0, channels)
                 ZEND_ARG_INFO(1, dst)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_merge);
 PHP_FUNCTION(opencv_get_optimal_dft_size);
+
+PHP_FUNCTION(opencv_copy_make_border);
+ZEND_BEGIN_ARG_INFO_EX(opencv_copy_make_border_arginfo, 0, 0, 8)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, top)
+                ZEND_ARG_INFO(0, bottom)
+                ZEND_ARG_INFO(0, left)
+                ZEND_ARG_INFO(0, right)
+                ZEND_ARG_INFO(0, borderType)
+                ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
 
 #endif //OPENCV_CORE_H

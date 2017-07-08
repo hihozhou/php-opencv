@@ -36,6 +36,7 @@ extern "C" {
 #include "source/opencv2/core/hal/opencv_interface.h"
 #include "opencv_exception.h"
 #include "source/opencv2/opencv_core.h"
+#include "source/opencv2/core/opencv_base.h"
 
 /* If you declare any globals in php_opencv.h uncomment this:
 ZEND_DECLARE_MODULE_GLOBALS(opencv)
@@ -112,6 +113,7 @@ PHP_MINIT_FUNCTION(opencv)
     opencv_type_init(module_number);
     opencv_imgproc_init(module_number);
 	opencv_core_init(module_number);
+    opencv_border_types_init(module_number);
 
 	return SUCCESS;
 }
@@ -193,6 +195,7 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, merge, ZEND_FN(opencv_merge), opencv_merge_arginfo)
     ZEND_NS_NAMED_FE(OPENCV_NS, createTrackbar, ZEND_FN(opencv_create_trackbar), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, getOptimalDFTSize, ZEND_FN(opencv_get_optimal_dft_size), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, copyMakeBorder, ZEND_FN(opencv_copy_make_border), opencv_copy_make_border_arginfo)
 	PHP_FE_END	/* Must be the last line in opencv_functions[] */
 };
 /* }}} */

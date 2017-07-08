@@ -4,6 +4,7 @@
 #include "opencv_core.h"
 #include "core/opencv_mat.h"
 #include "../../opencv_exception.h"
+#include "core/opencv_type.h"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +30,6 @@ void opencv_formatter_const_init(int module_number){
     zend_declare_class_constant_long(opencv_formatter_ce,"FMT_NUMPY",sizeof("FMT_NUMPY")-1,Formatter::FMT_NUMPY);
     zend_declare_class_constant_long(opencv_formatter_ce,"FMT_C",sizeof("FMT_C")-1,Formatter::FMT_C);
 }
-
 
 void opencv_core_init(int module_number)
 {
@@ -206,3 +206,50 @@ PHP_FUNCTION(opencv_get_optimal_dft_size){
     RETURN_LONG(getOptimalDFTSize((int)vecsize));
 }
 
+/**
+ * copyMakeBorder
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_copy_make_border){
+    zval *src_zval, *dst_zval, *value_zval = NULL;
+    long top, bottom, left, right, border_type;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Ozlllll|O",
+                              &src_zval, opencv_mat_ce,
+                              &dst_zval,
+                              &top, &bottom, &left, &right, &border_type,
+                              &value_zval, opencv_scalar_ce) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *src_object = Z_PHP_MAT_OBJ_P(src_zval);
+    Scalar value;
+    if(value_zval == NULL){
+        value = Scalar();
+    }else{
+        opencv_scalar_object *value_object = Z_PHP_SCALAR_OBJ_P(value_zval);
+        value = *value_object->scalar;
+    }
+    opencv_mat_object *dst_object;
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval) == opencv_mat_ce){
+        // is Mat object
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        // isn't Mat object
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);// Cover dst_real_zval by Mat object
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+    try {
+        copyMakeBorder(*src_object->mat, *dst_object->mat, (int)top, (int)bottom, (int)left, (int)right, (int)border_type, value);
+    }catch (Exception e){
+        opencv_throw_exception(e.what());
+    }
+    opencv_mat_update_property_by_c_mat(dst_real_zval, dst_object->mat);
+    RETURN_NULL();
+
+}

@@ -298,6 +298,46 @@ PHP_METHOD(opencv_mat, at)
 }
 
 
+ZEND_BEGIN_ARG_INFO_EX(opencv_mat_convert_to_arginfo, 0, 0, 4)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, rtype)
+                ZEND_ARG_INFO(0, alpha)
+                ZEND_ARG_INFO(0, beta)
+ZEND_END_ARG_INFO()
+
+/**
+ * CV\Mat->convertTo
+ * @param execute_data
+ * @param return_value
+ */
+PHP_METHOD(opencv_mat, convert_to){
+    zval *dst_zval;
+    long rtype;
+    double alpha = 1, beta = 0;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "zl|dd", &dst_zval, &rtype, &alpha, &beta) == FAILURE) {
+        RETURN_NULL();
+    }
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    opencv_mat_object *dst_object, *this_object;
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval)==opencv_mat_ce){
+        // is Mat object
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        // isn't Mat object
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);// Cover dst_real_zval by Mat object
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+    this_object = Z_PHP_MAT_OBJ_P(getThis());
+    this_object->mat->convertTo(*dst_object->mat, (int)rtype, alpha, beta);
+    opencv_mat_update_property_by_c_mat(dst_real_zval,dst_object->mat);
+    RETURN_NULL();
+}
+
+
 /**
  * mat_methods[]
  */
@@ -314,6 +354,7 @@ const zend_function_entry mat_methods[] = {
         PHP_ME(opencv_mat, at, NULL, ZEND_ACC_PUBLIC)
         PHP_MALIAS(opencv_mat, getImageROI ,get_image_roi, NULL, ZEND_ACC_PUBLIC)
         PHP_MALIAS(opencv_mat, copyTo ,copy_to, NULL, ZEND_ACC_PUBLIC)
+        PHP_MALIAS(opencv_mat, convertTo ,convert_to, opencv_mat_convert_to_arginfo, ZEND_ACC_PUBLIC)
         PHP_FE_END
 };
 /* }}} */

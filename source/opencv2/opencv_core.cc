@@ -257,3 +257,44 @@ PHP_FUNCTION(opencv_copy_make_border){
     RETURN_NULL();
 
 }
+
+/**
+ * CV\merge
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_dft){
+    zval *src_zval, *array_val_zval, *dst_zval;
+    long flags, nonzero_rows;
+    opencv_mat_object *dst_object;
+
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Oz", &src_zval, opencv_mat_ce, &dst_zval) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *src_object = Z_PHP_MAT_OBJ_P(src_zval);
+
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval)==opencv_mat_ce){
+        // is Mat object
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        // isn't Mat object
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);// Cover dst_real_zval by Mat object
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+
+    try{
+        dft(*src_object->mat, *dst_object->mat, (int)flags, (int)nonzero_rows);
+    }catch (Exception e){
+        opencv_throw_exception(e.what());
+    }
+    opencv_mat_update_property_by_c_mat(dst_real_zval, dst_object->mat);
+    RETURN_NULL();
+
+}

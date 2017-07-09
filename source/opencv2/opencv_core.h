@@ -43,4 +43,12 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_copy_make_border_arginfo, 0, 0, 8)
                 ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(opencv_dft_arginfo, 0, 0, 4)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, flags)
+                ZEND_ARG_INFO(0, nonzeroRows)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_dft);
+
 #endif //OPENCV_CORE_H

@@ -142,7 +142,7 @@ PHP_FUNCTION(opencv_merge){
         RETURN_NULL();
     }
 
-    int channel_count = zend_hash_num_elements(Z_ARRVAL_P(channels_zval));
+    unsigned long channel_count = zend_hash_num_elements(Z_ARRVAL_P(channels_zval));
     std::vector<Mat> channels;
     if(channel_count == 0){
         char *error_message = (char*)malloc(strlen("array lenght must be >=1") + 1);
@@ -157,9 +157,13 @@ PHP_FUNCTION(opencv_merge){
 
     ZEND_HASH_FOREACH_NUM_KEY_VAL(Z_ARRVAL_P(channels_zval),_h,array_val_zval){
                 //check array_val_zval is Mat object
+                again:
                 if(Z_TYPE_P(array_val_zval) == IS_OBJECT && Z_OBJCE_P(array_val_zval)==opencv_mat_ce){
                     mat_obj = Z_PHP_MAT_OBJ_P(array_val_zval);
                     channels.push_back(*mat_obj->mat);
+                }else if(Z_TYPE_P(array_val_zval) == IS_REFERENCE){
+                    array_val_zval = Z_REFVAL_P(array_val_zval);
+                    goto again;
                 } else {
                     char *error_message = (char*)malloc(strlen("array value just Mat object") + 1);
                     strcpy(error_message,"array value just Mat object");

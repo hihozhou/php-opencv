@@ -31,10 +31,29 @@ void opencv_formatter_const_init(int module_number){
     zend_declare_class_constant_long(opencv_formatter_ce,"FMT_C",sizeof("FMT_C")-1,Formatter::FMT_C);
 }
 
+/**
+ * @see NormTypes
+ * @param module_number
+ */
+void opencv_norm_types_const_init(int module_number){
+
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "NORM_INF", NORM_INF, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "NORM_L1", NORM_L1, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "NORM_L2", NORM_L2, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "NORM_L2SQR", NORM_L2SQR, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "NORM_HAMMING", NORM_HAMMING, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "NORM_HAMMING2", NORM_HAMMING2, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "NORM_TYPE_MASK", NORM_TYPE_MASK, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "NORM_RELATIVE", NORM_RELATIVE, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "NORM_MINMAX", NORM_MINMAX, CONST_CS | CONST_PERSISTENT);
+}
+
+
 void opencv_core_init(int module_number)
 {
     opencv_formatter_init();
     opencv_formatter_const_init(module_number);
+    opencv_norm_types_const_init(module_number);
 }
 
 

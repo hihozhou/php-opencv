@@ -342,13 +342,15 @@ PHP_FUNCTION(opencv_magnitude){
 }
 
 /**
+ * //todo mask and dtype params
  * CV\add
  * @param execute_data
  * @param return_value
  */
 PHP_FUNCTION(opencv_add){
-    zval *src1_zval, *src2_zval, *dst_zval, *mask_zval;
-    long dtype = -1;
+    zval *src1_zval, *src2_zval, *dst_zval;
+//    zval *mask_zval;
+//    long dtype = -1;
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "zzz",
                               &src1_zval,
                               &src2_zval,
@@ -442,6 +444,75 @@ PHP_FUNCTION(opencv_add){
         opencv_scalar_update_property_by_c_scalar(dst_real_zval, dst_scalar_object->scalar);
     }
 
+    RETURN_NULL();
+
+}
+
+
+/**
+ * CV\log
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_log){
+    zval *src_zval, *dst_zval;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Oz",
+                              &src_zval, opencv_mat_ce,
+                              &dst_zval) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *src_object = Z_PHP_MAT_OBJ_P(src_zval);
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    opencv_mat_object *dst_object;
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval)==opencv_mat_ce){
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+
+    log(*src_object->mat, *dst_object->mat);
+    opencv_mat_update_property_by_c_mat(dst_real_zval, dst_object->mat);
+    RETURN_NULL();
+
+}
+
+/**
+ * //todo mask parameter
+ * CV\log
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_normalize){
+    zval *src_zval, *dst_zval;
+    double alpha = 1, beta = 0;
+    long norm_type = NORM_L2, dtype = -1;
+    zval *mask_zval;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Oz|ddll",
+                              &src_zval, opencv_mat_ce, &dst_zval,
+                              &alpha, &beta, &norm_type, &dtype) == FAILURE) {
+        RETURN_NULL();
+    }
+    opencv_mat_object *src_object = Z_PHP_MAT_OBJ_P(src_zval);
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    opencv_mat_object *dst_object;
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval)==opencv_mat_ce){
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+    normalize(*src_object->mat, *dst_object->mat, alpha, beta, (int)norm_type, (int)dtype);
+    opencv_mat_update_property_by_c_mat(dst_real_zval, dst_object->mat);
     RETURN_NULL();
 
 }

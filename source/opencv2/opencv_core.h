@@ -65,5 +65,19 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_add_arginfo, 0, 0, 5)
                 ZEND_ARG_INFO(0, dtype)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_add);
+ZEND_BEGIN_ARG_INFO_EX(opencv_log_arginfo, 0, 0, 2)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_log);
+ZEND_BEGIN_ARG_INFO_EX(opencv_normalize_arginfo, 0, 0, 6)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, alpha)
+                ZEND_ARG_INFO(0, beta)
+                ZEND_ARG_INFO(0, norm_type)
+                ZEND_ARG_INFO(0, dtype)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_normalize);
 
 #endif //OPENCV_CORE_H

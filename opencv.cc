@@ -199,6 +199,8 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, dft, ZEND_FN(opencv_dft), opencv_dft_arginfo)
     ZEND_NS_NAMED_FE(OPENCV_NS, magnitude, ZEND_FN(opencv_magnitude), opencv_magnitude_arginfo)
     ZEND_NS_NAMED_FE(OPENCV_NS, add, ZEND_FN(opencv_add), opencv_add_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, log, ZEND_FN(opencv_log), opencv_log_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, normalize, ZEND_FN(opencv_normalize), opencv_normalize_arginfo)
 	PHP_FE_END	/* Must be the last line in opencv_functions[] */
 };
 /* }}} */

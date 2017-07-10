@@ -259,7 +259,7 @@ PHP_FUNCTION(opencv_copy_make_border){
 }
 
 /**
- * CV\merge
+ * CV\dft
  * @param execute_data
  * @param return_value
  */
@@ -291,6 +291,48 @@ PHP_FUNCTION(opencv_dft){
 
     try{
         dft(*src_object->mat, *dst_object->mat, (int)flags, (int)nonzero_rows);
+    }catch (Exception e){
+        opencv_throw_exception(e.what());
+    }
+    opencv_mat_update_property_by_c_mat(dst_real_zval, dst_object->mat);
+    RETURN_NULL();
+
+}
+
+/**
+ * CV\magnitude
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_magnitude){
+    zval *x_zval, *y_zval, *dst_zval;
+    opencv_mat_object *dst_object;
+
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OOz",
+                              &x_zval, opencv_mat_ce,
+                              &y_zval, opencv_mat_ce,
+                              &dst_zval) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *x_object = Z_PHP_MAT_OBJ_P(x_zval);
+    opencv_mat_object *y_object = Z_PHP_MAT_OBJ_P(y_zval);
+
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval)==opencv_mat_ce){
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+
+    try{
+        magnitude(*x_object->mat, *y_object->mat, *dst_object->mat);
     }catch (Exception e){
         opencv_throw_exception(e.what());
     }

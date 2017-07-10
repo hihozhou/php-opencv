@@ -43,4 +43,41 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_copy_make_border_arginfo, 0, 0, 8)
                 ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(opencv_dft_arginfo, 0, 0, 4)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, flags)
+                ZEND_ARG_INFO(0, nonzeroRows)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_dft);
+
+ZEND_BEGIN_ARG_INFO_EX(opencv_magnitude_arginfo, 0, 0, 3)
+                ZEND_ARG_INFO(0, x)
+                ZEND_ARG_INFO(0, y)
+                ZEND_ARG_INFO(1, magnitude)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_magnitude);
+ZEND_BEGIN_ARG_INFO_EX(opencv_add_arginfo, 0, 0, 5)
+                ZEND_ARG_INFO(0, src1)
+                ZEND_ARG_INFO(0, src2)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, mask)
+                ZEND_ARG_INFO(0, dtype)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_add);
+ZEND_BEGIN_ARG_INFO_EX(opencv_log_arginfo, 0, 0, 2)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_log);
+ZEND_BEGIN_ARG_INFO_EX(opencv_normalize_arginfo, 0, 0, 6)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, alpha)
+                ZEND_ARG_INFO(0, beta)
+                ZEND_ARG_INFO(0, norm_type)
+                ZEND_ARG_INFO(0, dtype)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_normalize);
+
 #endif //OPENCV_CORE_H

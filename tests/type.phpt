@@ -1,5 +1,5 @@
 --TEST--
-Point test
+Type test
 --SKIPIF--
 <?php if (!extension_loaded("opencv")) print "skip"; ?>
 --FILE--
@@ -43,13 +43,13 @@ object(CV\Scalar)#2 (1) {
   ["val"]=>
   array(4) {
     [0]=>
-    int(2500)
+    float(2500)
     [1]=>
-    int(0)
+    float(0)
     [2]=>
-    int(0)
+    float(0)
     [3]=>
-    int(0)
+    float(0)
   }
 }
 [2500, 0, 0, 0]

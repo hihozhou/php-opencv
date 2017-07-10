@@ -153,6 +153,23 @@ void opencv_scalar_free_obj(zend_object *object)
 }
 
 
+void opencv_scalar_update_property_by_c_scalar(zval *z,Scalar *scalar){
+    zval val;
+    array_init(&val);
+    add_next_index_double(&val,scalar->val[0]);
+    add_next_index_double(&val,scalar->val[1]);
+    add_next_index_double(&val,scalar->val[2]);
+    add_next_index_double(&val,scalar->val[3]);
+    zend_update_property(opencv_scalar_ce, z, "val", sizeof("val")-1, &val);
+    /**
+     * 数组val在array_init()后refcount=1，
+     * 插入成员属性zend_update_property()会自动加一次，变为2，
+     * 对象销毁后只会减1，需要要在zend_update_property()后主动减一次引用
+     */
+    Z_DELREF(val);
+}
+
+
 /**
  * Scalar __construct
  * @param execute_data
@@ -160,26 +177,14 @@ void opencv_scalar_free_obj(zend_object *object)
  */
 PHP_METHOD(opencv_scalar, __construct)
 {
-    long value1 = 0, value2 = 0, value3 = 0, value4 = 0;//value: 8bit=0~255 16bit=0~65535...
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "|llll", &value1, &value2, &value3, &value4) == FAILURE) {
+    double value1 = 0, value2 = 0, value3 = 0, value4 = 0;//value: 8bit=0~255 16bit=0~65535...
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "|dddd", &value1, &value2, &value3, &value4) == FAILURE) {
         RETURN_NULL();
     }
     opencv_scalar_object *obj = Z_PHP_SCALAR_OBJ_P(getThis());
     Scalar scalar = Scalar((int)value1, (int)value2, (int)value3, (int)value4);
     obj->scalar = new Scalar(scalar);
-    zval val;
-    array_init(&val);
-    add_next_index_long(&val,value1);
-    add_next_index_long(&val,value2);
-    add_next_index_long(&val,value3);
-    add_next_index_long(&val,value4);
-    zend_update_property(opencv_scalar_ce, getThis(), "val", sizeof("val")-1, &val);
-    /**
-     * 数组val在array_init()后refcount=1，
-     * 插入成员属性zend_update_property()会自动加一次，变为2，
-     * 对象销毁后只会减1，需要要在zend_update_property()后主动减一次引用
-     */
-    Z_DELREF(val);
+    opencv_scalar_update_property_by_c_scalar(getThis(), obj->scalar);
 }
 
 

@@ -238,6 +238,10 @@ PHP_METHOD(opencv_mat, get_image_roi)
     RETURN_ZVAL(&instance,0,0); //return php Mat object
 }
 
+ZEND_BEGIN_ARG_INFO_EX(opencv_mat_copy_to_arginfo, 0, 0, 2)
+                ZEND_ARG_INFO(1, m)
+                ZEND_ARG_INFO(0, mask)
+ZEND_END_ARG_INFO()
 
 /**
  * Mat->copyTo(Mat $mat,Mat $mask=NULL)
@@ -246,21 +250,38 @@ PHP_METHOD(opencv_mat, get_image_roi)
  */
 PHP_METHOD(opencv_mat, copy_to)
 {
-    zval *mat_zval, *mask_zval = NULL;
+    zval *m_zval, *mask_zval = NULL;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "O|O", &mat_zval, opencv_mat_ce, &mask_zval, opencv_mat_ce) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "z|O", &m_zval, opencv_mat_ce, &mask_zval, opencv_mat_ce) == FAILURE) {
         RETURN_NULL();
     }
-    opencv_mat_object *mat_object = Z_PHP_MAT_OBJ_P(mat_zval);
-    opencv_mat_object *this_object = Z_PHP_MAT_OBJ_P(getThis());
 
+    zval *m_real_zval = Z_REFVAL_P(m_zval);
+    opencv_mat_object *m_object;
+    if(Z_TYPE_P(m_real_zval) == IS_OBJECT && Z_OBJCE_P(m_real_zval)==opencv_mat_ce){
+        m_object = Z_PHP_MAT_OBJ_P(m_real_zval);
+    } else if(Z_TYPE_P(m_real_zval) == IS_NULL){
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(m_real_zval, &instance);
+        m_object = Z_PHP_MAT_OBJ_P(m_real_zval);
+        m_object->mat = new Mat(dst);
+    }else{
+        char *error_message = (char*)malloc(strlen("copy expect param is Mat object or null.")+ 1);
+        strcpy(error_message,"copy expect param is Mat object or null.");
+        opencv_throw_exception(error_message);
+        free(error_message);
+    }
+    opencv_mat_object *this_object = Z_PHP_MAT_OBJ_P(getThis());
     try {
         if(mask_zval != NULL){
             opencv_mat_object *mask_object = Z_PHP_MAT_OBJ_P(mask_zval);
-            this_object->mat->copyTo(*mat_object->mat, *mask_object->mat);
+            this_object->mat->copyTo(*m_object->mat, *mask_object->mat);
         }else{
-            this_object->mat->copyTo(*mat_object->mat);
+            this_object->mat->copyTo(*m_object->mat);
         }
+        opencv_mat_update_property_by_c_mat(m_real_zval, m_object->mat);
     }catch (Exception exception){
         const char* err_msg = exception.what();
         opencv_throw_exception(err_msg);//throw exception
@@ -353,7 +374,7 @@ const zend_function_entry mat_methods[] = {
         PHP_ME(opencv_mat, col, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, at, NULL, ZEND_ACC_PUBLIC)
         PHP_MALIAS(opencv_mat, getImageROI ,get_image_roi, NULL, ZEND_ACC_PUBLIC)
-        PHP_MALIAS(opencv_mat, copyTo ,copy_to, NULL, ZEND_ACC_PUBLIC)
+        PHP_MALIAS(opencv_mat, copyTo ,copy_to, opencv_mat_copy_to_arginfo, ZEND_ACC_PUBLIC)
         PHP_MALIAS(opencv_mat, convertTo ,convert_to, opencv_mat_convert_to_arginfo, ZEND_ACC_PUBLIC)
         PHP_FE_END
 };

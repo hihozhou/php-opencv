@@ -1,0 +1,23 @@
+language: php
+
+compiler:
+  - gcc
+  - clang
+
+os:
+  - linux
+#  - osx
+
+php:
+  - 7.0
+  - 7.1
+
+notifications:
+  email: hihozhou@gmail.com
+
+#Compile
+before_script:
+    - ./travis/compile.sh
+
+script:
+    - exit 0

@@ -1,6 +1,6 @@
 # PHP-OPENCV - PHP extension for Opencv
 
-[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.0-8892BF.svg)](https://php.net/)
+[![Build Status](https://travis-ci.org/hihozhou/php-opencv.svg?branch=master)](https://travis-ci.org/hihozhou/php-opencv) [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.0-8892BF.svg)](https://php.net/)
 
 ## Requirements
 

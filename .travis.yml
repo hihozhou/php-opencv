@@ -29,8 +29,8 @@ before_script:
     - mkdir build
     - cd build
     - cmake ..
-    - make -j4
-    - sudo make install
+    - make
+    - make install
     - cd ..
     - ./travis/compile.sh
 

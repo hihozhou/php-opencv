@@ -15,8 +15,23 @@ php:
 notifications:
   email: hihozhou@gmail.com
 
+before_install:
+  - sudo apt-get update
+install:
+  - sudo apt-get install build-essential
+  - sudo apt-get install cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
+
 #Compile
 before_script:
+    - git clone https://github.com/opencv/opencv.git
+    - cd opencv
+    - git checkout 3.2.0
+    - mkdir build
+    - cd build
+    - cmake ..
+    - make -j4
+    - sudo make install
+    - cd ..
     - ./travis/compile.sh
 
 script:

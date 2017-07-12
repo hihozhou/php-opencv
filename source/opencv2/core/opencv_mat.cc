@@ -15,7 +15,7 @@ zend_class_entry *opencv_mat_ce;
  * @param type
  * @return
  */
-zend_object* mat_create_handler(zend_class_entry *type)
+zend_object* opencv_mat_create_handler(zend_class_entry *type)
 {
     int size = sizeof(opencv_mat_object);
     opencv_mat_object *obj = (opencv_mat_object *)ecalloc(1,size);
@@ -360,9 +360,9 @@ PHP_METHOD(opencv_mat, convert_to){
 
 
 /**
- * mat_methods[]
+ * opencv_mat_methods[]
  */
-const zend_function_entry mat_methods[] = {
+const zend_function_entry opencv_mat_methods[] = {
         PHP_ME(opencv_mat, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
         PHP_ME(opencv_mat, type, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, depth, NULL, ZEND_ACC_PUBLIC)
@@ -410,10 +410,10 @@ void opencv_mat_write_property(zval *object, zval *member, zval *value, void **c
  */
 void opencv_mat_init(void){
     zend_class_entry ce;
-    INIT_NS_CLASS_ENTRY(ce,OPENCV_NS, "Mat", mat_methods);
+    INIT_NS_CLASS_ENTRY(ce,OPENCV_NS, "Mat", opencv_mat_methods);
     opencv_mat_ce = zend_register_internal_class(&ce);
 
-    opencv_mat_ce->create_object = mat_create_handler;
+    opencv_mat_ce->create_object = opencv_mat_create_handler;
     memcpy(&opencv_mat_object_handlers,
            zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     opencv_mat_object_handlers.clone_obj = NULL;

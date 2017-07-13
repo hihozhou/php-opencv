@@ -230,6 +230,21 @@ zval *opencv_file_storage_read_property(zval *object, zval *member, int type, vo
 
 }
 
+void opencv_file_storage_consts_init(int module_number){
+    //! file storage mode
+    //@see cv::FileStorage::Mode
+    zend_declare_class_constant_long(opencv_file_storage_ce,"READ",sizeof("READ")-1,FileStorage::READ);
+    zend_declare_class_constant_long(opencv_file_storage_ce,"WRITE",sizeof("WRITE")-1,FileStorage::WRITE);
+    zend_declare_class_constant_long(opencv_file_storage_ce,"APPEND",sizeof("APPEND")-1,FileStorage::APPEND);
+    zend_declare_class_constant_long(opencv_file_storage_ce,"MEMORY",sizeof("MEMORY")-1,FileStorage::MEMORY);
+
+    zend_declare_class_constant_long(opencv_file_storage_ce,"FORMAT_MASK",sizeof("FORMAT_MASK")-1,FileStorage::FORMAT_MASK);
+    zend_declare_class_constant_long(opencv_file_storage_ce,"FORMAT_AUTO",sizeof("FORMAT_AUTO")-1,FileStorage::FORMAT_AUTO);
+    zend_declare_class_constant_long(opencv_file_storage_ce,"FORMAT_XML",sizeof("FORMAT_XML")-1,FileStorage::FORMAT_XML);
+    zend_declare_class_constant_long(opencv_file_storage_ce,"FORMAT_YAML",sizeof("FORMAT_YAML")-1,FileStorage::FORMAT_YAML);
+    zend_declare_class_constant_long(opencv_file_storage_ce,"FORMAT_JSON",sizeof("FORMAT_JSON")-1,FileStorage::FORMAT_JSON);
+}
+
 /**
  * FileStorage class Init
  */

@@ -107,7 +107,6 @@ PHP_FUNCTION(opencv_add_weighted){
     RETURN_NULL();
 }
 
-#define OPENCV_CONNECT(text1,text2) text1##text2
 
 /**
  * CV\split

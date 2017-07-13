@@ -50,6 +50,12 @@ using namespace cv;
 
 #define OPENCV_NS "CV"
 
+#define OPENCV_CONNECT(text1,text2) text1##text2
+
+
+//#define OPENCV_BEGIN_ARG_INFO		ZEND_BEGIN_ARG_INFO
+//#define OPENCV_BEGIN_ARG_INFO_EX	ZEND_BEGIN_ARG_INFO_EX
+
 /*
   	Declare any global variables you may need between the BEGIN
 	and END macros here:

@@ -38,6 +38,7 @@ extern "C" {
 #include "source/opencv2/opencv_core.h"
 #include "source/opencv2/core/opencv_base.h"
 #include "source/opencv2/core/opencv_persistence.h"
+#include "source/opencv2/opencv_objdetect.h"
 
 /* If you declare any globals in php_opencv.h uncomment this:
 ZEND_DECLARE_MODULE_GLOBALS(opencv)
@@ -116,6 +117,7 @@ PHP_MINIT_FUNCTION(opencv)
 	opencv_core_init(module_number);
     opencv_border_types_init(module_number);
 	opencv_file_storage_init(module_number);
+	opencv_objdetect_init(module_number);
 
 	return SUCCESS;
 }

@@ -264,4 +264,5 @@ void opencv_file_storage_init(int module_number){
 
 //    zend_declare_property_null(opencv_mat_ce,"type",sizeof("type") - 1,ZEND_ACC_PRIVATE);//private Mat->type
 //    opencv_mat_object_handlers.free_obj = opencv_mat_free_obj;
+    opencv_file_storage_consts_init(module_number);
 }

@@ -370,6 +370,12 @@ void opencv_rect_free_obj(zend_object *object)
     zend_object_std_dtor(object);
 }
 
+void opencv_rect_update_property_by_c_rect(zval *z, Rect *rect){
+    zend_update_property_long(opencv_rect_ce, z, "x", sizeof("x")-1, rect->x);
+    zend_update_property_long(opencv_rect_ce, z, "y", sizeof("y")-1, rect->y);
+    zend_update_property_long(opencv_rect_ce, z, "width", sizeof("width")-1, rect->width);
+    zend_update_property_long(opencv_rect_ce, z, "height", sizeof("height")-1, rect->height);
+}
 
 /**
  * Rect __construct
@@ -385,11 +391,7 @@ PHP_METHOD(opencv_rect, __construct)
     opencv_rect_object *obj = Z_PHP_RECT_OBJ_P(getThis());
     Rect rect = Rect((int)x, (int)y, (int)width, (int)height);
     obj->rect = new Rect(rect);
-
-    zend_update_property_long(opencv_rect_ce, getThis(), "x", sizeof("x")-1, obj->rect->x);
-    zend_update_property_long(opencv_rect_ce, getThis(), "y", sizeof("y")-1, obj->rect->y);
-    zend_update_property_long(opencv_rect_ce, getThis(), "width", sizeof("width")-1, obj->rect->width);
-    zend_update_property_long(opencv_rect_ce, getThis(), "height", sizeof("height")-1, obj->rect->height);
+    opencv_rect_update_property_by_c_rect(getThis(),obj->rect);
 }
 
 

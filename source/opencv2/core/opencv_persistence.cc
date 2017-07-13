@@ -114,7 +114,11 @@ PHP_METHOD(opencv_file_storage, write){
 //            }
             break;
         case IS_ARRAY:
-            //非空数组为true
+            //todo only one type array
+            error_message = (char*)malloc(strlen("Can't write file on array.")+ 1);
+            strcpy(error_message,"Can't write file object on array.");
+            opencv_throw_exception(error_message);
+            free(error_message);
 //            if (zend_hash_num_elements(Z_ARRVAL_P(op))) {
 //                result = 1;
 //            }
@@ -130,8 +134,6 @@ PHP_METHOD(opencv_file_storage, write){
                 opencv_throw_exception(error_message);
                 free(error_message);
             }
-
-//            result = zend_object_is_true(op);
             break;
         case IS_RESOURCE:
             error_message = (char*)malloc(strlen("Can't write file on resource.")+ 1);
@@ -143,6 +145,10 @@ PHP_METHOD(opencv_file_storage, write){
             goto again;
             break;
         default:
+            error_message = (char*)malloc(strlen("Can't write file on unknow type.")+ 1);
+            strcpy(error_message,"Can't write file on unknow type.");
+            opencv_throw_exception(error_message);
+            free(error_message);
             break;
     }
     RETURN_NULL();
@@ -150,7 +156,53 @@ PHP_METHOD(opencv_file_storage, write){
 }
 
 PHP_METHOD(opencv_file_storage, read){
-
+    char *name;
+    long name_len = 0, value_type;
+    char *error_message;
+    FileStorage fs;
+    Mat mat_val;
+    opencv_mat_object *mat_object;
+    char* char_val;
+    String string_val;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "sl", &name, &name_len, &value_type) == FAILURE) {
+        RETURN_NULL();
+    }
+    opencv_file_storage_object *obj = Z_PHP_FILE_STORAGE_OBJ_P(getThis());
+    fs = *(obj->fileStorage);
+    switch (value_type) {
+        case 1://int
+            int int_val;
+            fs[name]>>int_val;
+            RETURN_LONG((long)int_val);
+            break;
+        case 2://double
+            double double_val;
+            fs[name]>>double_val;
+            RETURN_DOUBLE(double_val);
+            break;
+        case 3://string
+            fs[name] >> string_val;
+            char_val = const_cast<char*>(string_val.c_str());
+            RETURN_STRING(char_val);
+            break;
+        case 4://bool
+            bool bool_val;
+            fs[name] >> bool_val;
+            RETURN_BOOL(bool_val);
+            break;
+        case 5://Mat
+            fs[name] >> mat_val;
+            zval mat_instance;
+            object_init_ex(&mat_instance,opencv_mat_ce);
+            mat_object = Z_PHP_MAT_OBJ_P(&mat_instance);
+            mat_object->mat = new Mat(mat_val);
+            opencv_mat_update_property_by_c_mat(&mat_instance, mat_object->mat);
+            RETURN_ZVAL(&mat_instance,0,0);
+            break;
+        default:
+            RETURN_NULL();
+            break;
+    }
 }
 
 PHP_METHOD(opencv_file_storage, release){

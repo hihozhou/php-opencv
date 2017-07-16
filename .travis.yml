@@ -22,7 +22,7 @@ install:
   - sudo apt-get install -y build-essential
   - sudo apt-get install -y cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
   - sudo apt-get install -y python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
-  - sudo apt-get install -y gcc-4.8 g++-4.8
+  #- sudo apt-get install -y gcc-4.8 g++-4.8
 
   # Download OpenCV-contrib v3.3.0-rc
   - curl -sL https://github.com/Itseez/opencv_contrib/archive/3.3.0-rc.zip > opencv_contrib.zip

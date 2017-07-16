@@ -59,7 +59,7 @@ if test "$PHP_OPENCV" != "no"; then
           AC_MSG_RESULT(found)
           AC_MSG_CHECKING(for opencv)
           if $PKG_CONFIG --exists opencv; then
-              if $PKG_CONFIG --atleast-version=3.2.0 opencv; then
+              if $PKG_CONFIG --atleast-version=3.3.0 opencv; then
                   opencv_version=`$PKG_CONFIG --modversion opencv`
                   AC_MSG_RESULT([found $opencv_version])
                   dnl Add c++ opencv libs and includes by pkg-config
@@ -70,7 +70,7 @@ if test "$PHP_OPENCV" != "no"; then
                   AC_DEFINE(HAVE_OPENCV, 1, [whether opencv exists in the system])
               else
                   AC_MSG_RESULT(too old)
-                  AC_MSG_ERROR(Ooops ! You need at least opencv 2.1.0)
+                  AC_MSG_ERROR(Ooops ! You need at least opencv 3.3.0)
               fi
           else
               AC_MSG_RESULT(not found)

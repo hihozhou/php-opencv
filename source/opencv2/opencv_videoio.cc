@@ -15,6 +15,7 @@
  */
 #include "../../php_opencv.h"
 #include "opencv_videoio.h"
+#include "../../opencv_exception.h"
 
 zend_class_entry *opencv_video_capture_ce;
 
@@ -34,8 +35,106 @@ zend_object* opencv_video_capture_create_handler(zend_class_entry *type)
 
 PHP_METHOD(opencv_video_capture, __construct)
 {
+    zval *zval1 = NULL;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "|z", &zval1) == FAILURE) {
+        RETURN_NULL();
+    }
     opencv_video_capture_object *obj = Z_PHP_VIDEO_CAPTURE_P(getThis());
-    obj->videoCapture = new VideoCapture();
+    char *error_message;
+    VideoCapture *videoCapture;
+    if(zval1 == NULL){
+        videoCapture = new VideoCapture();
+    }else{
+        again:
+        switch (Z_TYPE_P(zval1)) {
+            case IS_LONG:
+                try{
+                    int long_val = (int)zval_get_long(zval1);
+                    videoCapture = new VideoCapture(long_val);
+                }catch (Exception e){
+                    opencv_throw_exception(e.what());
+                }
+                break;
+            case IS_DOUBLE:
+                try{
+                    int double_val = (int)zval_get_double(zval1);
+                    videoCapture = new VideoCapture(double_val);
+                }catch (Exception e){
+                    opencv_throw_exception(e.what());
+                }
+                break;
+            case IS_STRING:
+                try{
+                    String string_val=(String)ZSTR_VAL(zval_get_string(zval1));
+                    videoCapture = new VideoCapture(string_val);
+                }catch (Exception e){
+                    opencv_throw_exception(e.what());
+                }
+                break;
+            case IS_REFERENCE:
+                zval1 = Z_REFVAL_P(zval1);
+                goto again;
+                break;
+            default:
+                error_message = (char*)malloc(strlen("Can't write file on unknow type.")+ 1);
+                strcpy(error_message,"Can't write file on unknow type.");
+                opencv_throw_exception(error_message);
+                free(error_message);
+                break;
+        }
+    }
+
+    obj->videoCapture = videoCapture;
+}
+
+PHP_METHOD(opencv_video_capture, open)
+{
+    zval *zval1 = NULL;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "z", &zval1) == FAILURE) {
+        RETURN_NULL();
+    }
+    opencv_video_capture_object *obj = Z_PHP_VIDEO_CAPTURE_P(getThis());
+    char *error_message;
+    VideoCapture *videoCapture;
+    again:
+    switch (Z_TYPE_P(zval1)) {
+        case IS_LONG:
+            try{
+                int long_val = (int)zval_get_long(zval1);
+                obj->videoCapture->open(long_val);
+            }catch (Exception e){
+                opencv_throw_exception(e.what());
+            }
+            break;
+        case IS_DOUBLE:
+            try{
+                int double_val = (int)zval_get_double(zval1);
+                obj->videoCapture->open(double_val);
+            }catch (Exception e){
+                opencv_throw_exception(e.what());
+            }
+            break;
+        case IS_STRING:
+            try{
+                String string_val=(String)ZSTR_VAL(zval_get_string(zval1));
+                obj->videoCapture->open(string_val);
+            }catch (Exception e){
+                opencv_throw_exception(e.what());
+            }
+            break;
+        case IS_REFERENCE:
+            zval1 = Z_REFVAL_P(zval1);
+            goto again;
+            break;
+        default:
+            error_message = (char*)malloc(strlen("Can't write file on unknow type.")+ 1);
+            strcpy(error_message,"Can't write file on unknow type.");
+            opencv_throw_exception(error_message);
+            free(error_message);
+            break;
+    }
+
+    obj->videoCapture = videoCapture;
 }
 
 /**
@@ -43,6 +142,7 @@ PHP_METHOD(opencv_video_capture, __construct)
  */
 const zend_function_entry opencv_video_capture_methods[] = {
         PHP_ME(opencv_video_capture, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+        PHP_ME(opencv_video_capture, open, NULL, ZEND_ACC_PUBLIC)
         PHP_FE_END
 };
 /* }}} */

@@ -16,6 +16,7 @@
 #include "../../php_opencv.h"
 #include "opencv_videoio.h"
 #include "../../opencv_exception.h"
+#include "core/opencv_mat.h"
 
 zend_class_entry *opencv_video_capture_ce;
 
@@ -95,7 +96,6 @@ PHP_METHOD(opencv_video_capture, open)
     }
     opencv_video_capture_object *obj = Z_PHP_VIDEO_CAPTURE_P(getThis());
     char *error_message;
-    VideoCapture *videoCapture;
     again:
     switch (Z_TYPE_P(zval1)) {
         case IS_LONG:
@@ -133,8 +133,45 @@ PHP_METHOD(opencv_video_capture, open)
             free(error_message);
             break;
     }
+}
 
-    obj->videoCapture = videoCapture;
+
+PHP_METHOD(opencv_video_capture, is_opend)
+{
+    opencv_video_capture_object *obj = Z_PHP_VIDEO_CAPTURE_P(getThis());
+    bool is_opend = obj->videoCapture->isOpened();
+    RETURN_BOOL(is_opend);
+}
+
+ZEND_BEGIN_ARG_INFO_EX(opencv_video_capture_read_arginfo, 0, 0, 1)
+                ZEND_ARG_INFO(1, mat)
+ZEND_END_ARG_INFO()
+
+PHP_METHOD(opencv_video_capture, read)
+{
+    zval *mat_zval = NULL;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "z", &mat_zval) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    zval *mat_real_zval = Z_REFVAL_P(mat_zval);
+    opencv_mat_object *real_object;
+    Mat mat;
+    again:
+    if(Z_TYPE_P(mat_real_zval) == IS_OBJECT && Z_OBJCE_P(mat_real_zval)==opencv_mat_ce){
+        real_object = Z_PHP_MAT_OBJ_P(mat_real_zval);
+    }else{
+        zval instance;
+
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(mat_real_zval, &instance);// Cover dst_real_zval by Mat object
+        real_object = Z_PHP_MAT_OBJ_P(mat_real_zval);
+    }
+    opencv_video_capture_object *this_object = Z_PHP_VIDEO_CAPTURE_P(getThis());
+    *(this_object->videoCapture) >> mat;
+
+    real_object->mat = new Mat(mat);
+    RETURN_NULL();
 }
 
 /**
@@ -143,6 +180,8 @@ PHP_METHOD(opencv_video_capture, open)
 const zend_function_entry opencv_video_capture_methods[] = {
         PHP_ME(opencv_video_capture, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
         PHP_ME(opencv_video_capture, open, NULL, ZEND_ACC_PUBLIC)
+        PHP_MALIAS(opencv_video_capture, isOpend ,is_opend, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_video_capture, read, opencv_video_capture_read_arginfo, ZEND_ACC_PUBLIC)
         PHP_FE_END
 };
 /* }}} */

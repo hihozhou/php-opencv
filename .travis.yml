@@ -22,18 +22,24 @@ install:
   - sudo apt-get install -y build-essential
   - sudo apt-get install -y cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
   - sudo apt-get install -y python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
+  #- sudo apt-get install -y gcc-4.8 g++-4.8
 
-  # Download v3.0.0 .zip file and extract.
-  - curl -sL https://github.com/Itseez/opencv/archive/3.2.0.zip > opencv.zip
+  # Download OpenCV-contrib v3.3.0-rc
+  - curl -sL https://github.com/Itseez/opencv_contrib/archive/3.3.0-rc.zip > opencv_contrib.zip
+  - unzip opencv_contrib.zip
+  #- cd opencv_contrib-3.3.0-rc
+
+  # Download OpenCV v3.3.0-rc .zip file and extract.
+  - curl -sL https://github.com/Itseez/opencv/archive/3.3.0-rc.zip > opencv.zip
   - unzip opencv.zip
-  - cd opencv-3.2.0
+  - cd opencv-3.3.0-rc
 
   # Create a new 'build' folder.
   - mkdir build
   - cd build
 
   # Set build instructions for Ubuntu distro.
-  - cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_TBB=ON -D BUILD_NEW_PYTHON_SUPPORT=ON -D WITH_V4L=ON -D INSTALL_C_EXAMPLES=ON -D INSTALL_PYTHON_EXAMPLES=ON -D BUILD_EXAMPLES=ON -D WITH_QT=ON -D WITH_OPENGL=ON ..
+  - cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_TBB=ON -D BUILD_NEW_PYTHON_SUPPORT=ON -D WITH_V4L=ON -D INSTALL_C_EXAMPLES=ON -D INSTALL_PYTHON_EXAMPLES=ON -D BUILD_EXAMPLES=ON -D WITH_QT=ON -D WITH_OPENGL=ON -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.3.0-rc/modules ..
   # Run 'make' with four threads.
   - make -j4
 

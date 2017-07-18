@@ -14,30 +14,22 @@
  +----------------------------------------------------------------------+
  */
 
+#ifndef PHP_OPENCV_VIDEOIO_H
+#define PHP_OPENCV_VIDEOIO_H
 
-/* $Id$ */
+extern zend_class_entry *opencv_video_capture_ce;
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+#define Z_PHP_VIDEO_CAPTURE_P(zv)  get_video_capture_obj(Z_OBJ_P(zv))
 
-#include "php_opencv.h"
-#include "zend_exceptions.h"
-#include "opencv_exception.h"
+typedef struct _opencv_video_capture_object{
+    zend_object std;
+    VideoCapture *videoCapture;
+}opencv_video_capture_object;
 
-zend_class_entry *opencv_exception_ce;
+extern void opencv_videoio_init(int module_number);
 
-void opencv_exception_init(void)
-{
-    zend_class_entry ce;
-    INIT_NS_CLASS_ENTRY(ce, OPENCV_NS, "Exception", NULL);
-    opencv_exception_ce = zend_register_internal_class_ex(&ce, zend_exception_get_default());
+static inline opencv_video_capture_object* get_video_capture_obj(zend_object *obj) {
+    return (opencv_video_capture_object*)((char*)(obj) - XtOffsetOf(opencv_video_capture_object, std));
 }
 
-
-PHP_OPENCV_API void opencv_throw_exception(const char *error_message)
-{
-    int status = 1;
-    zend_throw_exception(opencv_exception_ce, error_message, status);
-    return;
-}
+#endif //PHP_OPENCV_VIDEOIO_H

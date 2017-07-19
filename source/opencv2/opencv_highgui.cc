@@ -18,6 +18,9 @@
 #include "../../php_opencv.h"
 #include "opencv_highgui.h"
 #include "core/opencv_mat.h"
+#include <cstdlib>
+#include <stdio.h>
+#include <stdlib.h>
 
 
 #ifdef HAVE_CONFIG_H
@@ -56,8 +59,8 @@ PHP_FUNCTION(opencv_wait_key){
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "|l", &delay) == FAILURE) {
         RETURN_NULL();
     }
-    waitKey((int)(delay*1000));//seconds
-    RETURN_NULL();
+    int key = waitKey((int)delay);//millisecond
+    RETURN_LONG(key);
 }
 
 /**

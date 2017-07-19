@@ -34,6 +34,15 @@ install:
   - unzip opencv.zip
   - cd opencv-3.3.0-rc
 
+  # Download OpenCV ippicv
+  - cd 3rdparty/ippicv/
+  - mkdir downloads
+  - cd downloads
+  - mkdir linux-808b791a6eac9ed78d32a7666804320e
+  - cd linux-808b791a6eac9ed78d32a7666804320e
+  - curl -sL https://raw.githubusercontent.com/opencv/opencv_3rdparty/a62e20676a60ee0ad6581e217fe7e4bada3b95db/ippicv/ippicv_2017u2_lnx_intel64_20170418.tgz > ippicv_linux_20151201.tgz
+  - cd ../../../../
+
   # Create a new 'build' folder.
   - mkdir build
   - cd build

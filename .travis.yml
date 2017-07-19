@@ -20,7 +20,6 @@ before_install:
   - sudo apt-get -q update
   - sudo apt-get install gcc-4.8 -y
   - sudo apt-get install g++-4.8 -y
-  - sudo apt-get install cmake
 install:
   # OpenCV dependencies - Details available at: http://docs.opencv.org/trunk/doc/tutorials/introduction/linux_install/linux_install.html
   - sudo apt-get install -y build-essential
@@ -60,6 +59,14 @@ install:
 
   # We need to return to the repo "root" folder, so we can then 'cd' into the C++ project folder.
   - cd ../../
+
+addons:
+  apt:
+    sources:
+      - george-edison55-precise-backports
+    packages:
+      - cmake-data
+      - cmake
 
 #Compile
 before_script:

@@ -17,13 +17,11 @@ notifications:
 
 before_install:
   - sudo apt-get -y update
-  - sudo apt-get -y upgrade
 install:
   # OpenCV dependencies - Details available at: http://docs.opencv.org/trunk/doc/tutorials/introduction/linux_install/linux_install.html
   - sudo apt-get install -y build-essential
   - sudo apt-get install -y cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
   - sudo apt-get install -y python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
-  - sudo apt-get install -y qt5-default
   #- sudo apt-get install -y gcc-4.8 g++-4.8
 
   # Download OpenCV-contrib v3.3.0-rc
@@ -42,7 +40,7 @@ install:
   - cd downloads
   - mkdir linux-808b791a6eac9ed78d32a7666804320e
   - cd linux-808b791a6eac9ed78d32a7666804320e
-  - curl -sL https://raw.githubusercontent.com/opencv/opencv_3rdparty/a62e20676a60ee0ad6581e217fe7e4bada3b95db/ippicv/ippicv_2017u2_lnx_intel64_20170418.tgz > ippicv_linux_20151201.tgz
+  - curl -sL https://raw.githubusercontent.com/Itseez/opencv_3rdparty/81a676001ca8075ada498583e4166079e5744668/ippicv/ippicv_linux_20151201.tgz
   - cd ../../../../
 
   # Create a new 'build' folder.

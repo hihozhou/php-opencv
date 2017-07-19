@@ -16,8 +16,8 @@ notifications:
   email: hihozhou@gmail.com
 
 before_install:
-  - sudo apt-get update
-  - sudo apt-get upgrade
+  - sudo apt-get -y update
+  - sudo apt-get -y upgrade
 install:
   # OpenCV dependencies - Details available at: http://docs.opencv.org/trunk/doc/tutorials/introduction/linux_install/linux_install.html
   - sudo apt-get install -y build-essential

@@ -25,23 +25,15 @@ install:
   #- sudo apt-get install -y gcc-4.8 g++-4.8
 
   # Download OpenCV-contrib v3.3.0-rc
-  - curl -sL https://github.com/Itseez/opencv_contrib/archive/3.3.0-rc.zip > opencv_contrib.zip
-  - unzip opencv_contrib.zip
-  #- cd opencv_contrib-3.3.0-rc
+  - git clone https://github.com/opencv/opencv_contrib.git
+  - cd opencv_contrib
+  - git checkout 3.3.0-rc
+  - cd ..
 
-  # Download OpenCV v3.3.0-rc .zip file and extract.
-  - curl -sL https://github.com/Itseez/opencv/archive/3.3.0-rc.zip > opencv.zip
-  - unzip opencv.zip
+  # Download OpenCV v3.3.0-rc
+  - git clone https://github.com/opencv/opencv.git
   - cd opencv-3.3.0-rc
-
-  # Download OpenCV ippicv
-  - cd 3rdparty/ippicv/
-  - mkdir downloads
-  - cd downloads
-  - mkdir linux-808b791a6eac9ed78d32a7666804320e
-  - cd linux-808b791a6eac9ed78d32a7666804320e
-  - wget https://raw.githubusercontent.com/Itseez/opencv_3rdparty/81a676001ca8075ada498583e4166079e5744668/ippicv/ippicv_linux_20151201.tgz
-  - cd ../../../../
+  - git checkout 3.3.0-rc
 
   # Create a new 'build' folder.
   - mkdir build

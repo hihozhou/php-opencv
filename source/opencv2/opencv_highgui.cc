@@ -18,9 +18,7 @@
 #include "../../php_opencv.h"
 #include "opencv_highgui.h"
 #include "core/opencv_mat.h"
-#include <cstdlib>
-#include <stdio.h>
-#include <stdlib.h>
+#include "../../opencv_exception.h"
 
 
 #ifdef HAVE_CONFIG_H
@@ -164,6 +162,25 @@ PHP_FUNCTION(opencv_create_trackbar){
 //    } else {
 //        RETURN_FALSE;
 //    }
+
+}
+
+PHP_FUNCTION(opencv_destroy_window){
+    char *winname;
+    long winname_len;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &winname,&winname_len) == FAILURE) {
+        return;
+    }
+
+    try{
+        destroyWindow(winname);
+    }catch (Exception e){
+        opencv_throw_exception(e.what());
+    }
+
+    RETURN_NULL();
+
 
 }
 

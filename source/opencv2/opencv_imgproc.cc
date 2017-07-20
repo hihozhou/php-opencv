@@ -19,6 +19,7 @@
 #include <opencv2/imgproc.hpp>
 #include "core/opencv_mat.h"
 #include "core/opencv_type.h"
+#include "../../opencv_exception.h"
 
 
 void opencv_imgproc_init(int module_number)
@@ -224,6 +225,41 @@ PHP_FUNCTION(opencv_rectangle_by_rect){
     RETURN_NULL();
 }
 
+
+/**
+ * CV\equalizeHist
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_equalize_hist){
+
+    zval *src_zval, *dst_zval;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Oz",
+                              &src_zval, opencv_mat_ce,
+                              &dst_zval) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *src_obj, *dst_object;
+    src_obj = Z_PHP_MAT_OBJ_P(src_zval);
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval)==opencv_mat_ce){
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+    try {
+        equalizeHist(*src_obj->mat, *dst_object->mat);
+    }catch (Exception e){
+        opencv_throw_exception(e.what());
+    }
+    RETURN_NULL();
+}
 
 /**
  * color conversion code in CV\cvtColor,opencv enum ColorConversionCodes

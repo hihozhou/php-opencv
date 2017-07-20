@@ -72,8 +72,11 @@ PHP_FUNCTION(opencv_imwrite){
         RETURN_NULL();
     }
     opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(object);
-    //todo throw exception can't save
-    imwrite(filename,*(obj->mat));
+    try {
+        imwrite(filename,*obj->mat);
+    }catch (Exception e){
+        opencv_throw_exception(e.what());
+    }
     RETURN_TRUE;
 }
 

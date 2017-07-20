@@ -136,7 +136,7 @@ PHP_METHOD(opencv_video_capture, open)
 }
 
 
-PHP_METHOD(opencv_video_capture, is_opend)
+PHP_METHOD(opencv_video_capture, is_opened)
 {
     opencv_video_capture_object *obj = Z_PHP_VIDEO_CAPTURE_P(getThis());
     bool is_opend = obj->videoCapture->isOpened();
@@ -157,7 +157,6 @@ PHP_METHOD(opencv_video_capture, read)
     zval *mat_real_zval = Z_REFVAL_P(mat_zval);
     opencv_mat_object *real_object;
     Mat mat;
-    again:
     if(Z_TYPE_P(mat_real_zval) == IS_OBJECT && Z_OBJCE_P(mat_real_zval)==opencv_mat_ce){
         real_object = Z_PHP_MAT_OBJ_P(mat_real_zval);
     }else{
@@ -169,8 +168,8 @@ PHP_METHOD(opencv_video_capture, read)
     }
     opencv_video_capture_object *this_object = Z_PHP_VIDEO_CAPTURE_P(getThis());
     *(this_object->videoCapture) >> mat;
-
     real_object->mat = new Mat(mat);
+    opencv_mat_update_property_by_c_mat(mat_real_zval, real_object->mat);
     RETURN_NULL();
 }
 
@@ -180,7 +179,7 @@ PHP_METHOD(opencv_video_capture, read)
 const zend_function_entry opencv_video_capture_methods[] = {
         PHP_ME(opencv_video_capture, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
         PHP_ME(opencv_video_capture, open, NULL, ZEND_ACC_PUBLIC)
-        PHP_MALIAS(opencv_video_capture, isOpend ,is_opend, NULL, ZEND_ACC_PUBLIC)
+        PHP_MALIAS(opencv_video_capture, isOpened ,is_opened, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_video_capture, read, opencv_video_capture_read_arginfo, ZEND_ACC_PUBLIC)
         PHP_FE_END
 };

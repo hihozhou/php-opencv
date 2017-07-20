@@ -20,6 +20,7 @@ before_install:
   - sudo apt-get -q update
   - sudo apt-get install gcc-4.8 -y
   - sudo apt-get install g++-4.8 -y
+  - sudo apt-get install libboost-dev -y
 install:
   # OpenCV dependencies - Details available at: http://docs.opencv.org/trunk/doc/tutorials/introduction/linux_install/linux_install.html
   - sudo apt-get install -y build-essential

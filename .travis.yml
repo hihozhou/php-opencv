@@ -2,7 +2,6 @@ language: php
 
 compiler:
   - gcc
-  - clang
 
 os:
   - linux
@@ -16,10 +15,7 @@ notifications:
   email: hihozhou@gmail.com
 
 before_install:
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get -q update
-  - sudo apt-get install gcc-4.8 -y
-  - sudo apt-get install g++-4.8 -y
 install:
   # OpenCV dependencies - Details available at: http://docs.opencv.org/trunk/doc/tutorials/introduction/linux_install/linux_install.html
   - sudo apt-get install -y build-essential
@@ -31,23 +27,18 @@ install:
 
   # Download OpenCV-contrib v3.3.0-rc
   - git clone https://github.com/opencv/opencv_contrib.git
-  - cd opencv_contrib
-  - git checkout 3.3.0-rc
-  - cd ..
 
   # Download OpenCV v3.3.0-rc
   - git clone https://github.com/opencv/opencv.git
-  - cd opencv
-  - git checkout 3.3.0-rc
 
   # Create a new 'build' folder.
-  - mkdir build
-  - cd build
+  - mkdir build-opencv
+  - cd build-opencv
 
   # Set build instructions for Ubuntu distro.
-  - cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_TBB=ON -D BUILD_NEW_PYTHON_SUPPORT=ON -D WITH_V4L=ON -D INSTALL_C_EXAMPLES=ON -D INSTALL_PYTHON_EXAMPLES=ON -D BUILD_EXAMPLES=ON -D WITH_QT=ON -D WITH_OPENGL=ON -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules ..
+  - cmake  -D OPENCV_EXTRA_MODULES_PATH=../opencv_contrib/modules ..
   # Run 'make' with four threads.
-  - make -j4
+  - make -j5
 
   # Install to OS.
   - sudo make install
@@ -57,16 +48,7 @@ install:
   - sudo ldconfig
   - echo "OpenCV installed."
 
-  # We need to return to the repo "root" folder, so we can then 'cd' into the C++ project folder.
-  - cd ../../
 
-addons:
-  apt:
-    sources:
-      - george-edison55-precise-backports
-    packages:
-      - cmake-data
-      - cmake
 
 #Compile
 before_script:

@@ -36,7 +36,7 @@ install:
   - cd build-opencv
 
   # Set build instructions for Ubuntu distro.
-  - cmake  -D OPENCV_EXTRA_MODULES_PATH=../opencv_contrib/modules ..
+  - cmake  -D OPENCV_EXTRA_MODULES_PATH=../opencv_contrib/modules ../opencv
   # Run 'make' with four threads.
   - make -j5
 

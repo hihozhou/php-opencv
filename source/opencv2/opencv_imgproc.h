@@ -28,10 +28,21 @@ PHP_FUNCTION(opencv_line);
 PHP_FUNCTION(opencv_rectangle);
 PHP_FUNCTION(opencv_rectangle_by_point);
 PHP_FUNCTION(opencv_rectangle_by_rect);
+
 ZEND_BEGIN_ARG_INFO_EX(opencv_equalize_hist_arginfo, 0, 0, 2)
                 ZEND_ARG_INFO(0, src)
                 ZEND_ARG_INFO(1, dst)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_equalize_hist);
+
+ZEND_BEGIN_ARG_INFO_EX(opencv_resize_arginfo, 0, 0, 6)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, dsize_zval)
+                ZEND_ARG_INFO(0, fx)
+                ZEND_ARG_INFO(0, fy)
+                ZEND_ARG_INFO(0, interpolation)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_resize);
 
 #endif //OPENCV_OPENCV_IMGPROC_H

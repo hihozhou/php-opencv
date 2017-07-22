@@ -261,6 +261,43 @@ PHP_FUNCTION(opencv_equalize_hist){
     RETURN_NULL();
 }
 
+
+PHP_FUNCTION(opencv_resize){
+
+    zval *src_zval, *dst_zval, *dsize_zval;
+    double fx = 0, fy = 0;
+    long interpolation = INTER_LINEAR;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OzO|ddl",
+                              &src_zval, opencv_mat_ce,
+                              &dst_zval,
+                              &dsize_zval, opencv_size_ce,
+                              &fx, &fy, &interpolation
+    ) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *src_obj, *dst_object;
+    src_obj = Z_PHP_MAT_OBJ_P(src_zval);
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval)==opencv_mat_ce){
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+    opencv_size_object *dsize_obj = Z_PHP_SIZE_OBJ_P(dsize_zval);
+    try {
+        resize(*src_obj->mat, *dst_object->mat, *dsize_obj->size , fx, fy, (int)interpolation);
+    }catch (Exception e){
+        opencv_throw_exception(e.what());
+    }
+    RETURN_NULL();
+}
+
 /**
  * color conversion code in CV\cvtColor,opencv enum ColorConversionCodes
  * @param module_number

@@ -25,10 +25,10 @@ install:
   - sudo apt-get install -y build-essential
   # Install cmake
   - wget https://cmake.org/files/v3.8/cmake-3.8.2.tar.gz
-  - tar -zxvf cmake-3.8.2.tar.gz
+  - tar -zxf cmake-3.8.2.tar.gz
   - cd cmake-3.8.2
-  - sudo apt-get install checkinstall
-  - sudo checkinstall
+  - sudo apt-get install checkinstall -y
+  - sudo checkinstall -y
   - cmake -version
 
   - sudo apt-get install -y git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev

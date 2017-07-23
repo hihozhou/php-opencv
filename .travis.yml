@@ -33,7 +33,7 @@ install:
   - ./configure
   - make
   - sudo make install
-  - cmake -version
+  - cd ..
 
   - sudo apt-get install -y git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev -qq
   - sudo apt-get install -y python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev -qq

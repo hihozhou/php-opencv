@@ -112,8 +112,10 @@ PHP_METHOD(opencv_cascade_classifier, detect_multi_scale)
             min_size, max_size);
 
     zval *objects_real_zval = Z_REFVAL_P(objects_zval);
-    zval instance;
-    array_init(&instance);
+
+    zval_dtor(objects_real_zval);//if real_zval value not eq null ,free real_zval to avoid memory leaks detected
+
+    array_init(objects_real_zval);
     for(unsigned long i=0; i < objects.size(); i++){
         zval OPENCV_CONNECT(zval,i);
         Rect OPENCV_CONNECT(rect,i);
@@ -123,10 +125,10 @@ PHP_METHOD(opencv_cascade_classifier, detect_multi_scale)
         OPENCV_CONNECT(rect,i) = objects.at(i);
         OPENCV_CONNECT(rect_object,i)->rect = new Rect(OPENCV_CONNECT(rect,i));
         opencv_rect_update_property_by_c_rect(&OPENCV_CONNECT(zval,i), OPENCV_CONNECT(rect_object,i)->rect);
-        add_next_index_zval(&instance,&OPENCV_CONNECT(zval,i));
 
+        add_next_index_zval(objects_real_zval,&OPENCV_CONNECT(zval,i));
     }
-    ZVAL_COPY_VALUE(objects_real_zval, &instance);
+
     RETURN_NULL();
 }
 
@@ -167,6 +169,16 @@ void opencv_cascade_classifier_init(int module_number){
     opencv_cascade_classifier_object_handlers.free_obj = opencv_cascade_classifier_free_obj;
 }
 
+void opencv_objdetect_constants_init(int module_number)
+{
+
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "CV_HAAR_DO_CANNY_PRUNING", CV_HAAR_DO_CANNY_PRUNING, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "CV_HAAR_SCALE_IMAGE", CV_HAAR_SCALE_IMAGE, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "CV_HAAR_FIND_BIGGEST_OBJECT", CV_HAAR_FIND_BIGGEST_OBJECT, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "CV_HAAR_DO_ROUGH_SEARCH", CV_HAAR_DO_ROUGH_SEARCH, CONST_CS | CONST_PERSISTENT);
+}
+
 void opencv_objdetect_init(int module_number){
     opencv_cascade_classifier_init(module_number);
+    opencv_objdetect_constants_init(module_number);
 }

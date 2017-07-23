@@ -16,32 +16,51 @@ notifications:
   email: hihozhou@gmail.com
 
 before_install:
-  - sudo apt-get update
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+  - sudo apt-get -qq update
+  - sudo apt-get install gcc-4.8 -y -qq
+  - sudo apt-get install g++-4.8 -y -qq
+
 install:
   # OpenCV dependencies - Details available at: http://docs.opencv.org/trunk/doc/tutorials/introduction/linux_install/linux_install.html
   - sudo apt-get install -y build-essential
-  - sudo apt-get install -y cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
-  - sudo apt-get install -y python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
+  # Install cmake
+  - wget https://cmake.org/files/v3.8/cmake-3.8.2.tar.gz
+  - tar -zxf cmake-3.8.2.tar.gz
+  - cd cmake-3.8.2
+  - ./configure
+  - make
+  - sudo make install
+  - cd ..
+
+  - sudo apt-get install -y git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev -qq
+  - sudo apt-get install -y python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev -qq
+
+
+
+
+
   #- sudo apt-get install -y gcc-4.8 g++-4.8
 
   # Download OpenCV-contrib v3.3.0-rc
-  - curl -sL https://github.com/Itseez/opencv_contrib/archive/3.3.0-rc.zip > opencv_contrib.zip
-  - unzip opencv_contrib.zip
-  #- cd opencv_contrib-3.3.0-rc
+  - git clone https://github.com/opencv/opencv_contrib.git
+  - cd opencv_contrib
+  - git checkout 3.3.0-rc
+  - cd ..
 
-  # Download OpenCV v3.3.0-rc .zip file and extract.
-  - curl -sL https://github.com/Itseez/opencv/archive/3.3.0-rc.zip > opencv.zip
-  - unzip opencv.zip
-  - cd opencv-3.3.0-rc
+  # Download OpenCV v3.3.0-rc
+  - git clone https://github.com/opencv/opencv.git
+  - cd opencv
+  - git checkout 3.3.0-rc
 
   # Create a new 'build' folder.
   - mkdir build
   - cd build
 
   # Set build instructions for Ubuntu distro.
-  - cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_TBB=ON -D BUILD_NEW_PYTHON_SUPPORT=ON -D WITH_V4L=ON -D INSTALL_C_EXAMPLES=ON -D INSTALL_PYTHON_EXAMPLES=ON -D BUILD_EXAMPLES=ON -D WITH_QT=ON -D WITH_OPENGL=ON -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.3.0-rc/modules ..
+  - cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_TBB=ON -D BUILD_NEW_PYTHON_SUPPORT=ON -D WITH_V4L=ON -D INSTALL_C_EXAMPLES=ON -D INSTALL_PYTHON_EXAMPLES=ON -D BUILD_EXAMPLES=ON -D WITH_QT=ON -D WITH_OPENGL=ON -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules ..
   # Run 'make' with four threads.
-  - make -j4
+  - make -j6
 
   # Install to OS.
   - sudo make install
@@ -54,9 +73,17 @@ install:
   # We need to return to the repo "root" folder, so we can then 'cd' into the C++ project folder.
   - cd ../../
 
+#addons:
+#  apt:
+#    sources:
+#      - george-edison55-precise-backports
+#    packages:
+#      - cmake-data
+#      - cmake
+
 #Compile
 before_script:
-    - ./travis/compile.sh
+  - ./travis/compile.sh
 
 script:
     - exit 0

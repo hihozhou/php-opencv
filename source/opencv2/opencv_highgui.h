@@ -24,5 +24,6 @@ PHP_FUNCTION(opencv_imshow);
 PHP_FUNCTION(opencv_wait_key);
 PHP_FUNCTION(opencv_named_window);
 PHP_FUNCTION(opencv_create_trackbar);
+PHP_FUNCTION(opencv_destroy_window);
 
 #endif //OPENCV_OPENCV_HIGHGUI_H

@@ -20,10 +20,8 @@ before_install:
   - sudo apt-get -qq update
   - sudo apt-get install gcc-4.8 -y -qq
   - sudo apt-get install g++-4.8 -y -qq
-  - pwd
 
 install:
-  - pwd
   # OpenCV dependencies - Details available at: http://docs.opencv.org/trunk/doc/tutorials/introduction/linux_install/linux_install.html
   - sudo apt-get install -y build-essential
   # Install cmake
@@ -49,7 +47,6 @@ install:
   - cd opencv_contrib
   - git checkout 3.3.0-rc
   - cd ..
-  - pwd
 
   # Download OpenCV v3.3.0-rc
   - git clone https://github.com/opencv/opencv.git
@@ -59,7 +56,6 @@ install:
   # Create a new 'build' folder.
   - mkdir build
   - cd build
-  - pwd
 
   # Set build instructions for Ubuntu distro.
   - cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_TBB=ON -D BUILD_NEW_PYTHON_SUPPORT=ON -D WITH_V4L=ON -D INSTALL_C_EXAMPLES=ON -D INSTALL_PYTHON_EXAMPLES=ON -D BUILD_EXAMPLES=ON -D WITH_QT=ON -D WITH_OPENGL=ON -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules ..
@@ -76,7 +72,6 @@ install:
 
   # We need to return to the repo "root" folder, so we can then 'cd' into the C++ project folder.
   - cd ../../
-  - pwd
 
 #addons:
 #  apt:
@@ -88,8 +83,6 @@ install:
 
 #Compile
 before_script:
-  - pwd
-  - ls -a -l
   - ./travis/compile.sh
 
 script:

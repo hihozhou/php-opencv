@@ -18,19 +18,21 @@ notifications:
 before_install:
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get -qq update
-  - sudo apt-get install gcc-4.8 -y
-  - sudo apt-get install g++-4.8 -y
+  - sudo apt-get install gcc-4.8 -y -qq
+  - sudo apt-get install g++-4.8 -y -qq
+  - pwd
 
 install:
+  - pwd
   # OpenCV dependencies - Details available at: http://docs.opencv.org/trunk/doc/tutorials/introduction/linux_install/linux_install.html
   - sudo apt-get install -y build-essential
   # Install cmake
   - wget https://cmake.org/files/v3.8/cmake-3.8.2.tar.gz
   - tar -zxf cmake-3.8.2.tar.gz
   - cd cmake-3.8.2
-  - ./configure 2>&1 > cmakeconfig.log
-  - make 2>&1 > cmakemake.log
-  - sudo make install 2>&1 > cmakemakeinstall.log
+  - ./configure
+  - make
+  - sudo make install
   - cmake -version
 
   - sudo apt-get install -y git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev -qq
@@ -47,6 +49,7 @@ install:
   - cd opencv_contrib
   - git checkout 3.3.0-rc
   - cd ..
+  - pwd
 
   # Download OpenCV v3.3.0-rc
   - git clone https://github.com/opencv/opencv.git
@@ -56,11 +59,12 @@ install:
   # Create a new 'build' folder.
   - mkdir build
   - cd build
+  - pwd
 
   # Set build instructions for Ubuntu distro.
-  - cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_TBB=ON -D BUILD_NEW_PYTHON_SUPPORT=ON -D WITH_V4L=ON -D INSTALL_C_EXAMPLES=ON -D INSTALL_PYTHON_EXAMPLES=ON -D BUILD_EXAMPLES=ON -D WITH_QT=ON -D WITH_OPENGL=ON -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules ..  2>&1 > opencvconfig.log
+  - cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_TBB=ON -D BUILD_NEW_PYTHON_SUPPORT=ON -D WITH_V4L=ON -D INSTALL_C_EXAMPLES=ON -D INSTALL_PYTHON_EXAMPLES=ON -D BUILD_EXAMPLES=ON -D WITH_QT=ON -D WITH_OPENGL=ON -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules ..
   # Run 'make' with four threads.
-  - make -j6 2>&1 > opencvmake.log
+  - make -j6
 
   # Install to OS.
   - sudo make install
@@ -72,6 +76,7 @@ install:
 
   # We need to return to the repo "root" folder, so we can then 'cd' into the C++ project folder.
   - cd ../../
+  - pwd
 
 #addons:
 #  apt:

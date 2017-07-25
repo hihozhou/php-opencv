@@ -35,7 +35,7 @@ LBPH face recognition
 use CV\Face\LBPHFaceRecognizer;
 //use ...;
 
-$src = imread('facePic.jpg);
+$src = imread('facePic.jpg');
 $gray = cvtColor($src, COLOR_BGR2GRAY);
 equalizeHist($gray, $gray);
 $faceRecognizer = LBPHFaceRecognizer::create();

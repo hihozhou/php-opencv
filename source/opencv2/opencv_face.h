@@ -22,7 +22,7 @@
 #include <opencv2/face.hpp>
 using namespace face;
 
-#define OPENCV_FACE_NS ZEND_NS_NAME(OPENCV_NS,"Face")
+
 
 extern void opencv_face_init(int module_number);
 

@@ -15,6 +15,7 @@
  */
 
 #include "opencv_face.h"
+#include "face/opencv_facerec.h"
 
 zend_class_entry *opencv_face_recognizer_ce;
 
@@ -35,4 +36,5 @@ void opencv_face_recognizer_init(int module_number){
 
 void opencv_face_init(int module_number){
     opencv_face_recognizer_init(module_number);
+    opencv_lbph_face_recognizer_init(module_number);
 }

@@ -220,7 +220,7 @@ PHP_FUNCTION(opencv_rectangle_by_rect){
     opencv_rect_object *rect_object = Z_PHP_RECT_OBJ_P(rect_zval);
     opencv_scalar_object *scalar_obj = Z_PHP_SCALAR_OBJ_P(color_zval);
 
-    rectangle(*(mat_obj->mat), *(rect_object->rect), *(scalar_obj->scalar), thickness, lineType, shift);
+    rectangle(*(mat_obj->mat), *(rect_object->rect), *(scalar_obj->scalar), (int)thickness, (int)lineType, (int)shift);
 
     RETURN_NULL();
 }
@@ -296,6 +296,31 @@ PHP_FUNCTION(opencv_resize){
         opencv_throw_exception(e.what());
     }
     RETURN_NULL();
+}
+
+PHP_FUNCTION(opencv_put_text){
+
+    zval *img_zval, *org_zval,*color_zval;
+    char *text;
+    long text_len = 0;
+    long font_face, thickness = 1, line_type = LINE_8;
+    double font_scale;
+    zend_bool bottom_left_origin = 0;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OsOldO|llb",
+                              &img_zval, opencv_mat_ce,
+                              &text, &text_len,
+                              &org_zval, opencv_point_ce,
+                              &font_face, &font_scale,
+                              &color_zval, opencv_scalar_ce,
+                              &thickness, &line_type,
+                              &bottom_left_origin
+    ) == FAILURE) {
+        RETURN_NULL();
+    }
+    opencv_mat_object *img_object = Z_PHP_MAT_OBJ_P(img_zval);
+    opencv_point_object *org_object = Z_PHP_POINT_OBJ_P(org_zval);
+    opencv_scalar_object *color_object = Z_PHP_SCALAR_OBJ_P(color_zval);
+    putText(*img_object->mat, text, *org_object->point, (int)font_face, (int)font_scale, *color_object->scalar, (int)thickness, (int)line_type, (bool)bottom_left_origin);
 }
 
 /**

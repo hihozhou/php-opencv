@@ -44,5 +44,6 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_resize_arginfo, 0, 0, 6)
                 ZEND_ARG_INFO(0, interpolation)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_resize);
+PHP_FUNCTION(opencv_put_text);
 
 #endif //OPENCV_OPENCV_IMGPROC_H

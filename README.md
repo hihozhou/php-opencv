@@ -4,7 +4,7 @@
 
 ## Requirements
 
-- OpenCV 3.2
+- OpenCV 3.3.0+
 - PHP7.0+
 
 
@@ -130,8 +130,9 @@ result:
 - 19.Videostab
 
 ## Document
+- [PHP OpenCV Doc](http://php-opencv.hihozhou.com/zh-cn/docs/)
+- [PHP OpenCV Api](http://php-opencv.hihozhou.com/zh-cn/api/)
 
-[PHP OpenCV Api](http://php-opencv.hihozhou.com/zh-cn/api/)
 
     
     

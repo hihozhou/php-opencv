@@ -2,6 +2,12 @@
 
 [![Build Status](https://travis-ci.org/hihozhou/php-opencv.svg?branch=master)](https://travis-ci.org/hihozhou/php-opencv) [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.0-8892BF.svg)](https://php.net/)
 
+
+## Document
+- [PHP OpenCV Doc](http://phpopencv.org/zh-cn/docs/)
+- [PHP OpenCV Api](http://phpopencv.org/zh-cn/api/)
+
+
 ## Requirements
 
 - OpenCV 3.3.0+
@@ -29,7 +35,7 @@ extension="opencv.so path"
 ```
 ## Example
 
-LBPH face recognition
+### LBPH face recognition
 
 ```php
 use CV\Face\LBPHFaceRecognizer;
@@ -49,6 +55,9 @@ $faceLabel = $faceRecognizer->predict($gray);
 result:
 
 ![predict](tests/face_recognizer.jpg)
+
+
+### Image Processing
 
 ```php
 //Obama.php
@@ -128,10 +137,6 @@ result:
 - 17.ts
 - 18.video
 - 19.Videostab
-
-## Document
-- [PHP OpenCV Doc](http://php-opencv.hihozhou.com/zh-cn/docs/)
-- [PHP OpenCV Api](http://php-opencv.hihozhou.com/zh-cn/api/)
 
 
     

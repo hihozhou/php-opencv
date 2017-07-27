@@ -375,6 +375,112 @@ PHP_FUNCTION(opencv_magnitude){
 }
 
 /**
+ * CV\absdiff
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_absdiff){
+        zval *src1_zval, *src2_zval, *dst_zval;
+
+        if (zend_parse_parameters(ZEND_NUM_ARGS(), "zzz",
+        &src1_zval,
+        &src2_zval,
+        &dst_zval) == FAILURE) {
+            RETURN_NULL();
+        }
+        opencv_mat_object *src1_mat_object = NULL, *src2_mat_object = NULL, *dst_mat_object = NULL;
+        opencv_scalar_object *src1_scalar_object = NULL, *src2_scalar_object = NULL, *dst_scalar_object = NULL;
+
+        int flag = 0;//1 mat,0 scalar
+
+        if(Z_TYPE_P(src1_zval) != IS_OBJECT){
+            char *error_message = (char*)malloc(strlen("src1 parameter must be Mat or Scalar object.") + 1);
+            strcpy(error_message,"src1 parameter must be Mat or Scalar object.");
+            opencv_throw_exception(error_message);//throw exception
+            free(error_message);
+        }
+
+        if(Z_OBJCE_P(src1_zval) == opencv_mat_ce){
+            src1_mat_object = Z_PHP_MAT_OBJ_P(src1_zval);
+            flag |= (1<<1);
+        }else if(Z_OBJCE_P(src1_zval) == opencv_scalar_ce){
+            src1_scalar_object = Z_PHP_SCALAR_OBJ_P(src1_zval);
+        }else{
+            char *error_message = (char*)malloc(strlen("src1 parameter must be Mat or Scalar object.") + 1);
+            strcpy(error_message,"src1 parameter must be Mat or Scalar object.");
+            opencv_throw_exception(error_message);//throw exception
+            free(error_message);
+        }
+
+        if(Z_TYPE_P(src2_zval) != IS_OBJECT){
+            char *error_message = (char*)malloc(strlen("src2 parameter must be Mat or Scalar object.") + 1);
+            strcpy(error_message,"src2 parameter must be Mat or Scalar object.");
+            opencv_throw_exception(error_message);//throw exception
+            free(error_message);
+        }
+
+        if(Z_OBJCE_P(src2_zval) == opencv_mat_ce){
+            src2_mat_object = Z_PHP_MAT_OBJ_P(src2_zval);
+            flag |= (1<<0);
+        }else if(Z_OBJCE_P(src2_zval) == opencv_scalar_ce){
+            src2_scalar_object = Z_PHP_SCALAR_OBJ_P(src2_zval);
+        }else{
+            char *error_message = (char*)malloc(strlen("src2 parameter must be Mat or Scalar object.") + 1);
+            strcpy(error_message,"src2 parameter must be Mat or Scalar object.");
+            opencv_throw_exception(error_message);//throw exception
+            free(error_message);
+        }
+
+        zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+
+        if(flag == 0){ //both scalar
+            if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval)==opencv_scalar_ce){
+                dst_scalar_object = Z_PHP_SCALAR_OBJ_P(dst_real_zval);
+            } else{
+                zval instance;
+                Scalar dst;
+                object_init_ex(&instance,opencv_scalar_ce);
+                ZVAL_COPY_VALUE(dst_real_zval, &instance);
+                dst_scalar_object = Z_PHP_SCALAR_OBJ_P(dst_real_zval);
+                dst_scalar_object->scalar = new Scalar(dst);
+            }
+
+            absdiff(*src1_scalar_object->scalar,*src2_scalar_object->scalar, *dst_scalar_object->scalar);
+            opencv_scalar_update_property_by_c_scalar(dst_real_zval, dst_scalar_object->scalar);
+        }else{
+            if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval)==opencv_mat_ce){
+                dst_mat_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+            } else{
+                zval instance;
+                Mat dst;
+                object_init_ex(&instance,opencv_mat_ce);
+                ZVAL_COPY_VALUE(dst_real_zval, &instance);
+
+                dst_mat_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+                dst_mat_object->mat = new Mat(dst);
+            }
+            switch (flag){
+                case 1:
+                    absdiff(*src1_scalar_object->scalar,*src2_mat_object->mat, *dst_mat_object->mat);
+                    opencv_mat_update_property_by_c_mat(dst_real_zval, dst_mat_object->mat);
+                    break;
+                case 10:
+                    absdiff(*src1_mat_object->mat,*src2_scalar_object->scalar, *dst_mat_object->mat);
+                    opencv_mat_update_property_by_c_mat(dst_real_zval, dst_mat_object->mat);
+                    break;
+                case 11:
+                    absdiff(*src1_mat_object->mat,*src2_mat_object->mat, *dst_mat_object->mat);
+                    opencv_mat_update_property_by_c_mat(dst_real_zval, dst_mat_object->mat);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        RETURN_NULL();
+}
+
+/**
  * //todo mask and dtype params
  * CV\add
  * @param execute_data

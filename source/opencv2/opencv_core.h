@@ -92,5 +92,11 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_normalize_arginfo, 0, 0, 6)
                 ZEND_ARG_INFO(0, dtype)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_normalize);
+ZEND_BEGIN_ARG_INFO_EX(opencv_absdiff_arginfo, 0, 0, 3)
+                ZEND_ARG_INFO(0, src1)
+                ZEND_ARG_INFO(0, src2)
+                ZEND_ARG_INFO(1, dst)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_absdiff);
 
 #endif //OPENCV_CORE_H

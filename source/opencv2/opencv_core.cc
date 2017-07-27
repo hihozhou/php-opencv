@@ -298,11 +298,11 @@ PHP_FUNCTION(opencv_copy_make_border){
  */
 PHP_FUNCTION(opencv_dft){
     zval *src_zval, *array_val_zval, *dst_zval;
-    long flags, nonzero_rows;
+    long flags = 0, nonzero_rows = 0;
     opencv_mat_object *dst_object;
 
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Oz", &src_zval, opencv_mat_ce, &dst_zval) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Oz|ll", &src_zval, opencv_mat_ce, &dst_zval, &flags, &nonzero_rows) == FAILURE) {
         RETURN_NULL();
     }
 

@@ -23,6 +23,12 @@
 #include <opencv2/face.hpp>
 using namespace cv::face;
 
+
+/**
+ * -----------------------------------【CV\LBPHFaceRecognizer】-------------------------
+ *
+ * -------------------------------------------------------------------------------------
+ */
 extern void opencv_lbph_face_recognizer_init(int module_number);
 
 #define Z_PHP_LBPH_FACE_RECOGNIZER_OBJ_P(zv)  get_lbph_face_recognizer_obj(Z_OBJ_P(zv))
@@ -40,5 +46,14 @@ typedef struct _opencv_lbph_face_recognizer_object{
 static inline opencv_lbph_face_recognizer_object* get_lbph_face_recognizer_obj(zend_object *obj) {
     return (opencv_lbph_face_recognizer_object*)((char*)(obj) - XtOffsetOf(opencv_lbph_face_recognizer_object, std));
 }
+
+
+/**
+ * -----------------------------------【CV\BaseFaceRecognizer】-------------------------
+ *
+ * -------------------------------------------------------------------------------------
+ */
+extern void opencv_base_face_recognizer_init(int module_number);
+
 
 #endif //PHP_OPENCV_FACEREC_H

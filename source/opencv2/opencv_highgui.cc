@@ -102,29 +102,45 @@ PHP_FUNCTION(opencv_named_window){
     RETURN_NULL();
 }
 
-struct opencv_fcall_info_struct{
+struct opencv_fcall_info_cb{
     zend_fcall_info *fci;
     zend_fcall_info_cache *fci_cache;
 };
 
+
+opencv_fcall_info_cb * opencv_fcall_info_cb_create(zend_fcall_info *fci_ptr, zend_fcall_info_cache *fci_cache_ptr) {
+    opencv_fcall_info_cb *cb = new opencv_fcall_info_cb;
+    cb->fci = new zend_fcall_info;
+    cb->fci_cache = new zend_fcall_info_cache;
+
+    memcpy(cb->fci, fci_ptr, sizeof(zend_fcall_info));
+    memcpy(cb->fci_cache, fci_cache_ptr, sizeof(zend_fcall_info_cache));
+    Z_TRY_ADDREF(cb->fci->function_name);
+    cb->fci->param_count = 0;
+    cb->fci->no_separation = 1;
+    cb->fci->retval = NULL;
+
+    return cb;
+}
+
 void opencv_create_trackbar_callback(int pos, void* userdata){
-    opencv_fcall_info_struct *fci_s=(opencv_fcall_info_struct*)userdata;
+    opencv_fcall_info_cb *fci_s=(opencv_fcall_info_cb*)userdata;
 
     zval retval;
     zval args[1];
-    ZVAL_LONG(&args[0], (long)pos);
+    ZVAL_LONG(&args[0], (long)pos);//将滑动条滑动的值传入到闭包参数中
     fci_s->fci->param_count = 1;
     fci_s->fci->params = args;
     fci_s->fci->retval = &retval;
 
-    //todo zend_call_function: Assertion `((zend_object*)func->op_array.prototype)->gc.u.v.type == 8' failed.
     zend_call_function(fci_s->fci, fci_s->fci_cache);
     zval_ptr_dtor(&args[0]);
 }
 
 
+
 /**
- * //todo c++ createTrackbar 跳转事件调用php传入的闭包:1php全局变量，2c++闭包
+ * todo Total 1 memory leaks detected
  * CV\createTrackbar
  * @param execute_data
  * @param return_value
@@ -134,35 +150,21 @@ PHP_FUNCTION(opencv_create_trackbar){
     long value, count, trackbarname_len,winname_len;
     zval retval;
 
-    zend_fcall_info *fci = new zend_fcall_info;
-    zend_fcall_info_cache *fci_cache = new zend_fcall_info_cache;
+    zend_fcall_info fci;
+    zend_fcall_info_cache fci_cache;
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "ssll|f",
                               &trackbarname, &trackbarname_len,
                               &winname,&winname_len,
                               &value,&count,
-                              fci, fci_cache) == FAILURE) {
+                              &fci, &fci_cache) == FAILURE) {
         return;
     }
 
     int *trackbar_value_ptr = new int(value);
 
-    opencv_fcall_info_struct *fci_s = new opencv_fcall_info_struct;
-    fci_s->fci=fci;
-    fci_s->fci_cache = fci_cache;
-    createTrackbar(trackbarname, winname, trackbar_value_ptr, (int)count,opencv_create_trackbar_callback,fci_s);
-    opencv_create_trackbar_callback(*trackbar_value_ptr,fci_s);
-//    createTrackbar(trackbarname, winname, trackbar_value_ptr, (int)count);
-//    zend_call_function(fci_s->fci, fci_s->fci_cache);
+    opencv_fcall_info_cb *cb = opencv_fcall_info_cb_create(&fci, &fci_cache);
+    createTrackbar(trackbarname, winname, trackbar_value_ptr, (int)count,opencv_create_trackbar_callback,cb);
     RETURN_NULL();
-
-//    if (zend_call_function(fci, fci_cache) == SUCCESS && Z_TYPE(retval) != IS_UNDEF) {
-//        zval_ptr_dtor(&args[0]);
-//        RETURN_ZVAL(&retval,1,1);
-//        ZVAL_COPY_VALUE(return_value, &retval);
-//    } else {
-//        RETURN_FALSE;
-//    }
-
 }
 
 PHP_FUNCTION(opencv_destroy_window){

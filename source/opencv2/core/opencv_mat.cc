@@ -284,10 +284,8 @@ PHP_METHOD(opencv_mat, copy_to)
         m_object = Z_PHP_MAT_OBJ_P(m_real_zval);
         m_object->mat = new Mat(dst);
     }else{
-        char *error_message = (char*)malloc(strlen("copy expect param is Mat object or null.")+ 1);
-        strcpy(error_message,"copy expect param is Mat object or null.");
-        opencv_throw_exception(error_message);
-        free(error_message);
+        opencv_throw_exception("copy expect param is Mat object or null.");
+        RETURN_NULL();
     }
     opencv_mat_object *this_object = Z_PHP_MAT_OBJ_P(getThis());
     try {

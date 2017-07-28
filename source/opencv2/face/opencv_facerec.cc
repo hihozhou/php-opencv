@@ -61,10 +61,7 @@ PHP_METHOD(opencv_lbph_face_recognizer, train)
                     array_val_zval = Z_REFVAL_P(array_val_zval);
                     goto again1;
                 } else {
-                    char *error_message = (char*)malloc(strlen("array value just Mat object") + 1);
-                    strcpy(error_message,"array value just Mat object");
-                    opencv_throw_exception(error_message);
-                    free(error_message);
+                    opencv_throw_exception("array value just Mat object.");
                     RETURN_NULL();
                 }
             }ZEND_HASH_FOREACH_END();
@@ -76,10 +73,7 @@ PHP_METHOD(opencv_lbph_face_recognizer, train)
                     array_val_zval = Z_REFVAL_P(array_val_zval);
                     goto again2;
                 } else {
-                    char *error_message = (char*)malloc(strlen("array value just number") + 1);
-                    strcpy(error_message,"array value just number");
-                    opencv_throw_exception(error_message);
-                    free(error_message);
+                    opencv_throw_exception("array value just number.");
                     RETURN_NULL();
                 }
             }ZEND_HASH_FOREACH_END();

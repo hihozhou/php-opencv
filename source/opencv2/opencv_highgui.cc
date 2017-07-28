@@ -182,10 +182,17 @@ PHP_FUNCTION(opencv_destroy_window){
     }
 
     RETURN_NULL();
-
-
 }
 
+PHP_FUNCTION(opencv_get_track_bar_pos){
+    char *trackbarname, *winname;
+    long trackbarname_len, winname_len;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &trackbarname, &trackbarname_len, &winname, &winname_len) == FAILURE) {
+        return;
+    }
+    RETURN_LONG(getTrackbarPos(trackbarname, winname))
+}
 
 
 void opencv_highgui_init(int module_number)

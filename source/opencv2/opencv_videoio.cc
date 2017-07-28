@@ -54,6 +54,7 @@ PHP_METHOD(opencv_video_capture, __construct)
                     videoCapture = new VideoCapture(long_val);
                 }catch (Exception e){
                     opencv_throw_exception(e.what());
+                    RETURN_NULL();
                 }
                 break;
             case IS_DOUBLE:
@@ -62,6 +63,7 @@ PHP_METHOD(opencv_video_capture, __construct)
                     videoCapture = new VideoCapture(double_val);
                 }catch (Exception e){
                     opencv_throw_exception(e.what());
+                    RETURN_NULL();
                 }
                 break;
             case IS_STRING:
@@ -70,6 +72,7 @@ PHP_METHOD(opencv_video_capture, __construct)
                     videoCapture = new VideoCapture(string_val);
                 }catch (Exception e){
                     opencv_throw_exception(e.what());
+                    RETURN_NULL();
                 }
                 break;
             case IS_REFERENCE:
@@ -77,10 +80,8 @@ PHP_METHOD(opencv_video_capture, __construct)
                 goto again;
                 break;
             default:
-                error_message = (char*)malloc(strlen("Can't write file on unknow type.")+ 1);
-                strcpy(error_message,"Can't write file on unknow type.");
-                opencv_throw_exception(error_message);
-                free(error_message);
+                opencv_throw_exception("Can't write file on unknow type.");
+                RETURN_NULL();
                 break;
         }
     }
@@ -95,31 +96,34 @@ PHP_METHOD(opencv_video_capture, open)
         RETURN_NULL();
     }
     opencv_video_capture_object *obj = Z_PHP_VIDEO_CAPTURE_P(getThis());
-    char *error_message;
+    bool return_bool;
     again:
     switch (Z_TYPE_P(zval1)) {
         case IS_LONG:
             try{
                 int long_val = (int)zval_get_long(zval1);
-                obj->videoCapture->open(long_val);
+                return_bool = obj->videoCapture->open(long_val);
             }catch (Exception e){
                 opencv_throw_exception(e.what());
+                RETURN_NULL();
             }
             break;
         case IS_DOUBLE:
             try{
                 int double_val = (int)zval_get_double(zval1);
-                obj->videoCapture->open(double_val);
+                return_bool = obj->videoCapture->open(double_val);
             }catch (Exception e){
                 opencv_throw_exception(e.what());
+                RETURN_NULL();
             }
             break;
         case IS_STRING:
             try{
                 String string_val=(String)ZSTR_VAL(zval_get_string(zval1));
-                obj->videoCapture->open(string_val);
+                return_bool = obj->videoCapture->open(string_val);
             }catch (Exception e){
                 opencv_throw_exception(e.what());
+                RETURN_NULL();
             }
             break;
         case IS_REFERENCE:
@@ -127,12 +131,11 @@ PHP_METHOD(opencv_video_capture, open)
             goto again;
             break;
         default:
-            error_message = (char*)malloc(strlen("Can't write file on unknow type.")+ 1);
-            strcpy(error_message,"Can't write file on unknow type.");
-            opencv_throw_exception(error_message);
-            free(error_message);
+            opencv_throw_exception("Can't write file on unknow type.");
+            RETURN_NULL();
             break;
     }
+    RETURN_BOOL(return_bool);
 }
 
 

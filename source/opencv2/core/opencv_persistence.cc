@@ -121,7 +121,6 @@ PHP_METHOD(opencv_file_storage, write){
             //todo check name len and value len
             try{
                 String string_val=(String)ZSTR_VAL(zval_get_string(val_zval));
-                fs<< name << string_val;
             }catch (Exception e){
                 opencv_throw_exception(e.what());
             }
@@ -131,10 +130,7 @@ PHP_METHOD(opencv_file_storage, write){
             break;
         case IS_ARRAY:
             //todo only one type array
-            error_message = (char*)malloc(strlen("Can't write file on array.")+ 1);
-            strcpy(error_message,"Can't write file object on array.");
-            opencv_throw_exception(error_message);
-            free(error_message);
+            opencv_throw_exception("Can't write file on array.");
 //            if (zend_hash_num_elements(Z_ARRVAL_P(op))) {
 //                result = 1;
 //            }
@@ -145,26 +141,17 @@ PHP_METHOD(opencv_file_storage, write){
                 opencv_mat_object *mat_object = Z_PHP_MAT_OBJ_P(val_zval);
                 fs<< name << *(mat_object->mat);
             }else{
-                error_message = (char*)malloc(strlen("Can't write file object only Mat.")+ 1);
-                strcpy(error_message,"Can't write file object only Mat.");
-                opencv_throw_exception(error_message);
-                free(error_message);
+                opencv_throw_exception("Can't write file object only Mat.");
             }
             break;
         case IS_RESOURCE:
-            error_message = (char*)malloc(strlen("Can't write file on resource.")+ 1);
-            strcpy(error_message,"Can't write file on resource.");
-            opencv_throw_exception(error_message);
-            free(error_message);
+            opencv_throw_exception("Can't write file on resource.");
         case IS_REFERENCE:
             val_zval = Z_REFVAL_P(val_zval);
             goto again;
             break;
         default:
-            error_message = (char*)malloc(strlen("Can't write file on unknow type.")+ 1);
-            strcpy(error_message,"Can't write file on unknow type.");
-            opencv_throw_exception(error_message);
-            free(error_message);
+            opencv_throw_exception("Can't write file on unknow type.");
             break;
     }
     RETURN_NULL();

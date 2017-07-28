@@ -178,10 +178,7 @@ PHP_FUNCTION(opencv_merge){
     unsigned long channel_count = zend_hash_num_elements(Z_ARRVAL_P(channels_zval));
     std::vector<Mat> channels;
     if(channel_count == 0){
-        char *error_message = (char*)malloc(strlen("array lenght must be >=1") + 1);
-        strcpy(error_message,"array lenght must be >=1");
-        opencv_throw_exception(error_message);
-        free(error_message);
+        opencv_throw_exception("array lenght must be >=1");
         RETURN_NULL();
     }
 
@@ -198,10 +195,7 @@ PHP_FUNCTION(opencv_merge){
                     array_val_zval = Z_REFVAL_P(array_val_zval);
                     goto again;
                 } else {
-                    char *error_message = (char*)malloc(strlen("array value just Mat object") + 1);
-                    strcpy(error_message,"array value just Mat object");
-                    opencv_throw_exception(error_message);
-                    free(error_message);
+                    opencv_throw_exception("array value just Mat object.");
                     RETURN_NULL();
                 }
     }ZEND_HASH_FOREACH_END();
@@ -395,10 +389,8 @@ PHP_FUNCTION(opencv_absdiff){
     int flag = 0;//dst 1 mat,0 scalar
 
     if(Z_TYPE_P(src1_zval) != IS_OBJECT || Z_TYPE_P(src2_zval) != IS_OBJECT){
-        char *error_message = (char*)malloc(strlen("src1 and src1 parameter must be Mat or Scalar object.") + 1);
-        strcpy(error_message,"src1 parameter must be Mat or Scalar object.");
-        opencv_throw_exception(error_message);//throw exception
-        free(error_message);
+        opencv_throw_exception("src1 and src2 parameter must be Mat or Scalar object.");
+        RETURN_NULL();
     }
 
     if(Z_OBJCE_P(src1_zval) == opencv_mat_ce){
@@ -406,10 +398,8 @@ PHP_FUNCTION(opencv_absdiff){
     }else if(Z_OBJCE_P(src1_zval) == opencv_scalar_ce){
         src1_scalar_object = Z_PHP_SCALAR_OBJ_P(src1_zval);
     }else{
-        char *error_message = (char*)malloc(strlen("src1 parameter must be Mat or Scalar object.") + 1);
-        strcpy(error_message,"src1 parameter must be Mat or Scalar object.");
-        opencv_throw_exception(error_message);//throw exception
-        free(error_message);
+        opencv_throw_exception("src1 parameter must be Mat or Scalar object.");
+        RETURN_NULL();
     }
 
     if(Z_OBJCE_P(src2_zval) == opencv_mat_ce){
@@ -425,10 +415,8 @@ PHP_FUNCTION(opencv_absdiff){
             flag = 2;
         }
     }else{
-        char *error_message = (char*)malloc(strlen("src2 parameter must be Mat or Scalar object.") + 1);
-        strcpy(error_message,"src2 parameter must be Mat or Scalar object.");
-        opencv_throw_exception(error_message);//throw exception
-        free(error_message);
+        opencv_throw_exception("src2 parameter must be Mat or Scalar object.");
+        RETURN_NULL();
     }
 
     zval *dst_real_zval = Z_REFVAL_P(dst_zval);
@@ -475,6 +463,8 @@ PHP_FUNCTION(opencv_absdiff){
                 opencv_mat_update_property_by_c_mat(dst_real_zval, dst_mat_object->mat);
                 break;
             default:
+                opencv_throw_exception("absdiff function error.");
+                RETURN_NULL();
                 break;
         }
     }
@@ -507,10 +497,7 @@ PHP_FUNCTION(opencv_add){
             src1_scalar_object = Z_PHP_SCALAR_OBJ_P(src1_zval);
         }
     } else{
-        char *error_message = (char*)malloc(strlen("src1 parameter must be Mat or Scalar object.") + 1);
-        strcpy(error_message,"src1 parameter must be Mat or Scalar object.");
-        opencv_throw_exception(error_message);//throw exception
-        free(error_message);
+        opencv_throw_exception("src1 parameter must be Mat or Scalar object.");
     }
 
     if(Z_TYPE_P(src2_zval) == IS_OBJECT && (Z_OBJCE_P(src2_zval) == opencv_mat_ce || Z_OBJCE_P(src2_zval) == opencv_scalar_ce)){
@@ -520,10 +507,7 @@ PHP_FUNCTION(opencv_add){
             src2_scalar_object = Z_PHP_SCALAR_OBJ_P(src2_zval);
         }
     } else{
-        char *error_message = (char*)malloc(strlen("src2 parameter must be Mat or Scalar object.") + 1);
-        strcpy(error_message,"src2 parameter must be Mat or Scalar object.");
-        opencv_throw_exception(error_message);//throw exception
-        free(error_message);
+        opencv_throw_exception("src2 parameter must be Mat or Scalar object.");//throw exception
     }
 
     zval *dst_real_zval = Z_REFVAL_P(dst_zval);

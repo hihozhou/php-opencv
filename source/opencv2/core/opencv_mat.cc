@@ -122,6 +122,12 @@ PHP_METHOD(opencv_mat, channels)
     RETURN_LONG(obj->mat->channels());
 }
 
+PHP_METHOD(opencv_mat, empty)
+{
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
+    RETURN_LONG(obj->mat->empty());
+}
+
 
 PHP_METHOD(opencv_mat, zeros)
 {
@@ -173,6 +179,18 @@ PHP_METHOD(opencv_mat, is_continuous)
     opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
     bool isContinuous = obj->mat->isContinuous();
     RETURN_BOOL(isContinuous);
+}
+
+/**
+ * Mat->isSubmatrix
+ * @param execute_data
+ * @param return_value
+ */
+PHP_METHOD(opencv_mat, is_submatrix)
+{
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
+    bool isSubmatrix = obj->mat->isSubmatrix();
+    RETURN_BOOL(isSubmatrix);
 }
 
 /**
@@ -382,9 +400,11 @@ const zend_function_entry opencv_mat_methods[] = {
         PHP_ME(opencv_mat, type, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, depth, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, channels, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_mat, empty, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, print, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, zeros, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
         PHP_MALIAS(opencv_mat, isContinuous ,is_continuous, NULL, ZEND_ACC_PUBLIC)
+        PHP_MALIAS(opencv_mat, isSubmatrix ,is_submatrix, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, row, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, col, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, at, NULL, ZEND_ACC_PUBLIC)

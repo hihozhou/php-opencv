@@ -55,6 +55,7 @@ void opencv_mat_free_obj(zend_object *object)
 void opencv_mat_update_property_by_c_mat(zval *z,Mat *mat){
     zend_update_property_long(opencv_mat_ce, z, "rows", sizeof("rows")-1, mat->rows);
     zend_update_property_long(opencv_mat_ce, z, "cols", sizeof("cols")-1, mat->cols);
+    zend_update_property_long(opencv_mat_ce, z, "dims", sizeof("dims")-1, mat->dims);
     zend_update_property_long(opencv_mat_ce, z, "type", sizeof("type")-1, mat->type());
 }
 

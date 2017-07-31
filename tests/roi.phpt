@@ -20,13 +20,15 @@ $roi->print(Formatter::FMT_PYTHON);
 
 ?>
 --EXPECT--
-object(CV\Mat)#3 (3) {
+object(CV\Mat)#3 (4) {
   ["type":"CV\Mat":private]=>
   int(0)
   ["rows"]=>
   int(5)
   ["cols"]=>
   int(5)
+  ["dims"]=>
+  int(2)
 }
 [[  0,   0,   0,   0,   0],
  [  0,   0,   0,   0,   0],

@@ -22,13 +22,15 @@ var_dump($dst);
 $dst->print();
 
 --EXPECT--
-object(CV\Mat)#3 (3) {
+object(CV\Mat)#3 (4) {
   ["type":"CV\Mat":private]=>
   int(0)
   ["rows"]=>
   int(3)
   ["cols"]=>
   int(3)
+  ["dims"]=>
+  int(2)
 }
 [ 10,  10,  10;
   10,  10,  10;
@@ -47,13 +49,15 @@ object(CV\Scalar)#3 (1) {
   }
 }
 [0, 0, 0, 0]
-object(CV\Mat)#3 (3) {
+object(CV\Mat)#3 (4) {
   ["type":"CV\Mat":private]=>
   int(16)
   ["rows"]=>
   int(3)
   ["cols"]=>
   int(3)
+  ["dims"]=>
+  int(2)
 }
 [  0,   0,   0,   0,   0,   0,   0,   0,   0;
    0,   0,   0,   0,   0,   0,   0,   0,   0;

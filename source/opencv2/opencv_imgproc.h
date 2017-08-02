@@ -63,5 +63,11 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_gaussian_blur_arginfo, 0, 0, 6)
                 ZEND_ARG_INFO(0, borderType)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_gaussian_blur);
+ZEND_BEGIN_ARG_INFO_EX(opencv_median_blur_arginfo, 0, 0, 3)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, ksize)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_median_blur);
 
 #endif //OPENCV_OPENCV_IMGPROC_H

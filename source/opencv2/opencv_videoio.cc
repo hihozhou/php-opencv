@@ -163,8 +163,9 @@ PHP_METHOD(opencv_video_capture, read)
     if(Z_TYPE_P(mat_real_zval) == IS_OBJECT && Z_OBJCE_P(mat_real_zval)==opencv_mat_ce){
         real_object = Z_PHP_MAT_OBJ_P(mat_real_zval);
     }else{
-        zval instance;
 
+        zval_ptr_dtor(mat_real_zval);
+        zval instance;
         object_init_ex(&instance,opencv_mat_ce);
         ZVAL_COPY_VALUE(mat_real_zval, &instance);// Cover dst_real_zval by Mat object
         real_object = Z_PHP_MAT_OBJ_P(mat_real_zval);

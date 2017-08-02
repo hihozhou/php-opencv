@@ -246,6 +246,7 @@ PHP_FUNCTION(opencv_equalize_hist){
     if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval)==opencv_mat_ce){
         dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
     } else{
+        zval_ptr_dtor(dst_real_zval);
         zval instance;
         Mat dst;
         object_init_ex(&instance,opencv_mat_ce);
@@ -282,6 +283,7 @@ PHP_FUNCTION(opencv_resize){
     if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval)==opencv_mat_ce){
         dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
     } else{
+        zval_ptr_dtor(dst_real_zval);
         zval instance;
         Mat dst;
         object_init_ex(&instance,opencv_mat_ce);
@@ -298,6 +300,11 @@ PHP_FUNCTION(opencv_resize){
     RETURN_NULL();
 }
 
+/**
+ * CV\putText
+ * @param execute_data
+ * @param return_value
+ */
 PHP_FUNCTION(opencv_put_text){
 
     zval *img_zval, *org_zval,*color_zval;
@@ -321,6 +328,115 @@ PHP_FUNCTION(opencv_put_text){
     opencv_point_object *org_object = Z_PHP_POINT_OBJ_P(org_zval);
     opencv_scalar_object *color_object = Z_PHP_SCALAR_OBJ_P(color_zval);
     putText(*img_object->mat, text, *org_object->point, (int)font_face, (int)font_scale, *color_object->scalar, (int)thickness, (int)line_type, (bool)bottom_left_origin);
+}
+
+/**
+ * CV\blur
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_blur){
+
+    zval *src_zval, *dst_zval, *ksize_zval, *anchor_zval = NULL;
+    long border_type = BORDER_DEFAULT;
+    Point anchor =  Point(-1,-1);
+    opencv_mat_object *dst_object;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OzO|Ol",
+                              &src_zval, opencv_mat_ce,
+                              &dst_zval,
+                              &ksize_zval, opencv_size_ce,
+                              &anchor_zval, opencv_point_ce,
+                              &border_type) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *src_object = Z_PHP_MAT_OBJ_P(src_zval);
+    opencv_size_object *ksize_object = Z_PHP_SIZE_OBJ_P(ksize_zval);
+    if(anchor_zval != NULL){
+        opencv_point_object *anchor_object = Z_PHP_POINT_OBJ_P(anchor_zval);
+        anchor = *anchor_object->point;
+    }
+
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval) == opencv_mat_ce){
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        zval_ptr_dtor(dst_real_zval);
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+    blur(*src_object->mat, *dst_object->mat, *ksize_object->size, anchor, (int)border_type);
+    RETURN_NULL();
+}
+
+PHP_FUNCTION(opencv_gaussian_blur){
+
+    zval *src_zval, *dst_zval, *ksize_zval;
+    double sigma_x, sigma_y = 0;
+    long border_type = BORDER_DEFAULT;
+    opencv_mat_object *dst_object;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OzOd|dl",
+                              &src_zval, opencv_mat_ce,
+                              &dst_zval,
+                              &ksize_zval, opencv_size_ce,
+                              &sigma_x, sigma_y,
+                              &border_type) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *src_object = Z_PHP_MAT_OBJ_P(src_zval);
+    opencv_size_object *ksize_object = Z_PHP_SIZE_OBJ_P(ksize_zval);
+
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval) == opencv_mat_ce){
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        zval_ptr_dtor(dst_real_zval);
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+    GaussianBlur(*src_object->mat, *dst_object->mat, *ksize_object->size, sigma_x, sigma_y, (int)border_type);
+    RETURN_NULL();
+}
+
+PHP_FUNCTION(opencv_median_blur){
+
+    zval *src_zval, *dst_zval;
+    long ksize;
+    opencv_mat_object *dst_object;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Ozl",
+                              &src_zval, opencv_mat_ce,
+                              &dst_zval, &ksize) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *src_object = Z_PHP_MAT_OBJ_P(src_zval);
+
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval) == opencv_mat_ce){
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        zval_ptr_dtor(dst_real_zval);
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+    medianBlur(*src_object->mat, *dst_object->mat, (int)ksize);
+    RETURN_NULL();
 }
 
 /**

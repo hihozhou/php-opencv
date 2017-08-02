@@ -373,6 +373,41 @@ PHP_FUNCTION(opencv_blur){
     blur(*src_object->mat, *dst_object->mat, *ksize_object->size, anchor, (int)border_type);
 }
 
+PHP_FUNCTION(opencv_gaussian_blur){
+
+    zval *src_zval, *dst_zval, *ksize_zval;
+    double sigma_x, sigma_y = 0;
+    long border_type = BORDER_DEFAULT;
+    opencv_mat_object *dst_object;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OzOd|dl",
+                              &src_zval, opencv_mat_ce,
+                              &dst_zval,
+                              &ksize_zval, opencv_size_ce,
+                              &sigma_x, sigma_y,
+                              &border_type) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *src_object = Z_PHP_MAT_OBJ_P(src_zval);
+    opencv_size_object *ksize_object = Z_PHP_SIZE_OBJ_P(ksize_zval);
+
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval) == opencv_mat_ce){
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        zval_ptr_dtor(dst_real_zval);
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+    GaussianBlur(*src_object->mat, *dst_object->mat, *ksize_object->size, sigma_x, sigma_y, (int)border_type);
+    RETURN_NULL();
+}
+
 /**
  * color conversion code in CV\cvtColor,opencv enum ColorConversionCodes
  * @param module_number

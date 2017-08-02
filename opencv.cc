@@ -215,6 +215,7 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, absdiff, ZEND_FN(opencv_absdiff), opencv_absdiff_arginfo)
     ZEND_NS_NAMED_FE(OPENCV_NS, getTrackBarPos, ZEND_FN(opencv_get_track_bar_pos), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, blur, ZEND_FN(opencv_blur), opencv_blur_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, GaussianBlur, ZEND_FN(opencv_gaussian_blur), opencv_gaussian_blur_arginfo)
 	PHP_FE_END	/* Must be the last line in opencv_functions[] */
 };
 /* }}} */

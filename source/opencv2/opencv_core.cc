@@ -104,6 +104,7 @@ PHP_FUNCTION(opencv_add_weighted){
         dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
     } else{
         // isn't Mat object
+        zval_ptr_dtor(dst_real_zval);
         zval instance;
         Mat dst;
         object_init_ex(&instance,opencv_mat_ce);
@@ -206,6 +207,7 @@ PHP_FUNCTION(opencv_merge){
         dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
     } else{
         // isn't Mat object
+        zval_ptr_dtor(dst_real_zval);
         zval instance;
         Mat dst;
         object_init_ex(&instance,opencv_mat_ce);
@@ -268,6 +270,7 @@ PHP_FUNCTION(opencv_copy_make_border){
         dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
     } else{
         // isn't Mat object
+        zval_ptr_dtor(dst_real_zval);
         zval instance;
         Mat dst;
         object_init_ex(&instance,opencv_mat_ce);
@@ -308,6 +311,7 @@ PHP_FUNCTION(opencv_dft){
         dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
     } else{
         // isn't Mat object
+        zval_ptr_dtor(dst_real_zval);
         zval instance;
         Mat dst;
         object_init_ex(&instance,opencv_mat_ce);
@@ -350,6 +354,7 @@ PHP_FUNCTION(opencv_magnitude){
     if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval)==opencv_mat_ce){
         dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
     } else{
+        zval_ptr_dtor(dst_real_zval);
         zval instance;
         Mat dst;
         object_init_ex(&instance,opencv_mat_ce);
@@ -517,6 +522,7 @@ PHP_FUNCTION(opencv_add){
         if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval)==opencv_mat_ce){
             dst_mat_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
         } else{
+            zval_ptr_dtor(dst_real_zval);
             zval instance;
             Mat dst;
             object_init_ex(&instance,opencv_mat_ce);
@@ -531,6 +537,7 @@ PHP_FUNCTION(opencv_add){
         if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval)==opencv_mat_ce){
             dst_mat_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
         } else{
+            zval_ptr_dtor(dst_real_zval);
             zval instance;
             Mat dst;
             object_init_ex(&instance,opencv_mat_ce);
@@ -544,6 +551,7 @@ PHP_FUNCTION(opencv_add){
         if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval)==opencv_mat_ce){
             dst_mat_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
         } else{
+            zval_ptr_dtor(dst_real_zval);
             zval instance;
             Mat dst;
             object_init_ex(&instance,opencv_mat_ce);
@@ -592,6 +600,7 @@ PHP_FUNCTION(opencv_log){
     if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval)==opencv_mat_ce){
         dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
     } else{
+        zval_ptr_dtor(dst_real_zval);
         zval instance;
         Mat dst;
         object_init_ex(&instance,opencv_mat_ce);
@@ -628,6 +637,7 @@ PHP_FUNCTION(opencv_normalize){
     if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval)==opencv_mat_ce){
         dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
     } else{
+        zval_ptr_dtor(dst_real_zval);
         zval instance;
         Mat dst;
         object_init_ex(&instance,opencv_mat_ce);

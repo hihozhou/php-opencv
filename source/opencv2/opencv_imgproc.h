@@ -46,4 +46,13 @@ ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_resize);
 PHP_FUNCTION(opencv_put_text);
 
+ZEND_BEGIN_ARG_INFO_EX(opencv_blur_arginfo, 0, 0, 5)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, ksize)
+                ZEND_ARG_INFO(0, anchor)
+                ZEND_ARG_INFO(0, borderType)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_blur);
+
 #endif //OPENCV_OPENCV_IMGPROC_H

@@ -296,6 +296,7 @@ PHP_METHOD(opencv_mat, copy_to)
     if(Z_TYPE_P(m_real_zval) == IS_OBJECT && Z_OBJCE_P(m_real_zval)==opencv_mat_ce){
         m_object = Z_PHP_MAT_OBJ_P(m_real_zval);
     } else if(Z_TYPE_P(m_real_zval) == IS_NULL){
+        zval_ptr_dtor(m_real_zval);
         zval instance;
         Mat dst;
         object_init_ex(&instance,opencv_mat_ce);
@@ -378,6 +379,7 @@ PHP_METHOD(opencv_mat, convert_to){
         dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
     } else{
         // isn't Mat object
+        zval_ptr_dtor(dst_real_zval);
         zval instance;
         Mat dst;
         object_init_ex(&instance,opencv_mat_ce);

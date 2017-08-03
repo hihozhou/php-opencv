@@ -69,5 +69,14 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_median_blur_arginfo, 0, 0, 3)
                 ZEND_ARG_INFO(0, ksize)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_median_blur);
+ZEND_BEGIN_ARG_INFO_EX(opencv_bilateral_filter_arginfo, 0, 0, 6)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, d)
+                ZEND_ARG_INFO(0, sigmaColor)
+                ZEND_ARG_INFO(0, sigmaSpace)
+                ZEND_ARG_INFO(0, borderType)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_bilateral_filter);
 
 #endif //OPENCV_OPENCV_IMGPROC_H

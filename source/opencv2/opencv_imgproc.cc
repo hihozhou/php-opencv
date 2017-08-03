@@ -439,6 +439,39 @@ PHP_FUNCTION(opencv_median_blur){
     RETURN_NULL();
 }
 
+PHP_FUNCTION(opencv_bilateral_filter){
+
+    zval *src_zval, *dst_zval;
+    long d, border_type = BORDER_DEFAULT;
+    double sigma_color, sigma_space;
+    opencv_mat_object *dst_object;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Ozlddl",
+                              &src_zval, opencv_mat_ce,
+                              &dst_zval, &d, &sigma_color,
+                              &sigma_space, &border_type) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *src_object = Z_PHP_MAT_OBJ_P(src_zval);
+
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval) == opencv_mat_ce){
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        zval_ptr_dtor(dst_real_zval);
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+    bilateralFilter(*src_object->mat, *dst_object->mat, (int)d, sigma_color, sigma_space, border_type);
+    RETURN_NULL();
+}
+
+
 /**
  * color conversion code in CV\cvtColor,opencv enum ColorConversionCodes
  * @param module_number

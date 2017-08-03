@@ -75,6 +75,8 @@ static inline opencv_rect_object* get_rect_obj(zend_object *obj) {
     return (opencv_rect_object*)((char*)(obj) - XtOffsetOf(opencv_rect_object, std));
 }
 
+void opencv_size_update_property_by_c_size(zval *z, Size *size);
+
 void opencv_rect_update_property_by_c_rect(zval *z, Rect *rect);
 
 void opencv_scalar_update_property_by_c_scalar(zval *z,Scalar *scalar);

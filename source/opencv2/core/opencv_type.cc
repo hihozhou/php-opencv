@@ -272,6 +272,11 @@ void opencv_size_free_obj(zend_object *object)
     zend_object_std_dtor(object);
 }
 
+void opencv_size_update_property_by_c_size(zval *z, Size *size){
+    zend_update_property_long(opencv_size_ce, z, "width", sizeof("width")-1, size->width);
+    zend_update_property_long(opencv_size_ce, z, "height", sizeof("height")-1, size->height);
+}
+
 
 /**
  * Size __construct
@@ -287,9 +292,7 @@ PHP_METHOD(opencv_size, __construct)
     opencv_size_object *obj = Z_PHP_SIZE_OBJ_P(getThis());
     Size size = Size((int)width, (int)height);
     obj->size = new Size(size);
-
-    zend_update_property_long(opencv_size_ce, getThis(), "width", sizeof("width")-1, obj->size->width);
-    zend_update_property_long(opencv_size_ce, getThis(), "height", sizeof("height")-1, obj->size->height);
+    opencv_size_update_property_by_c_size(getThis(), obj->size);
 }
 
 

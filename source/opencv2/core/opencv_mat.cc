@@ -131,8 +131,8 @@ PHP_METHOD(opencv_mat, empty)
 
 PHP_METHOD(opencv_mat, zeros)
 {
-    long rows, cols, flags = IMREAD_COLOR;
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ll|l", &rows, &cols, &flags) == FAILURE) {
+    long rows, cols, flags;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "lll", &rows, &cols, &flags) == FAILURE) {
         RETURN_NULL();
     }
     zval instance;
@@ -146,6 +146,27 @@ PHP_METHOD(opencv_mat, zeros)
     opencv_mat_update_property_by_c_mat(&instance, obj->mat);
 
     RETURN_ZVAL(&instance,0,0); //return php Mat object
+}
+
+PHP_METHOD(opencv_mat, zeros_by_size)
+{
+    zval *size_zval;
+    long flags;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Ol", &size_zval, opencv_size_ce, &flags) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_size_object *size_object = Z_PHP_SIZE_OBJ_P(size_zval);
+    zval instance;
+    object_init_ex(&instance, opencv_mat_ce);
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(&instance);
+
+    Mat im = Mat::zeros(*size_object->size, (int)flags);
+
+    obj->mat=new Mat(im);
+    opencv_mat_update_property_by_c_mat(&instance, obj->mat);
+
+    RETURN_ZVAL(&instance,0,0);
 }
 
 
@@ -261,7 +282,7 @@ PHP_METHOD(opencv_mat, get_image_roi)
     opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
     try {
         Mat roi = (*obj->mat)(*rect_object->rect);
-        new_obj->mat=new Mat(roi);
+        new_obj->mat = new Mat(roi);
     }catch (Exception exception){
         const char* err_msg = exception.what();
         opencv_throw_exception(err_msg);//throw exception
@@ -393,6 +414,24 @@ PHP_METHOD(opencv_mat, convert_to){
     RETURN_NULL();
 }
 
+PHP_METHOD(opencv_mat, size)
+{
+    zval instance;
+    object_init_ex(&instance, opencv_size_ce);
+    opencv_size_object *size_object = Z_PHP_SIZE_OBJ_P(&instance);
+
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
+    try {
+        Size size = obj->mat->size();
+        size_object->size = new Size(size);
+    }catch (Exception e){
+        opencv_throw_exception(e.what());
+        RETURN_NULL();
+    }
+    opencv_size_update_property_by_c_size(&instance, size_object->size);
+    RETURN_ZVAL(&instance,0,0);
+}
+
 
 /**
  * opencv_mat_methods[]
@@ -404,7 +443,9 @@ const zend_function_entry opencv_mat_methods[] = {
         PHP_ME(opencv_mat, channels, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, empty, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, print, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_mat, size, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, zeros, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+        PHP_MALIAS(opencv_mat, zerosBySize ,zeros_by_size, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
         PHP_MALIAS(opencv_mat, isContinuous ,is_continuous, NULL, ZEND_ACC_PUBLIC)
         PHP_MALIAS(opencv_mat, isSubmatrix ,is_submatrix, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, row, NULL, ZEND_ACC_PUBLIC)

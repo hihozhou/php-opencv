@@ -193,6 +193,7 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, cvtColor, ZEND_FN(opencv_cv_t_color), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, ellipse, ZEND_FN(opencv_ellipse), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, circle, ZEND_FN(opencv_circle), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, fillPoly, ZEND_FN(opencv_fill_poly), NULL)//TODO fillPoly
     ZEND_NS_NAMED_FE(OPENCV_NS, line, ZEND_FN(opencv_line), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, rectangle, ZEND_FN(opencv_rectangle), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, rectangleByPoint, ZEND_FN(opencv_rectangle_by_point), NULL)

@@ -446,7 +446,7 @@ PHP_FUNCTION(opencv_bilateral_filter){
     double sigma_color, sigma_space;
     opencv_mat_object *dst_object;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Ozlddl",
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Ozldd|l",
                               &src_zval, opencv_mat_ce,
                               &dst_zval, &d, &sigma_color,
                               &sigma_space, &border_type) == FAILURE) {
@@ -467,7 +467,7 @@ PHP_FUNCTION(opencv_bilateral_filter){
         dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
         dst_object->mat = new Mat(dst);
     }
-    bilateralFilter(*src_object->mat, *dst_object->mat, (int)d, sigma_color, sigma_space, border_type);
+    bilateralFilter(*src_object->mat, *dst_object->mat, (int)d, sigma_color, sigma_space, (int)border_type);
     RETURN_NULL();
 }
 

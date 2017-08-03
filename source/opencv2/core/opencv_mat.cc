@@ -444,6 +444,7 @@ const zend_function_entry opencv_mat_methods[] = {
         PHP_ME(opencv_mat, empty, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, print, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, size, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_mat, clone, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, zeros, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
         PHP_MALIAS(opencv_mat, zerosBySize ,zeros_by_size, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
         PHP_MALIAS(opencv_mat, isContinuous ,is_continuous, NULL, ZEND_ACC_PUBLIC)

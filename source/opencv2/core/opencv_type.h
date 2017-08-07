@@ -80,4 +80,7 @@ void opencv_size_update_property_by_c_size(zval *z, Size *size);
 void opencv_rect_update_property_by_c_rect(zval *z, Rect *rect);
 
 void opencv_scalar_update_property_by_c_scalar(zval *z,Scalar *scalar);
+
+void opencv_point_update_property_by_c_point(zval *z, Point *point);
+
 #endif //OPENCV_OPENCV_TYPE_H

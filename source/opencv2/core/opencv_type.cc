@@ -49,9 +49,14 @@ PHP_METHOD(opencv_point, __construct)
     Point point = Point((int)x, (int)y);
     obj->point = new Point(point);
 
-    zend_update_property_long(opencv_point_ce, getThis(), "x", sizeof("x")-1, x);
-    zend_update_property_long(opencv_point_ce, getThis(), "y", sizeof("y")-1, y);
+    opencv_point_update_property_by_c_point(getThis(),obj->point);
 }
+
+void opencv_point_update_property_by_c_point(zval *z, Point *point){
+    zend_update_property_long(opencv_point_ce, z, "x", sizeof("x")-1, point->x);
+    zend_update_property_long(opencv_point_ce, z, "y", sizeof("y")-1, point->y);
+}
+
 
 /**
  * print Point data
@@ -440,8 +445,7 @@ PHP_METHOD(opencv_rect, tl)
     opencv_point_object *point_obj = Z_PHP_POINT_OBJ_P(&point_zval);
     point_obj->point = new Point(rect_obj->rect->tl());
 
-    zend_update_property_long(opencv_point_ce, &point_zval, "x", sizeof("x")-1, point_obj->point->x);
-    zend_update_property_long(opencv_point_ce, &point_zval, "y", sizeof("y")-1, point_obj->point->y);
+    opencv_point_update_property_by_c_point(&point_zval,point_obj->point);
 
     RETURN_ZVAL(&point_zval,0,0); //return php Point object
 }
@@ -460,8 +464,7 @@ PHP_METHOD(opencv_rect, br)
     opencv_point_object *point_obj = Z_PHP_POINT_OBJ_P(&point_zval);
     point_obj->point = new Point(rect_obj->rect->br());
 
-    zend_update_property_long(opencv_point_ce, &point_zval, "x", sizeof("x")-1, point_obj->point->x);
-    zend_update_property_long(opencv_point_ce, &point_zval, "y", sizeof("y")-1, point_obj->point->y);
+    opencv_point_update_property_by_c_point(&point_zval,point_obj->point);
 
     RETURN_ZVAL(&point_zval,0,0); //return php Point object
 }
@@ -480,8 +483,7 @@ PHP_METHOD(opencv_rect, size)
     opencv_size_object *size_obj = Z_PHP_SIZE_OBJ_P(&size_zval);
     size_obj->size = new Size(rect_obj->rect->size());
 
-    zend_update_property_long(opencv_size_ce, &size_zval, "width", sizeof("width")-1, size_obj->size->width);
-    zend_update_property_long(opencv_size_ce, &size_zval, "height", sizeof("height")-1, size_obj->size->height);
+    opencv_size_update_property_by_c_size(&size_zval,size_obj->size);
 
     RETURN_ZVAL(&size_zval,0,0); //return php Point object
 }

@@ -23,7 +23,17 @@ void opencv_line_type_init(int module_number);
 PHP_FUNCTION(opencv_cv_t_color);
 PHP_FUNCTION(opencv_ellipse);
 PHP_FUNCTION(opencv_circle);
-PHP_FUNCTION(opencv_fill_poly);//TODO fillPoly
+ZEND_BEGIN_ARG_INFO_EX(opencv_fill_poly_arginfo, 0, 0, 7)
+                ZEND_ARG_INFO(0, img)
+                ZEND_ARG_INFO(0, pts)//point array
+                ZEND_ARG_INFO(0, ncontours)
+                ZEND_ARG_INFO(0, color)
+                ZEND_ARG_INFO(0, lineType)
+                ZEND_ARG_INFO(0, shift)
+                ZEND_ARG_INFO(1, offset)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_fill_poly);
+
 PHP_FUNCTION(opencv_line);
 PHP_FUNCTION(opencv_rectangle);
 PHP_FUNCTION(opencv_rectangle_by_point);

@@ -189,6 +189,7 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, imwrite, ZEND_FN(opencv_imwrite), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, imshow, ZEND_FN(opencv_imshow), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, waitKey, ZEND_FN(opencv_wait_key), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, moveWindow, ZEND_FN(opencv_move_window), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, namedWindow, ZEND_FN(opencv_named_window), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, cvtColor, ZEND_FN(opencv_cv_t_color), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, ellipse, ZEND_FN(opencv_ellipse), NULL)

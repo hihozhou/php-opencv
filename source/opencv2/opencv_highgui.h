@@ -22,6 +22,7 @@ extern void opencv_highgui_init(int module_number);
 
 PHP_FUNCTION(opencv_imshow);
 PHP_FUNCTION(opencv_wait_key);
+PHP_FUNCTION(opencv_move_window);
 PHP_FUNCTION(opencv_named_window);
 PHP_FUNCTION(opencv_create_trackbar);
 PHP_FUNCTION(opencv_destroy_window);

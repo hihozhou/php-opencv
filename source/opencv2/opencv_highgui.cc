@@ -86,6 +86,25 @@ int php_window_flags_to_c_flags(int flags){
 }
 
 /**
+ * CV\moveWindow
+ * @param window_name
+ * @param x
+ * @param y
+ */
+PHP_FUNCTION(opencv_move_window){
+    char *window_name;
+    long window_name_len;
+    long x;
+    long y;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "sll", &window_name, &window_name_len, &x, &y) == FAILURE) {
+        RETURN_NULL();
+    }
+    moveWindow(window_name,(int)x,(int)y);
+    RETURN_NULL();
+}
+
+/**
  * CV\namedWindow
  * @param window_name
  * @param flags

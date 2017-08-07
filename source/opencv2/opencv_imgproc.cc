@@ -124,47 +124,73 @@ PHP_FUNCTION(opencv_circle){
  */
 PHP_FUNCTION(opencv_fill_poly){
 
-    long thickness = 1, lineType = LINE_8, shift = 0;
-    long *number_points;
-    long ncoutours;
-    zval *mat_zval, *scalar_zval, *offset_point_zval;
-    zval *start_point_zval;
+    //define parameters
+    long ncontours, lineType = LINE_8, shift = 0;
+    zval *img_zval, *color_zval, *offset_point_zval = NULL;
+    zval *points_zval;
     opencv_point_object *offset_object;
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OOllO|llO",
-                              &mat_zval, opencv_mat_ce,
-                              &start_point_zval, opencv_point_ce,
-                              &number_points,
-                              &ncoutours,
-                              &scalar_zval, opencv_scalar_ce,
-                              &thickness, &lineType,
-                              &offset_point_zval, opencv_point_ce) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OalO|llz",
+                              &img_zval, opencv_mat_ce,
+                              &points_zval, &ncontours,
+                              &color_zval, opencv_scalar_ce,
+                              &lineType, &shift,
+                              &offset_point_zval) == FAILURE) {
         RETURN_NULL();
     }
 
-    zval *offset_point_real_zval = Z_REFVAL_P(offset_point_zval);
-    if(Z_TYPE_P(offset_point_real_zval) == IS_OBJECT && Z_OBJCE_P(offset_point_real_zval)==opencv_point_ce){
-        // is Point object
-        offset_object = Z_PHP_POINT_OBJ_P(offset_point_real_zval);
+    unsigned long point_count = zend_hash_num_elements(Z_ARRVAL_P(points_zval));
+    Point root_points[1][point_count];
+    opencv_point_object *point_object;
+    zend_ulong _h;
+    zval *array_val_zval;
+    ZEND_HASH_FOREACH_NUM_KEY_VAL(Z_ARRVAL_P(points_zval),_h,array_val_zval){
+                again1:
+                if(Z_TYPE_P(array_val_zval) == IS_OBJECT && Z_OBJCE_P(array_val_zval) == opencv_point_ce){
+                    point_object = Z_PHP_POINT_OBJ_P(array_val_zval);
+                    root_points[0][_h] = *point_object->point;
+                }else if(Z_TYPE_P(array_val_zval) == IS_REFERENCE){
+                    array_val_zval = Z_REFVAL_P(array_val_zval);
+                    goto again1;
+                } else {
+                    opencv_throw_exception("points array value just Point object.");
+                    RETURN_NULL();
+                }
+            }ZEND_HASH_FOREACH_END();
+
+    const Point* pts[1] = {root_points[0]};
+    int npts[] = {(int)point_count};
+    Point offset;
+    zval *offset_point_real_zval;
+
+    if(offset_point_zval != NULL){
+        offset_point_real_zval = Z_REFVAL_P(offset_point_zval);
+        if(Z_TYPE_P(offset_point_real_zval) == IS_OBJECT && Z_OBJCE_P(offset_point_real_zval) == opencv_point_ce){
+            // is Point object
+            offset_object = Z_PHP_POINT_OBJ_P(offset_point_real_zval);
+        } else{
+            // isn't Point object
+            zval_ptr_dtor(offset_point_real_zval);
+            zval instance;
+            object_init_ex(&instance,opencv_point_ce);
+            ZVAL_COPY_VALUE(offset_point_real_zval, &instance);// Cover dst_real_zval by Point object
+            offset_object = Z_PHP_POINT_OBJ_P(offset_point_real_zval);
+        }
     } else{
-        // isn't Point object
-        zval instance;
-        Point dst;
-        object_init_ex(&instance,opencv_point_ce);
-        ZVAL_COPY_VALUE(offset_point_real_zval, &instance);// Cover dst_real_zval by Point object
-        offset_object = Z_PHP_POINT_OBJ_P(offset_point_real_zval);
-        offset_object->point = new Point(dst);
+        offset = Point();
     }
 
-    opencv_mat_object *mat_obj = Z_PHP_MAT_OBJ_P(mat_zval);
-    opencv_point_object *start_point_obj = Z_PHP_POINT_OBJ_P(start_point_zval);
-    opencv_scalar_object *scalar_obj = Z_PHP_SCALAR_OBJ_P(scalar_zval);
+    opencv_mat_object *mat_obj = Z_PHP_MAT_OBJ_P(img_zval);
+    opencv_scalar_object *scalar_obj = Z_PHP_SCALAR_OBJ_P(color_zval);
 
-    const Point *pts = (start_point_obj->point);
-    const int *npts = (int*)(number_points);
-    fillPoly(*(mat_obj->mat), &pts, npts, ncoutours, *(scalar_obj->scalar), thickness, lineType, *offset_object->point);
+    fillPoly(*(mat_obj->mat), pts, npts, (int)ncontours, *(scalar_obj->scalar), (int)lineType, (int)shift, offset);
+    if(offset_point_zval != NULL){
+        offset_object->point = new Point(offset);
+        opencv_point_update_property_by_c_point(offset_point_real_zval, offset_object->point);
+    }
 
     RETURN_NULL();
 }
+
 
 /**
  * CV\line

@@ -89,4 +89,26 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_bilateral_filter_arginfo, 0, 0, 6)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_bilateral_filter);
 
+ZEND_BEGIN_ARG_INFO_EX(opencv_dilate_arginfo, 0, 0, 7)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, kernel)
+                ZEND_ARG_INFO(0, anchor)
+                ZEND_ARG_INFO(0, iterations)
+                ZEND_ARG_INFO(0, borderType)
+                ZEND_ARG_INFO(0, borderValue)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_dilate);
+
+ZEND_BEGIN_ARG_INFO_EX(opencv_erode_arginfo, 0, 0, 7)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, kernel)
+                ZEND_ARG_INFO(0, anchor)
+                ZEND_ARG_INFO(0, iterations)
+                ZEND_ARG_INFO(0, borderType)
+                ZEND_ARG_INFO(0, borderValue)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_erode);
+
 #endif //OPENCV_OPENCV_IMGPROC_H

@@ -638,9 +638,41 @@ PHP_FUNCTION(opencv_erode){
         opencv_scalar_object *border_value_object = Z_PHP_SCALAR_OBJ_P(border_value_zval);
         border_value = *border_value_object->scalar;
     }
-
     erode(*src_object->mat, *dst_object->mat, *kernel_object->mat, anchor, (int)iterations, (int)border_type, border_value);
     RETURN_NULL();
+}
+
+
+PHP_FUNCTION(opencv_threshold){
+
+    zval *src_zval, *dst_zval;
+    double thresh, maxval;
+    long type;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Ozddl",
+                              &src_zval, opencv_mat_ce,
+                              &dst_zval,
+                              &thresh, &maxval,
+                              &type) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *src_object, *dst_object;
+
+    src_object = Z_PHP_MAT_OBJ_P(src_zval);
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval) == opencv_mat_ce){
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        zval_ptr_dtor(dst_real_zval);
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+    threshold(*src_object->mat, *dst_object->mat, thresh, maxval, (int)type);
+
 }
 
 /**

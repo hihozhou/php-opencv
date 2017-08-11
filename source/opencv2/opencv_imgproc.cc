@@ -80,7 +80,6 @@ PHP_FUNCTION(opencv_threshold){
     opencv_mat_object *dst_obj = Z_PHP_MAT_OBJ_P(&instance);
 
     dst_obj->mat=new Mat(dstImg);
-
     opencv_mat_update_property_by_c_mat(&instance,dst_obj->mat);
 
     RETURN_ZVAL(&instance,0,0); //return php Mat object

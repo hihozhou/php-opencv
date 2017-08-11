@@ -118,20 +118,20 @@ PHP_FUNCTION(opencv_circle){
 }
 
 /**
+ * todo 传入二维数组
  * CV\fillPoly
  * @param execute_data
  * @param return_value
  */
 PHP_FUNCTION(opencv_fill_poly){
 
-    //define parameters
-    long ncontours, lineType = LINE_8, shift = 0;
+    long ncontours = 1, lineType = LINE_8, shift = 0;
     zval *img_zval, *color_zval, *offset_point_zval = NULL;
     zval *points_zval;
     opencv_point_object *offset_object;
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OalO|llz",
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OaO|llz",
                               &img_zval, opencv_mat_ce,
-                              &points_zval, &ncontours,
+                              &points_zval,
                               &color_zval, opencv_scalar_ce,
                               &lineType, &shift,
                               &offset_point_zval) == FAILURE) {
@@ -139,7 +139,7 @@ PHP_FUNCTION(opencv_fill_poly){
     }
 
     unsigned long point_count = zend_hash_num_elements(Z_ARRVAL_P(points_zval));
-    Point root_points[1][point_count];
+    Point root_points[ncontours][point_count];
     opencv_point_object *point_object;
     zend_ulong _h;
     zval *array_val_zval;
@@ -157,7 +157,7 @@ PHP_FUNCTION(opencv_fill_poly){
                 }
             }ZEND_HASH_FOREACH_END();
 
-    const Point* pts[1] = {root_points[0]};
+    const Point* pts[ncontours] = {root_points[0]};
     int npts[] = {(int)point_count};
     Point offset;
     zval *offset_point_real_zval;
@@ -546,6 +546,102 @@ PHP_FUNCTION(opencv_bilateral_filter){
     RETURN_NULL();
 }
 
+
+PHP_FUNCTION(opencv_dilate){
+    zval *src_zval, *dst_zval, *kernel_zval, *anchor_zval = NULL, *border_value_zval = NULL;
+    long iterations = 1, border_type = BORDER_CONSTANT;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OzO|OllO",
+                              &src_zval, opencv_mat_ce,
+                              &dst_zval,
+                              &kernel_zval, opencv_mat_ce,
+                              &anchor_zval, opencv_point_ce,
+                              &iterations, &border_type,
+                              &border_value_zval, opencv_scalar_ce) == FAILURE) {
+        RETURN_NULL();
+    }
+    opencv_mat_object *src_object, *dst_object, *kernel_object;
+    Point anchor = Point(-1,-1);
+    Scalar border_value = morphologyDefaultBorderValue();
+
+    src_object = Z_PHP_MAT_OBJ_P(src_zval);
+    kernel_object = Z_PHP_MAT_OBJ_P(kernel_zval);
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval) == opencv_mat_ce){
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        zval_ptr_dtor(dst_real_zval);
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+
+    if(anchor_zval != NULL){
+        opencv_point_object *anchor_object = Z_PHP_POINT_OBJ_P(anchor_zval);
+        anchor = *anchor_object->point;
+    }
+
+    if(border_value_zval != NULL){
+        opencv_scalar_object *border_value_object = Z_PHP_SCALAR_OBJ_P(border_value_zval);
+        border_value = *border_value_object->scalar;
+    }
+
+    dilate(*src_object->mat, *dst_object->mat, *kernel_object->mat, anchor, (int)iterations, (int)border_type, border_value);
+    RETURN_NULL();
+
+}
+
+PHP_FUNCTION(opencv_erode){
+
+    zval *src_zval, *dst_zval, *kernel_zval, *anchor_zval = NULL, *border_value_zval = NULL;
+    long iterations = 1, border_type = BORDER_CONSTANT;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OzO|OllO",
+                              &src_zval, opencv_mat_ce,
+                              &dst_zval,
+                              &kernel_zval, opencv_mat_ce,
+                              &anchor_zval, opencv_point_ce,
+                              &iterations, &border_type,
+                              &border_value_zval, opencv_scalar_ce) == FAILURE) {
+        RETURN_NULL();
+    }
+    opencv_mat_object *src_object, *dst_object, *kernel_object;
+    Point anchor = Point(-1,-1);
+    Scalar border_value = morphologyDefaultBorderValue();
+
+    src_object = Z_PHP_MAT_OBJ_P(src_zval);
+    kernel_object = Z_PHP_MAT_OBJ_P(kernel_zval);
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval) == opencv_mat_ce){
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        zval_ptr_dtor(dst_real_zval);
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+
+    if(anchor_zval != NULL){
+        opencv_point_object *anchor_object = Z_PHP_POINT_OBJ_P(anchor_zval);
+        anchor = *anchor_object->point;
+    }
+
+    if(border_value_zval != NULL){
+        opencv_scalar_object *border_value_object = Z_PHP_SCALAR_OBJ_P(border_value_zval);
+        border_value = *border_value_object->scalar;
+    }
+
+    erode(*src_object->mat, *dst_object->mat, *kernel_object->mat, anchor, (int)iterations, (int)border_type, border_value);
+    RETURN_NULL();
+}
 
 /**
  * color conversion code in CV\cvtColor,opencv enum ColorConversionCodes

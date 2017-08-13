@@ -8,8 +8,7 @@ namespace CV;
 
 $morph_elem = 2;
 $morph_size = 3;
-$element = getStructuringElement( $morph_elem, new Size( 2*$morph_size + 1, 2*$morph_size+1 ), new Point( $morph_size, $morph_size ));
-
+$element = getStructuringElement($morph_elem, new Size(2*$morph_size + 1, 2*$morph_size+1), new Point($morph_size, $morph_size));
 
 var_dump($element);
 $element->print();

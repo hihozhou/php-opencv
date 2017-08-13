@@ -56,34 +56,6 @@ PHP_FUNCTION(opencv_cv_t_color){
     RETURN_ZVAL(&instance,0,0); //return php Mat object
 }
 
-/**
- * CV\threshold
- * @param execute_data
- * @param return_value
- */
-PHP_FUNCTION(opencv_threshold){
-    long type;
-    double thresh;
-    double maxval;
-    Mat dstImg;
-    zval *mat_zval;
-
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Oddl", &mat_zval,opencv_mat_ce, &thresh, &maxval, &type) == FAILURE) {
-        RETURN_NULL();
-    }
-
-    opencv_mat_object *src_obj = Z_PHP_MAT_OBJ_P(mat_zval);
-    threshold(*(src_obj->mat),dstImg,thresh,maxval,type);
-
-    zval instance;
-    object_init_ex(&instance,opencv_mat_ce);
-    opencv_mat_object *dst_obj = Z_PHP_MAT_OBJ_P(&instance);
-
-    dst_obj->mat=new Mat(dstImg);
-    opencv_mat_update_property_by_c_mat(&instance,dst_obj->mat);
-
-    RETURN_ZVAL(&instance,0,0); //return php Mat object
-}
 
 /**
  * CV\ellipse

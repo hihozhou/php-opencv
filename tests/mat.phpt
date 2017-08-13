@@ -15,6 +15,9 @@ $mat->print(Formatter::FMT_PYTHON);
 $zeros = Mat::zeros(10,10,CV_8UC1);
 var_dump($zeros);
 $zeros->print(Formatter::FMT_PYTHON);
+$ones = Mat::ones(10,10,CV_8UC1);
+var_dump($ones);
+$ones->print(Formatter::FMT_PYTHON);
 ?>
 --EXPECT--
 object(CV\Mat)#2 (4) {
@@ -52,3 +55,23 @@ object(CV\Mat)#3 (4) {
  [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0],
  [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0],
  [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0]]
+object(CV\Mat)#4 (4) {
+  ["type":"CV\Mat":private]=>
+  int(0)
+  ["rows"]=>
+  int(10)
+  ["cols"]=>
+  int(10)
+  ["dims"]=>
+  int(2)
+}
+[[  1,   1,   1,   1,   1,   1,   1,   1,   1,   1],
+ [  1,   1,   1,   1,   1,   1,   1,   1,   1,   1],
+ [  1,   1,   1,   1,   1,   1,   1,   1,   1,   1],
+ [  1,   1,   1,   1,   1,   1,   1,   1,   1,   1],
+ [  1,   1,   1,   1,   1,   1,   1,   1,   1,   1],
+ [  1,   1,   1,   1,   1,   1,   1,   1,   1,   1],
+ [  1,   1,   1,   1,   1,   1,   1,   1,   1,   1],
+ [  1,   1,   1,   1,   1,   1,   1,   1,   1,   1],
+ [  1,   1,   1,   1,   1,   1,   1,   1,   1,   1],
+ [  1,   1,   1,   1,   1,   1,   1,   1,   1,   1]]

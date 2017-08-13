@@ -111,4 +111,10 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_erode_arginfo, 0, 0, 7)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_erode);
 
+ZEND_BEGIN_ARG_INFO_EX(opencv_get_structuring_element_arginfo, 0, 0, 3)
+                ZEND_ARG_INFO(0, shape)
+                ZEND_ARG_INFO(0, ksize)
+                ZEND_ARG_INFO(0, anchor)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_get_structuring_element);
 #endif //OPENCV_OPENCV_IMGPROC_H

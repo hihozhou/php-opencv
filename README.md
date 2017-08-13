@@ -139,7 +139,10 @@ result:
 - 19.Videostab
 
 
-    
+## Contributors
+
+[@hihozhou](https://github.com/hihozhou)  
+[@MaleicAcid](https://github.com/MaleicAcid)
     
 ## 感谢
 

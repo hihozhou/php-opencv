@@ -117,4 +117,14 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_get_structuring_element_arginfo, 0, 0, 3)
                 ZEND_ARG_INFO(0, anchor)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_get_structuring_element);
+
+ZEND_BEGIN_ARG_INFO_EX(opencv_threshold_arginfo, 0, 0, 5)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, thresh)
+                ZEND_ARG_INFO(0, maxval)
+                ZEND_ARG_INFO(0, type)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_threshold);
+
 #endif //OPENCV_OPENCV_IMGPROC_H

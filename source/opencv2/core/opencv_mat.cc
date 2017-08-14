@@ -128,6 +128,24 @@ PHP_METHOD(opencv_mat, empty)
     RETURN_LONG(obj->mat->empty());
 }
 
+PHP_METHOD(opencv_mat, ones)
+{
+    long rows, cols, flags;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "lll", &rows, &cols, &flags) == FAILURE) {
+        RETURN_NULL();
+    }
+    zval instance;
+    object_init_ex(&instance, opencv_mat_ce);
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(&instance);
+
+    Mat im = Mat::ones((int)rows, (int)cols, (int)flags);
+
+    obj->mat=new Mat(im);
+    //update php Mat object property
+    opencv_mat_update_property_by_c_mat(&instance, obj->mat);
+
+    RETURN_ZVAL(&instance,0,0); //return php Mat object
+}
 
 PHP_METHOD(opencv_mat, zeros)
 {
@@ -445,6 +463,7 @@ const zend_function_entry opencv_mat_methods[] = {
         PHP_ME(opencv_mat, print, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, size, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, clone, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_mat, ones, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
         PHP_ME(opencv_mat, zeros, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
         PHP_MALIAS(opencv_mat, zerosBySize ,zeros_by_size, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
         PHP_MALIAS(opencv_mat, isContinuous ,is_continuous, NULL, ZEND_ACC_PUBLIC)

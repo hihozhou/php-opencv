@@ -56,6 +56,7 @@ PHP_FUNCTION(opencv_cv_t_color){
     RETURN_ZVAL(&instance,0,0); //return php Mat object
 }
 
+
 /**
  * CV\ellipse
  * @param CV\Mat $img, Mat of original picture
@@ -674,6 +675,42 @@ PHP_FUNCTION(opencv_threshold){
         dst_object->mat = new Mat(dst);
     }
     RETURN_DOUBLE(threshold(*src_object->mat, *dst_object->mat, thresh, maxval, (int)type));
+}
+
+/**
+ * CV\getStructuringElement
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_get_structuring_element){
+    long shape;
+    zval *ksize_zval, *anchor_zval = NULL;
+    Point anchor =  Point(-1,-1);
+    opencv_mat_object *dst_object;
+    Mat dst;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "lO|O",
+                              &shape,
+                              &ksize_zval, opencv_size_ce,
+                              &anchor_zval, opencv_point_ce) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_size_object *ksize_object = Z_PHP_SIZE_OBJ_P(ksize_zval);
+    if(anchor_zval != NULL){
+        opencv_point_object *anchor_object = Z_PHP_POINT_OBJ_P(anchor_zval);
+        anchor = *anchor_object->point;
+    }
+
+    dst = getStructuringElement((int)shape, *ksize_object->size, anchor);
+
+    zval instance;
+    object_init_ex(&instance,opencv_mat_ce);
+    opencv_mat_object *dst_obj = Z_PHP_MAT_OBJ_P(&instance);
+
+    dst_obj->mat=new Mat(dst);
+    opencv_mat_update_property_by_c_mat(&instance,dst_obj->mat);
+
+    RETURN_ZVAL(&instance,0,0); //return php Mat object
 }
 
 /**

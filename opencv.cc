@@ -223,6 +223,7 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, dilate, ZEND_FN(opencv_dilate), opencv_dilate_arginfo)
     ZEND_NS_NAMED_FE(OPENCV_NS, erode, ZEND_FN(opencv_erode), opencv_erode_arginfo)
 	ZEND_NS_NAMED_FE(OPENCV_NS, getStructuringElement, ZEND_FN(opencv_get_structuring_element), opencv_get_structuring_element_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, threshold, ZEND_FN(opencv_threshold), opencv_threshold_arginfo)
 	PHP_FE_END	/* Must be the last line in opencv_functions[] */
 };
 /* }}} */

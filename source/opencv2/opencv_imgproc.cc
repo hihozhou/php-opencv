@@ -125,7 +125,7 @@ PHP_FUNCTION(opencv_circle){
  */
 PHP_FUNCTION(opencv_fill_poly){
 
-    long ncontours = 1, lineType = LINE_8, shift = 0;
+    long lineType = LINE_8, shift = 0;
     zval *img_zval, *color_zval, *offset_point_zval = NULL;
     zval *points_zval;
     opencv_point_object *offset_object;
@@ -138,6 +138,7 @@ PHP_FUNCTION(opencv_fill_poly){
         RETURN_NULL();
     }
 
+    long ncontours = 1;
     unsigned long point_count = zend_hash_num_elements(Z_ARRVAL_P(points_zval));
     Point root_points[ncontours][point_count];
     opencv_point_object *point_object;
@@ -157,7 +158,8 @@ PHP_FUNCTION(opencv_fill_poly){
                 }
             }ZEND_HASH_FOREACH_END();
 
-    const Point* pts[ncontours] = {root_points[0]};
+    const Point* pts[ncontours];
+    pts[0] = root_points[0];
     int npts[] = {(int)point_count};
     Point offset;
     zval *offset_point_real_zval;
@@ -671,8 +673,7 @@ PHP_FUNCTION(opencv_threshold){
         dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
         dst_object->mat = new Mat(dst);
     }
-    threshold(*src_object->mat, *dst_object->mat, thresh, maxval, (int)type);
-
+    RETURN_DOUBLE(threshold(*src_object->mat, *dst_object->mat, thresh, maxval, (int)type));
 }
 
 /**

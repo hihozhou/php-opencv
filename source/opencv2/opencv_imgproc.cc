@@ -463,7 +463,7 @@ PHP_FUNCTION(opencv_gaussian_blur){
                               &src_zval, opencv_mat_ce,
                               &dst_zval,
                               &ksize_zval, opencv_size_ce,
-                              &sigma_x, sigma_y,
+                              &sigma_x, &sigma_y,
                               &border_type) == FAILURE) {
         RETURN_NULL();
     }
@@ -483,7 +483,7 @@ PHP_FUNCTION(opencv_gaussian_blur){
         dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
         dst_object->mat = new Mat(dst);
     }
-    GaussianBlur(*src_object->mat, *dst_object->mat, *ksize_object->size, sigma_x, sigma_y, (int)border_type);
+    GaussianBlur(*src_object->mat, *dst_object->mat, *ksize_object->size, (double)sigma_x, (double)sigma_y, (int)border_type);
     RETURN_NULL();
 }
 
@@ -678,6 +678,140 @@ PHP_FUNCTION(opencv_threshold){
 }
 
 /**
+ * CV\sobel
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_sobel){
+
+    zval *src_zval, *dst_zval;
+    long ddepth,dx,dy;
+    long ksize=3;
+
+    double 	delta = 0.0,scale=1.0;
+    long border_type = BORDER_DEFAULT;
+    opencv_mat_object *dst_object;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Ozlll|lddl",
+                              &src_zval, opencv_mat_ce,
+                              &dst_zval,
+                              &ddepth,
+                              &dx,
+                              &dy,
+                              &ksize,
+                              &scale,
+                              &delta,
+                              &border_type) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *src_object = Z_PHP_MAT_OBJ_P(src_zval);
+
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval) == opencv_mat_ce){
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        zval_ptr_dtor(dst_real_zval);
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+    Sobel(*src_object->mat, *dst_object->mat, (int)ddepth, (int)dx, (int)dy, (int)ksize, (double)scale, (double)delta, (int)border_type);
+    RETURN_NULL();
+}
+
+/**
+ * CV\Scharr
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_scharr){
+
+    zval *src_zval, *dst_zval;
+    long ddepth,dx,dy;
+
+    double 	delta = 0.0,scale=1.0;
+    long border_type = BORDER_DEFAULT;
+    opencv_mat_object *dst_object;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Ozlll|ddl",
+                              &src_zval, opencv_mat_ce,
+                              &dst_zval,
+                              &ddepth,
+                              &dx,
+                              &dy,
+                              &scale,
+                              &delta,
+                              &border_type) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *src_object = Z_PHP_MAT_OBJ_P(src_zval);
+
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval) == opencv_mat_ce){
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        zval_ptr_dtor(dst_real_zval);
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+    Scharr(*src_object->mat, *dst_object->mat, (int)ddepth, (int)dx, (int)dy, (double)scale, (double)delta, (int)border_type);
+    RETURN_NULL();
+}
+
+/**
+ * CV\laplacian
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_laplacian){
+
+    zval *src_zval, *dst_zval;
+    long ddepth;
+    long ksize=3;
+
+    double 	delta = 0.0,scale=1.0;
+    long border_type = BORDER_DEFAULT;
+    opencv_mat_object *dst_object;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Ozl|lddl",
+                              &src_zval, opencv_mat_ce,
+                              &dst_zval,
+                              &ddepth,
+                              &ksize,
+                              &scale,
+                              &delta,
+                              &border_type) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *src_object = Z_PHP_MAT_OBJ_P(src_zval);
+
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval) == opencv_mat_ce){
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        zval_ptr_dtor(dst_real_zval);
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+    Laplacian(*src_object->mat, *dst_object->mat, (int)ddepth, (int)ksize, (double)scale, (double)delta, (int)border_type);
+    RETURN_NULL();
+}
+
+/**
  * CV\filter2D
  * @param execute_data
  * @param return_value
@@ -722,6 +856,45 @@ PHP_FUNCTION(opencv_filter2D){
         dst_object->mat = new Mat(dst);
     }
     filter2D(*src_object->mat, *dst_object->mat, (int)ddepth, *kernel_object->mat, anchor, delta, (int)border_type);
+    RETURN_NULL();
+}
+
+/**
+ * CV\convertScaleAbs
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_convert_scale_abs){
+
+    zval *src_zval, *dst_zval;
+    double 	alpha = 1.0;
+    double 	beta = 0.0;
+
+    opencv_mat_object *dst_object;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Oz|dd",
+                              &src_zval, opencv_mat_ce,
+                              &dst_zval,
+                              &alpha,
+                              &beta) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *src_object = Z_PHP_MAT_OBJ_P(src_zval);
+
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval) == opencv_mat_ce){
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        zval_ptr_dtor(dst_real_zval);
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+    convertScaleAbs(*src_object->mat, *dst_object->mat, (double)alpha, (double)beta);
     RETURN_NULL();
 }
 

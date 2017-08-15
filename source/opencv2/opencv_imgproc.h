@@ -111,6 +111,17 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_erode_arginfo, 0, 0, 7)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_erode);
 
+ZEND_BEGIN_ARG_INFO_EX(opencv_filter2D_arginfo, 0, 0, 7)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, ddepth)
+                ZEND_ARG_INFO(0, kernel)
+                ZEND_ARG_INFO(0, anchor)
+                ZEND_ARG_INFO(0, delta)
+                ZEND_ARG_INFO(0, border_type)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_filter2D);
+
 ZEND_BEGIN_ARG_INFO_EX(opencv_get_structuring_element_arginfo, 0, 0, 3)
                 ZEND_ARG_INFO(0, shape)
                 ZEND_ARG_INFO(0, ksize)

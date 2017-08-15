@@ -678,6 +678,54 @@ PHP_FUNCTION(opencv_threshold){
 }
 
 /**
+ * CV\filter2D
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_filter2D){
+
+    zval *src_zval, *dst_zval, *kernel_zval, *anchor_zval = NULL;
+    long ddepth;
+    Point anchor =  Point(-1,-1);
+    double 	delta = 0.0;
+    long border_type = BORDER_DEFAULT;
+    opencv_mat_object *dst_object;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OzlO|Odl",
+                              &src_zval, opencv_mat_ce,
+                              &dst_zval,
+                              &ddepth,
+                              &kernel_zval, opencv_mat_ce,
+                              &anchor_zval, opencv_point_ce,
+                              &delta,
+                              &border_type) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *src_object = Z_PHP_MAT_OBJ_P(src_zval);
+    opencv_mat_object *kernel_object = Z_PHP_MAT_OBJ_P(kernel_zval);
+    if(anchor_zval != NULL){
+        opencv_point_object *anchor_object = Z_PHP_POINT_OBJ_P(anchor_zval);
+        anchor = *anchor_object->point;
+    }
+
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval) == opencv_mat_ce){
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        zval_ptr_dtor(dst_real_zval);
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+    filter2D(*src_object->mat, *dst_object->mat, (int)ddepth, *kernel_object->mat, anchor, delta, (int)border_type);
+    RETURN_NULL();
+}
+
+/**
  * CV\getStructuringElement
  * @param execute_data
  * @param return_value

@@ -42,7 +42,7 @@ PHP_FUNCTION(opencv_cv_t_color){
     }
     //get src mat object from mat_zval
     opencv_mat_object *src_obj = Z_PHP_MAT_OBJ_P(mat_zval);
-    cvtColor(*(src_obj->mat),dstImg,code);
+    cvtColor(*(src_obj->mat), dstImg, (int)code);
 
     //new PHP Mat bing cv::cvtColor dstImg.
     zval instance;
@@ -88,7 +88,7 @@ PHP_FUNCTION(opencv_ellipse){
     opencv_point_object *point_obj = Z_PHP_POINT_OBJ_P(point_zval);
     opencv_size_object *size_obj = Z_PHP_SIZE_OBJ_P(size_zval);
     opencv_scalar_object *scalar_obj = Z_PHP_SCALAR_OBJ_P(scalar_zval);
-    ellipse(*(mat_obj->mat), *(point_obj->point), *(size_obj->size), angle, startAngle, endAngle, *(scalar_obj->scalar), thickness, lineType ,shift);
+    ellipse(*(mat_obj->mat), *(point_obj->point), *(size_obj->size), angle, startAngle, endAngle, *(scalar_obj->scalar), (int)thickness, (int)lineType ,(int)shift);
 
     RETURN_NULL();
 }
@@ -99,7 +99,7 @@ PHP_FUNCTION(opencv_ellipse){
 PHP_FUNCTION(opencv_circle){
 
     long radius, thickness = 1, lineType = LINE_8, shift = 0;
-    zval *mat_zval, *point_zval, *size_zval, *scalar_zval;
+    zval *mat_zval, *point_zval, *scalar_zval;
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "OOlO|lll",
                               &mat_zval, opencv_mat_ce,
                               &point_zval, opencv_point_ce,
@@ -113,7 +113,7 @@ PHP_FUNCTION(opencv_circle){
     opencv_point_object *point_obj = Z_PHP_POINT_OBJ_P(point_zval);
     opencv_scalar_object *scalar_obj = Z_PHP_SCALAR_OBJ_P(scalar_zval);
 
-    circle(*(mat_obj->mat),*(point_obj->point), radius, *(scalar_obj->scalar),thickness,lineType ,shift);
+    circle(*(mat_obj->mat),*(point_obj->point), (int)radius, *(scalar_obj->scalar),(int)thickness, (int)lineType ,(int)shift);
 
     RETURN_NULL();
 }
@@ -218,7 +218,7 @@ PHP_FUNCTION(opencv_line){
     opencv_point_object *end_point_obj = Z_PHP_POINT_OBJ_P(end_point_zval);
     opencv_scalar_object *scalar_obj = Z_PHP_SCALAR_OBJ_P(scalar_zval);
 
-    line(*(mat_obj->mat),*(start_point_obj->point),*(end_point_obj->point),*(scalar_obj->scalar), thickness, lineType, shift);
+    line(*(mat_obj->mat),*(start_point_obj->point),*(end_point_obj->point),*(scalar_obj->scalar), (int)thickness, (int)lineType, (int)shift);
 
     RETURN_NULL();
 }
@@ -244,7 +244,7 @@ PHP_FUNCTION(opencv_rectangle){
     opencv_mat_object *mat_obj = Z_PHP_MAT_OBJ_P(mat_zval);
     opencv_scalar_object *scalar_obj = Z_PHP_SCALAR_OBJ_P(color_zval);
 
-    rectangle(*(mat_obj->mat), Point(startX, startY), Point(endX, endY), *(scalar_obj->scalar), thickness, lineType, shift);
+    rectangle(*(mat_obj->mat), Point((int)startX, (int)startY), Point((int)endX, (int)endY), *(scalar_obj->scalar), (int)thickness, (int)lineType, (int)shift);
 
     RETURN_NULL();
 }
@@ -272,7 +272,7 @@ PHP_FUNCTION(opencv_rectangle_by_point){
     opencv_point_object *end_point_obj = Z_PHP_POINT_OBJ_P(end_point_zval);
     opencv_scalar_object *scalar_obj = Z_PHP_SCALAR_OBJ_P(color_zval);
 
-    rectangle(*(mat_obj->mat), *(start_point_obj->point), *(end_point_obj->point), *(scalar_obj->scalar), thickness, lineType, shift);
+    rectangle(*(mat_obj->mat), *(start_point_obj->point), *(end_point_obj->point), *(scalar_obj->scalar), (int)thickness, (int)lineType, (int)shift);
 
     RETURN_NULL();
 }
@@ -719,7 +719,7 @@ PHP_FUNCTION(opencv_sobel){
         dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
         dst_object->mat = new Mat(dst);
     }
-    Sobel(*src_object->mat, *dst_object->mat, (int)ddepth, (int)dx, (int)dy, (int)ksize, (double)scale, (double)delta, (int)border_type);
+    Sobel(*src_object->mat, *dst_object->mat, (int)ddepth, (int)dx, (int)dy, (int)ksize, scale, delta, (int)border_type);
     RETURN_NULL();
 }
 
@@ -733,7 +733,7 @@ PHP_FUNCTION(opencv_scharr){
     zval *src_zval, *dst_zval;
     long ddepth,dx,dy;
 
-    double 	delta = 0.0,scale=1.0;
+    double 	delta = 0.0, scale = 1.0;
     long border_type = BORDER_DEFAULT;
     opencv_mat_object *dst_object;
 
@@ -763,7 +763,7 @@ PHP_FUNCTION(opencv_scharr){
         dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
         dst_object->mat = new Mat(dst);
     }
-    Scharr(*src_object->mat, *dst_object->mat, (int)ddepth, (int)dx, (int)dy, (double)scale, (double)delta, (int)border_type);
+    Scharr(*src_object->mat, *dst_object->mat, (int)ddepth, (int)dx, (int)dy, scale, delta, (int)border_type);
     RETURN_NULL();
 }
 
@@ -807,7 +807,7 @@ PHP_FUNCTION(opencv_laplacian){
         dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
         dst_object->mat = new Mat(dst);
     }
-    Laplacian(*src_object->mat, *dst_object->mat, (int)ddepth, (int)ksize, (double)scale, (double)delta, (int)border_type);
+    Laplacian(*src_object->mat, *dst_object->mat, (int)ddepth, (int)ksize, scale, delta, (int)border_type);
     RETURN_NULL();
 }
 
@@ -894,7 +894,7 @@ PHP_FUNCTION(opencv_convert_scale_abs){
         dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
         dst_object->mat = new Mat(dst);
     }
-    convertScaleAbs(*src_object->mat, *dst_object->mat, (double)alpha, (double)beta);
+    convertScaleAbs(*src_object->mat, *dst_object->mat, alpha, beta);
     RETURN_NULL();
 }
 
@@ -907,7 +907,6 @@ PHP_FUNCTION(opencv_get_structuring_element){
     long shape;
     zval *ksize_zval, *anchor_zval = NULL;
     Point anchor =  Point(-1,-1);
-    opencv_mat_object *dst_object;
     Mat dst;
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "lO|O",
                               &shape,

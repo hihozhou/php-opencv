@@ -483,7 +483,7 @@ PHP_FUNCTION(opencv_gaussian_blur){
         dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
         dst_object->mat = new Mat(dst);
     }
-    GaussianBlur(*src_object->mat, *dst_object->mat, *ksize_object->size, (double)sigma_x, (double)sigma_y, (int)border_type);
+    GaussianBlur(*src_object->mat, *dst_object->mat, *ksize_object->size, sigma_x, sigma_y, (int)border_type);
     RETURN_NULL();
 }
 

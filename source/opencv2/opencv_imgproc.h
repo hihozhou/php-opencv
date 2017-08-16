@@ -111,6 +111,68 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_erode_arginfo, 0, 0, 7)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_erode);
 
+ZEND_BEGIN_ARG_INFO_EX(opencv_filter2D_arginfo, 0, 0, 7)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, ddepth)
+                ZEND_ARG_INFO(0, kernel)
+                ZEND_ARG_INFO(0, anchor)
+                ZEND_ARG_INFO(0, delta)
+                ZEND_ARG_INFO(0, border_type)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_filter2D);
+
+ZEND_BEGIN_ARG_INFO_EX(opencv_sobel_arginfo, 0, 0, 9)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, ddepth)
+                ZEND_ARG_INFO(0, dx)
+                ZEND_ARG_INFO(0, dy)
+                ZEND_ARG_INFO(0, ksize)
+                ZEND_ARG_INFO(0, scale)
+                ZEND_ARG_INFO(0, delta)
+                ZEND_ARG_INFO(0, border_type)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_sobel);
+
+ZEND_BEGIN_ARG_INFO_EX(opencv_scharr_arginfo, 0, 0, 8)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, ddepth)
+                ZEND_ARG_INFO(0, dx)
+                ZEND_ARG_INFO(0, dy)
+                ZEND_ARG_INFO(0, scale)
+                ZEND_ARG_INFO(0, delta)
+                ZEND_ARG_INFO(0, border_type)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_scharr);
+
+ZEND_BEGIN_ARG_INFO_EX(opencv_laplacian_arginfo, 0, 0, 7)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, ddepth)
+                ZEND_ARG_INFO(0, ksize)
+                ZEND_ARG_INFO(0, scale)
+                ZEND_ARG_INFO(0, delta)
+                ZEND_ARG_INFO(0, border_type)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_laplacian);
+
+ZEND_BEGIN_ARG_INFO_EX(opencv_convert_scale_abs_arginfo, 0, 0, 4)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, alpha)
+                ZEND_ARG_INFO(0, beta)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_convert_scale_abs);
+
+ZEND_BEGIN_ARG_INFO_EX(opencv_get_structuring_element_arginfo, 0, 0, 3)
+                ZEND_ARG_INFO(0, shape)
+                ZEND_ARG_INFO(0, ksize)
+                ZEND_ARG_INFO(0, anchor)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_get_structuring_element);
+
 ZEND_BEGIN_ARG_INFO_EX(opencv_threshold_arginfo, 0, 0, 5)
                 ZEND_ARG_INFO(0, src)
                 ZEND_ARG_INFO(1, dst)

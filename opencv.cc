@@ -222,6 +222,11 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, bilateralFilter, ZEND_FN(opencv_bilateral_filter), opencv_bilateral_filter_arginfo)
     ZEND_NS_NAMED_FE(OPENCV_NS, dilate, ZEND_FN(opencv_dilate), opencv_dilate_arginfo)
     ZEND_NS_NAMED_FE(OPENCV_NS, erode, ZEND_FN(opencv_erode), opencv_erode_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, filter2D, ZEND_FN(opencv_filter2D), opencv_filter2D_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, Sobel, ZEND_FN(opencv_sobel), opencv_sobel_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, Scharr, ZEND_FN(opencv_scharr), opencv_scharr_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, Laplacian, ZEND_FN(opencv_laplacian), opencv_laplacian_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, convertScaleAbs, ZEND_FN(opencv_convert_scale_abs), opencv_convert_scale_abs_arginfo)
 	ZEND_NS_NAMED_FE(OPENCV_NS, getStructuringElement, ZEND_FN(opencv_get_structuring_element), opencv_get_structuring_element_arginfo)
     ZEND_NS_NAMED_FE(OPENCV_NS, threshold, ZEND_FN(opencv_threshold), opencv_threshold_arginfo)
 	PHP_FE_END	/* Must be the last line in opencv_functions[] */

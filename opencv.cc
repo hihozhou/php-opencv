@@ -229,6 +229,7 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, convertScaleAbs, ZEND_FN(opencv_convert_scale_abs), opencv_convert_scale_abs_arginfo)
 	ZEND_NS_NAMED_FE(OPENCV_NS, getStructuringElement, ZEND_FN(opencv_get_structuring_element), opencv_get_structuring_element_arginfo)
     ZEND_NS_NAMED_FE(OPENCV_NS, threshold, ZEND_FN(opencv_threshold), opencv_threshold_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, morphologyEx, ZEND_FN(opencv_morphology_ex), opencv_morphology_ex_arginfo)
 	PHP_FE_END	/* Must be the last line in opencv_functions[] */
 };
 /* }}} */

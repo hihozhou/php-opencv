@@ -182,4 +182,16 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_threshold_arginfo, 0, 0, 5)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_threshold);
 
+ZEND_BEGIN_ARG_INFO_EX(opencv_morphology_ex_arginfo, 0, 0, 8)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, op)
+                ZEND_ARG_INFO(0, kernel)
+                ZEND_ARG_INFO(0, anchor)
+                ZEND_ARG_INFO(0, iterations)
+                ZEND_ARG_INFO(0, borderType)
+                ZEND_ARG_INFO(0, borderValue)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_morphology_ex);
+
 #endif //OPENCV_OPENCV_IMGPROC_H

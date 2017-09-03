@@ -19,6 +19,8 @@
 
 #include "../../../php_opencv.h"
 
+//todo Mat object noly unchar,need to support double,int,float
+
 extern void opencv_mat_init(void);
 
 extern zend_class_entry *opencv_mat_ce;

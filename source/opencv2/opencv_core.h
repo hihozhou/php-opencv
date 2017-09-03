@@ -99,4 +99,11 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_absdiff_arginfo, 0, 0, 3)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_absdiff);
 
+ZEND_BEGIN_ARG_INFO_EX(opencv_lut_arginfo, 0, 0, 3)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(0, lut)
+                ZEND_ARG_INFO(1, dst)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_lut);
+
 #endif //OPENCV_CORE_H

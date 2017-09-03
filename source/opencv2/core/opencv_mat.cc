@@ -381,12 +381,45 @@ PHP_METHOD(opencv_mat, at)
     opencv_mat_object *this_object = Z_PHP_MAT_OBJ_P(getThis());
     if(value_zval == NULL){
         //get px value
-        RETURN_LONG(this_object->mat->at<Vec3b>((int)row,(int)col)[channel]/1);
+        switch (this_object->mat->channels()){
+            case 1:
+                this_object->mat->at<uchar>((int)row,(int)col);
+                break;
+            case 2:
+                RETURN_LONG(this_object->mat->at<Vec2b>((int)row,(int)col)[channel]);
+                break;
+            case 3:
+                RETURN_LONG(this_object->mat->at<Vec3b>((int)row,(int)col)[channel]);
+                break;
+            case 4:
+            RETURN_LONG(this_object->mat->at<Vec4b>((int)row,(int)col)[channel]);
+                break;
+            default:
+                opencv_throw_exception("Get Mat px only channel in 1,2,3,4.");
+                break;
+        }
+
     }else{
         //set px value
         convert_to_long(value_zval);
         zend_long value = Z_LVAL_P(value_zval);
-        this_object->mat->at<Vec3b>((int)row,(int)col)[channel]=saturate_cast<uchar>(value);
+        switch (this_object->mat->channels()){
+            case 1:
+                this_object->mat->at<uchar>((int)row,(int)col) = saturate_cast<uchar>(value);
+                break;
+            case 2:
+                this_object->mat->at<Vec2b>((int)row,(int)col)[channel]=saturate_cast<uchar>(value);
+                break;
+            case 3:
+                this_object->mat->at<Vec3b>((int)row,(int)col)[channel]=saturate_cast<uchar>(value);
+                break;
+            case 4:
+                this_object->mat->at<Vec4b>((int)row,(int)col)[channel]=saturate_cast<uchar>(value);
+                break;
+            default:
+                opencv_throw_exception("Get Mat px only channel in 1,2,3,4.");
+                break;
+        }
     }
     RETURN_NULL();
 }

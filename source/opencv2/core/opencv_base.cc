@@ -17,9 +17,6 @@
 #include "../../../php_opencv.h"
 #include "opencv_base.h"
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 
 void opencv_border_types_init(int module_number){

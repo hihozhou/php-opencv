@@ -14,9 +14,6 @@
  +----------------------------------------------------------------------+
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include "../../../php_opencv.h"
 #include "opencv_mat.h"
@@ -366,6 +363,7 @@ PHP_METHOD(opencv_mat, copy_to)
 }
 
 /**
+ * //todo int,fload,double
  * CV\Mat->at
  * @param execute_data
  * @param return_value
@@ -386,10 +384,10 @@ PHP_METHOD(opencv_mat, at)
                 this_object->mat->at<uchar>((int)row,(int)col);
                 break;
             case 2:
-                RETURN_LONG(this_object->mat->at<Vec2b>((int)row,(int)col)[channel]);
+            RETURN_LONG(this_object->mat->at<Vec2b>((int)row,(int)col)[channel]);
                 break;
             case 3:
-                RETURN_LONG(this_object->mat->at<Vec3b>((int)row,(int)col)[channel]);
+            RETURN_LONG(this_object->mat->at<Vec3b>((int)row,(int)col)[channel]);
                 break;
             case 4:
             RETURN_LONG(this_object->mat->at<Vec4b>((int)row,(int)col)[channel]);
@@ -399,27 +397,52 @@ PHP_METHOD(opencv_mat, at)
                 break;
         }
 
+
     }else{
         //set px value
         convert_to_long(value_zval);
         zend_long value = Z_LVAL_P(value_zval);
-        switch (this_object->mat->channels()){
-            case 1:
-                this_object->mat->at<uchar>((int)row,(int)col) = saturate_cast<uchar>(value);
-                break;
-            case 2:
-                this_object->mat->at<Vec2b>((int)row,(int)col)[channel]=saturate_cast<uchar>(value);
-                break;
-            case 3:
-                this_object->mat->at<Vec3b>((int)row,(int)col)[channel]=saturate_cast<uchar>(value);
-                break;
-            case 4:
-                this_object->mat->at<Vec4b>((int)row,(int)col)[channel]=saturate_cast<uchar>(value);
+        switch(this_object->mat->depth()){
+            case CV_8U:
+                switch (this_object->mat->channels()){
+                    case 1:
+                        this_object->mat->at<uchar>((int)row,(int)col) = saturate_cast<uchar>(value);
+                        break;
+                    case 2:
+                        this_object->mat->at<Vec2b>((int)row,(int)col)[channel]=saturate_cast<uchar>(value);
+                        break;
+                    case 3:
+                        this_object->mat->at<Vec3b>((int)row,(int)col)[channel]=saturate_cast<uchar>(value);
+                        break;
+                    case 4:
+                        this_object->mat->at<Vec4b>((int)row,(int)col)[channel]=saturate_cast<uchar>(value);
+                        break;
+                    default:
+                        opencv_throw_exception("Get Mat px only channel in 1,2,3,4.");
+                        break;
+                }
                 break;
             default:
-                opencv_throw_exception("Get Mat px only channel in 1,2,3,4.");
+                switch (this_object->mat->channels()){
+                    case 1:
+                        this_object->mat->at<uchar>((int)row,(int)col) = saturate_cast<char>(value);
+                        break;
+                    case 2:
+                        this_object->mat->at<Vec2b>((int)row,(int)col)[channel]=saturate_cast<char>(value);
+                        break;
+                    case 3:
+                        this_object->mat->at<Vec3b>((int)row,(int)col)[channel]=saturate_cast<char>(value);
+                        break;
+                    case 4:
+                        this_object->mat->at<Vec4b>((int)row,(int)col)[channel]=saturate_cast<char>(value);
+                        break;
+                    default:
+                        opencv_throw_exception("Get Mat px only channel in 1,2,3,4.");
+                        break;
+                }
                 break;
         }
+
     }
     RETURN_NULL();
 }

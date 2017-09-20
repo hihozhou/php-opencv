@@ -21,9 +21,6 @@
 #include "../../opencv_exception.h"
 #include "core/opencv_type.h"
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 zend_class_entry *opencv_formatter_ce;
 

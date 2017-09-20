@@ -13,12 +13,15 @@
  | Author: HaiHao Zhou  <hihozhou@gmail.com>                            |
  +----------------------------------------------------------------------+
  */
-
+#include "../../php_opencv.h"
 #include "opencv_face.h"
 
 zend_class_entry *opencv_face_recognizer_ce;
 
 #ifdef HAVE_OPENCV_FACE
+
+#include <opencv2/face.hpp>
+using namespace face;
 
 #include "face/opencv_facerec.h"
 

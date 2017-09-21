@@ -18,11 +18,6 @@
 #ifndef PHP_OPENCV_FACE_H
 #define PHP_OPENCV_FACE_H
 
-#include "../../php_opencv.h"
-#include <opencv2/face.hpp>
-using namespace face;
-
-
 
 extern void opencv_face_init(int module_number);
 

@@ -14,6 +14,32 @@
  +----------------------------------------------------------------------+
  */
 
+
+
 #include "../../../php_opencv.h"
+#include "opencv_utility.h"
+
+void opencv_utility_init(int module_number){
+
+}
+
+/**
+ * CV\getTickCount
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_get_tick_count){
+    long tick_count = getTickCount();
+    RETURN_LONG(tick_count);
+}
 
 
+/**
+ * getTickFrequency
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_get_tick_frequency){
+    double tick_frequency = getTickFrequency();
+    RETURN_DOUBLE(tick_frequency);
+}

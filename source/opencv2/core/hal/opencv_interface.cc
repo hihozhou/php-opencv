@@ -17,10 +17,6 @@
 #include "../../../../php_opencv.h"
 #include "opencv_interface.h"
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 
 void opencv_interface_init(int module_number)
 {

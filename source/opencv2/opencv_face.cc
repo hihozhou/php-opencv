@@ -13,11 +13,18 @@
  | Author: HaiHao Zhou  <hihozhou@gmail.com>                            |
  +----------------------------------------------------------------------+
  */
-
+#include "../../php_opencv.h"
 #include "opencv_face.h"
-#include "face/opencv_facerec.h"
 
 zend_class_entry *opencv_face_recognizer_ce;
+
+#ifdef HAVE_OPENCV_FACE
+
+#include <opencv2/face.hpp>
+using namespace face;
+
+#include "face/opencv_facerec.h"
+
 
 /**
  * opencv_face_recognizer_methods[]
@@ -39,3 +46,12 @@ void opencv_face_init(int module_number){
     opencv_lbph_face_recognizer_init(module_number);
     opencv_base_face_recognizer_init(module_number);
 }
+
+#else
+
+void opencv_face_init(int module_number){
+
+}
+
+#endif
+

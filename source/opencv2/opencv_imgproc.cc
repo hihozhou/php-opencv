@@ -26,6 +26,7 @@ void opencv_imgproc_init(int module_number)
 {
     opencv_color_conversion_code_init(module_number);
     opencv_line_type_init(module_number);
+    opencv_morph_shapes(module_number);
 }
 
 /**
@@ -1246,4 +1247,10 @@ void opencv_line_type_init(int module_number){
     REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "LINE_4", LINE_4, CONST_CS | CONST_PERSISTENT);
     REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "LINE_8", LINE_8, CONST_CS | CONST_PERSISTENT);
     REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "LINE_AA", LINE_AA, CONST_CS | CONST_PERSISTENT);
+}
+
+void opencv_morph_shapes(int module_number){
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "MORPH_RECT", MORPH_RECT, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "MORPH_CROSS", MORPH_CROSS, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "MORPH_ELLIPSE", MORPH_ELLIPSE, CONST_CS | CONST_PERSISTENT);
 }

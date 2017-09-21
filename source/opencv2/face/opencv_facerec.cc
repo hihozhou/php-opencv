@@ -13,12 +13,32 @@
  | Author: HaiHao Zhou  <hihozhou@gmail.com>                            |
  +----------------------------------------------------------------------+
  */
-
-
+#include "../../../php_opencv.h"
 #include "opencv_facerec.h"
+
+#ifdef HAVE_OPENCV_FACE
+
 #include "../opencv_face.h"
 #include "../core/opencv_mat.h"
 #include "../../../opencv_exception.h"
+#include <opencv2/face.hpp>
+using namespace cv::face;
+
+#define Z_PHP_LBPH_FACE_RECOGNIZER_OBJ_P(zv)  get_lbph_face_recognizer_obj(Z_OBJ_P(zv))
+
+typedef struct _opencv_lbph_face_recognizer_object{
+    zend_object std;
+    Ptr<LBPHFaceRecognizer> faceRecognizer;
+}opencv_lbph_face_recognizer_object;
+
+
+/**
+ * @param obj
+ * @return
+ */
+static inline opencv_lbph_face_recognizer_object* get_lbph_face_recognizer_obj(zend_object *obj) {
+    return (opencv_lbph_face_recognizer_object*)((char*)(obj) - XtOffsetOf(opencv_lbph_face_recognizer_object, std));
+}
 
 zend_object_handlers opencv_lbph_face_recognizer_object_handlers;
 
@@ -131,7 +151,7 @@ void opencv_lbph_face_recognizer_free_obj(zend_object *object)
     zend_object_std_dtor(object);
 }
 
-extern void opencv_lbph_face_recognizer_init(int module_number){
+void opencv_lbph_face_recognizer_init(int module_number){
     zend_class_entry ce;
     INIT_NS_CLASS_ENTRY(ce,OPENCV_FACE_NS, "LBPHFaceRecognizer", opencv_lbph_face_recognizer_methods);
     opencv_lbph_face_recognizer_ce = zend_register_internal_class_ex(&ce, opencv_face_recognizer_ce);
@@ -142,6 +162,10 @@ extern void opencv_lbph_face_recognizer_init(int module_number){
     opencv_lbph_face_recognizer_object_handlers.clone_obj = NULL;
     opencv_lbph_face_recognizer_object_handlers.free_obj = opencv_lbph_face_recognizer_free_obj;
 }
+
+
+
+
 
 /**
  * -----------------------------------【CV\BaseFaceRecognizer】--------------------------------------
@@ -162,3 +186,16 @@ void opencv_base_face_recognizer_init(int module_number){
     INIT_NS_CLASS_ENTRY(ce,OPENCV_FACE_NS, "BaseFaceRecognizer", opencv_base_face_recognizer_methods);
     opencv_base_face_recognizer_ce = zend_register_internal_class_ex(&ce, opencv_face_recognizer_ce);
 }
+
+
+#else
+
+void opencv_lbph_face_recognizer_init(int module_number){
+
+}
+
+void opencv_base_face_recognizer_init(int module_number){
+
+}
+
+#endif

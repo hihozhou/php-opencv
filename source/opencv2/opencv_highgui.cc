@@ -21,9 +21,6 @@
 #include "../../opencv_exception.h"
 
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 /**
  * //todo only cli can call this function
@@ -134,7 +131,7 @@ opencv_fcall_info_cb * opencv_fcall_info_cb_create(zend_fcall_info *fci_ptr, zen
 
     memcpy(cb->fci, fci_ptr, sizeof(zend_fcall_info));
     memcpy(cb->fci_cache, fci_cache_ptr, sizeof(zend_fcall_info_cache));
-    Z_TRY_ADDREF(cb->fci->function_name);
+    Z_TRY_ADDREF(cb->fci->function_name);//todo 滑动调或窗口销毁是释放内存
     cb->fci->param_count = 0;
     cb->fci->no_separation = 1;
     cb->fci->retval = NULL;
@@ -178,9 +175,7 @@ PHP_FUNCTION(opencv_create_trackbar){
                               &fci, &fci_cache) == FAILURE) {
         return;
     }
-
     int *trackbar_value_ptr = new int(value);
-
     opencv_fcall_info_cb *cb = opencv_fcall_info_cb_create(&fci, &fci_cache);
     createTrackbar(trackbarname, winname, trackbar_value_ptr, (int)count,opencv_create_trackbar_callback,cb);
     RETURN_NULL();
@@ -207,7 +202,7 @@ PHP_FUNCTION(opencv_get_track_bar_pos){
     char *trackbarname, *winname;
     long trackbarname_len, winname_len;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &trackbarname, &trackbarname_len, &winname, &winname_len) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ss", &trackbarname, &trackbarname_len, &winname, &winname_len) == FAILURE) {
         return;
     }
     RETURN_LONG(getTrackbarPos(trackbarname, winname))

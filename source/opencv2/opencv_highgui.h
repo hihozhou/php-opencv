@@ -24,6 +24,13 @@ PHP_FUNCTION(opencv_imshow);
 PHP_FUNCTION(opencv_wait_key);
 PHP_FUNCTION(opencv_move_window);
 PHP_FUNCTION(opencv_named_window);
+ZEND_BEGIN_ARG_INFO_EX(opencv_create_trackbar_arginfo, 0, 0, 5)
+                ZEND_ARG_INFO(0, trackbarname)
+                ZEND_ARG_INFO(0, winname)
+                ZEND_ARG_INFO(1, value)
+                ZEND_ARG_INFO(0, count)
+                ZEND_ARG_INFO(0, onChange)
+ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_create_trackbar);
 PHP_FUNCTION(opencv_destroy_window);
 PHP_FUNCTION(opencv_get_track_bar_pos);

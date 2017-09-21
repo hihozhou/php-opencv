@@ -14,6 +14,12 @@
  +----------------------------------------------------------------------+
  */
 
-#include "../../../php_opencv.h"
+#ifndef PHP_OPENCV_UTILITY_H
+#define PHP_OPENCV_UTILITY_H
 
+#endif //PHP_OPENCV_UTILITY_H
 
+void opencv_utility_init(int module_number);
+
+PHP_FUNCTION(opencv_get_tick_count);
+PHP_FUNCTION(opencv_get_tick_frequency);

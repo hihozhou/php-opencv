@@ -40,6 +40,7 @@ extern "C" {
 #include "source/opencv2/opencv_objdetect.h"
 #include "source/opencv2/opencv_videoio.h"
 #include "source/opencv2/opencv_face.h"
+#include "source/opencv2/core/opencv_utility.h"
 
 /* If you declare any globals in php_opencv.h uncomment this:
 ZEND_DECLARE_MODULE_GLOBALS(opencv)
@@ -231,6 +232,8 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, threshold, ZEND_FN(opencv_threshold), opencv_threshold_arginfo)
     ZEND_NS_NAMED_FE(OPENCV_NS, morphologyEx, ZEND_FN(opencv_morphology_ex), opencv_morphology_ex_arginfo)
     ZEND_NS_NAMED_FE(OPENCV_NS, LUT, ZEND_FN(opencv_lut), opencv_lut_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, getTickCount, ZEND_FN(opencv_get_tick_count), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, getTickFrequency, ZEND_FN(opencv_get_tick_frequency), NULL)
 	PHP_FE_END	/* Must be the last line in opencv_functions[] */
 };
 /* }}} */

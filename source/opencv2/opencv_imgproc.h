@@ -195,4 +195,16 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_morphology_ex_arginfo, 0, 0, 8)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_morphology_ex);
 
+ZEND_BEGIN_ARG_INFO_EX(opencv_flood_fill_arginfo, 0, 0, 8)
+                ZEND_ARG_INFO(0, image)
+                ZEND_ARG_INFO(0, seedPoint)
+                ZEND_ARG_INFO(0, newVal)
+                ZEND_ARG_INFO(0, mask)
+                ZEND_ARG_INFO(0, rect)
+                ZEND_ARG_INFO(0, loDiff)
+                ZEND_ARG_INFO(0, upDiff)
+                ZEND_ARG_INFO(0, flags)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_flood_fill);
+
 #endif //OPENCV_OPENCV_IMGPROC_H

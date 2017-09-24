@@ -234,6 +234,7 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, LUT, ZEND_FN(opencv_lut), opencv_lut_arginfo)
     ZEND_NS_NAMED_FE(OPENCV_NS, getTickCount, ZEND_FN(opencv_get_tick_count), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, getTickFrequency, ZEND_FN(opencv_get_tick_frequency), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, floodFill, ZEND_FN(opencv_flood_fill), opencv_flood_fill_arginfo)
 	PHP_FE_END	/* Must be the last line in opencv_functions[] */
 };
 /* }}} */

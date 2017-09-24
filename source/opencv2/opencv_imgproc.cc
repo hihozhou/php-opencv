@@ -983,6 +983,67 @@ PHP_FUNCTION(opencv_morphology_ex){
     RETURN_NULL();
 }
 
+
+PHP_FUNCTION(opencv_flood_fill){
+    zval *image_zval, *seed_point_zval, *new_val_zval, *mask_zval = NULL, *rect_zval = NULL, *lo_diff_zval = NULL, *up_diff_zval = NULL;
+    long flags = 4;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OOOO!|O!OOl",
+                              &image_zval, opencv_mat_ce,
+                              &seed_point_zval, opencv_point_ce,
+                              &new_val_zval, opencv_scalar_ce,
+                              &mask_zval, opencv_mat_ce,
+                              &rect_zval, opencv_rect_ce,
+                              &lo_diff_zval, opencv_scalar_ce,
+                              &up_diff_zval, opencv_scalar_ce,
+                              &flags) == FAILURE) {
+        RETURN_NULL();
+    }
+    opencv_mat_object *image_object;
+    opencv_point_object  *seed_point_object;
+    opencv_scalar_object  *new_value_object;
+
+    image_object = Z_PHP_MAT_OBJ_P(image_zval);
+    seed_point_object = Z_PHP_POINT_OBJ_P(seed_point_zval);
+    new_value_object = Z_PHP_SCALAR_OBJ_P(new_val_zval);
+
+    Rect *rect = 0 ;
+    Scalar lo_diff = Scalar(), up_diff = Scalar();
+    opencv_rect_object *rect_object;
+    if(rect_zval != NULL){
+        rect_object = Z_PHP_RECT_OBJ_P(rect_zval);
+        rect = rect_object->rect;
+    }
+    if(lo_diff_zval != NULL){
+        opencv_scalar_object *lo_diff_object = Z_PHP_SCALAR_OBJ_P(lo_diff_zval);
+        lo_diff = *lo_diff_object->scalar;
+    }
+
+    if(up_diff_zval != NULL){
+        opencv_scalar_object *up_diff_object = Z_PHP_SCALAR_OBJ_P(up_diff_zval);
+        up_diff = *up_diff_object->scalar;
+    }
+
+    int result;
+    try {
+        if(mask_zval == NULL){
+            result = floodFill(*image_object->mat, *seed_point_object->point, *new_value_object->scalar, rect, lo_diff, up_diff, (int)flags);
+        }else{
+            opencv_mat_object *mask_object = Z_PHP_MAT_OBJ_P(mask_zval);
+            result= floodFill(*image_object->mat, *mask_object->mat, *seed_point_object->point, *new_value_object->scalar, rect, lo_diff, up_diff, (int)flags);
+        }
+
+        if(rect_zval != NULL){
+            opencv_rect_update_property_by_c_rect(rect_zval,rect_object->rect);
+        }
+
+    }catch (Exception e){
+        opencv_throw_exception(e.what());
+        RETURN_NULL();
+    }
+    RETURN_LONG(result);
+}
+
 /**
  * color conversion code in CV\cvtColor,opencv enum ColorConversionCodes
  * @param module_number

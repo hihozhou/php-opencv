@@ -20,7 +20,11 @@
 void opencv_imgproc_init(int module_number);
 void opencv_color_conversion_code_init(int module_number);
 void opencv_line_type_init(int module_number);
-void opencv_morph_shapes(int module_number);
+void opencv_morph_shapes_init(int module_number);
+void opencv_morph_types_init(int module_number);
+void opencv_flood_fill_flags_init(int module_number);
+void opencv_threshold_types_init(int module_number);
+
 PHP_FUNCTION(opencv_cv_t_color);
 PHP_FUNCTION(opencv_ellipse);
 PHP_FUNCTION(opencv_circle);
@@ -194,5 +198,17 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_morphology_ex_arginfo, 0, 0, 8)
                 ZEND_ARG_INFO(0, borderValue)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_morphology_ex);
+
+ZEND_BEGIN_ARG_INFO_EX(opencv_flood_fill_arginfo, 0, 0, 8)
+                ZEND_ARG_INFO(0, image)
+                ZEND_ARG_INFO(0, seedPoint)
+                ZEND_ARG_INFO(0, newVal)
+                ZEND_ARG_INFO(0, mask)
+                ZEND_ARG_INFO(0, rect)
+                ZEND_ARG_INFO(0, loDiff)
+                ZEND_ARG_INFO(0, upDiff)
+                ZEND_ARG_INFO(0, flags)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_flood_fill);
 
 #endif //OPENCV_OPENCV_IMGPROC_H

@@ -128,7 +128,6 @@ opencv_fcall_info_cb * opencv_fcall_info_cb_create(zend_fcall_info *fci_ptr, zen
     opencv_fcall_info_cb *cb = new opencv_fcall_info_cb;
     cb->fci = new zend_fcall_info;
     cb->fci_cache = new zend_fcall_info_cache;
-
     memcpy(cb->fci, fci_ptr, sizeof(zend_fcall_info));
     memcpy(cb->fci_cache, fci_cache_ptr, sizeof(zend_fcall_info_cache));
     Z_TRY_ADDREF(cb->fci->function_name);//todo 滑动调或窗口销毁是释放内存
@@ -140,17 +139,19 @@ opencv_fcall_info_cb * opencv_fcall_info_cb_create(zend_fcall_info *fci_ptr, zen
 }
 
 void opencv_create_trackbar_callback(int pos, void* userdata){
-    opencv_fcall_info_cb *fci_s=(opencv_fcall_info_cb*)userdata;
+    if(userdata != 0){
+        opencv_fcall_info_cb *fci_s=(opencv_fcall_info_cb*)userdata;
 
-    zval retval;
-    zval args[1];
-    ZVAL_LONG(&args[0], (long)pos);//将滑动条滑动的值传入到闭包参数中
-    fci_s->fci->param_count = 1;
-    fci_s->fci->params = args;
-    fci_s->fci->retval = &retval;
+        zval retval;
+        zval args[1];
+        ZVAL_LONG(&args[0], (long)pos);//将滑动条滑动的值传入到闭包参数中
+        fci_s->fci->param_count = 1;
+        fci_s->fci->params = args;
+        fci_s->fci->retval = &retval;
 
-    zend_call_function(fci_s->fci, fci_s->fci_cache);
-    zval_ptr_dtor(&args[0]);
+        zend_call_function(fci_s->fci, fci_s->fci_cache);
+        zval_ptr_dtor(&args[0]);
+    }
 }
 
 
@@ -168,15 +169,18 @@ PHP_FUNCTION(opencv_create_trackbar){
 
     zend_fcall_info fci;
     zend_fcall_info_cache fci_cache;
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ssll|f",
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ssll|f!",
                               &trackbarname, &trackbarname_len,
                               &winname,&winname_len,
                               &value,&count,
                               &fci, &fci_cache) == FAILURE) {
         return;
     }
+    opencv_fcall_info_cb *cb = 0;
+    if (fci.size > 0 && ZEND_NUM_ARGS() > 4) {//check callback param is valid
+        cb = opencv_fcall_info_cb_create(&fci, &fci_cache);
+    }
     int *trackbar_value_ptr = new int(value);
-    opencv_fcall_info_cb *cb = opencv_fcall_info_cb_create(&fci, &fci_cache);
     createTrackbar(trackbarname, winname, trackbar_value_ptr, (int)count,opencv_create_trackbar_callback,cb);
     RETURN_NULL();
 }
@@ -209,6 +213,53 @@ PHP_FUNCTION(opencv_get_track_bar_pos){
 }
 
 
+void opencv_on_mouse_callback(int event, int x, int y, int flags, void* userdata){
+    if(userdata != 0){
+        opencv_fcall_info_cb *fci_s=(opencv_fcall_info_cb*)userdata;
+        zval retval;
+        zval args[4];
+        ZVAL_LONG(&args[0], (long)event);
+        ZVAL_LONG(&args[1], (long)x);
+        ZVAL_LONG(&args[2], (long)y);
+        ZVAL_LONG(&args[3], (long)flags);
+        fci_s->fci->param_count = 4;
+        fci_s->fci->params = args;
+        fci_s->fci->retval = &retval;
+
+        zend_call_function(fci_s->fci, fci_s->fci_cache);
+        zval_ptr_dtor(&args[0]);
+        zval_ptr_dtor(&args[1]);
+        zval_ptr_dtor(&args[2]);
+        zval_ptr_dtor(&args[3]);
+    }
+}
+
+/**
+ * CV\setMouseCallback
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_set_mouse_callback){
+    char *winname;
+    long winname_len;
+
+    zend_fcall_info fci;
+    zend_fcall_info_cache fci_cache;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s|f!",
+                              &winname,&winname_len,
+                              &fci, &fci_cache) == FAILURE) {
+        return;
+    }
+    opencv_fcall_info_cb *cb = 0;
+    if (fci.size > 0 && ZEND_NUM_ARGS() > 1) {//check callback param is valid
+        cb = opencv_fcall_info_cb_create(&fci, &fci_cache);
+    }
+    setMouseCallback(winname, opencv_on_mouse_callback, cb);
+    RETURN_NULL();
+}
+
+
+
 void opencv_highgui_init(int module_number)
 {
     /**
@@ -221,4 +272,32 @@ void opencv_highgui_init(int module_number)
     REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "WINDOW_FREERATIO", 5, CONST_CS | CONST_PERSISTENT);
     REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "WINDOW_GUI_EXPANDED", 6, CONST_CS | CONST_PERSISTENT);
     REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "WINDOW_GUI_NORMAL", 7, CONST_CS | CONST_PERSISTENT);
+    opencv_highgui_mouse_event_types_init(module_number);
+    opencv_highgui_mouse_event_flags_init(module_number);
+}
+
+//! Mouse Events see cv::MouseCallback
+void opencv_highgui_mouse_event_types_init(int module_number){
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "EVENT_MOUSEMOVE", EVENT_MOUSEMOVE, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "EVENT_LBUTTONDOWN", EVENT_LBUTTONDOWN, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "EVENT_RBUTTONDOWN", EVENT_RBUTTONDOWN, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "EVENT_MBUTTONDOWN", EVENT_MBUTTONDOWN, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "EVENT_LBUTTONUP", EVENT_LBUTTONUP, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "EVENT_RBUTTONUP", EVENT_RBUTTONUP, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "EVENT_MBUTTONUP", EVENT_MBUTTONUP, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "EVENT_LBUTTONDBLCLK", EVENT_LBUTTONDBLCLK, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "EVENT_RBUTTONDBLCLK", EVENT_RBUTTONDBLCLK, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "EVENT_MBUTTONDBLCLK", EVENT_MBUTTONDBLCLK, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "EVENT_MOUSEWHEEL", EVENT_MOUSEWHEEL, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "EVENT_MOUSEHWHEEL", EVENT_MOUSEHWHEEL, CONST_CS | CONST_PERSISTENT);
+}
+
+//! Mouse Event Flags see cv::MouseCallback
+void opencv_highgui_mouse_event_flags_init(int module_number){
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "EVENT_FLAG_LBUTTON", EVENT_FLAG_LBUTTON, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "EVENT_FLAG_RBUTTON", EVENT_FLAG_RBUTTON, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "EVENT_FLAG_MBUTTON", EVENT_FLAG_MBUTTON, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "EVENT_FLAG_CTRLKEY", EVENT_FLAG_CTRLKEY, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "EVENT_FLAG_SHIFTKEY", EVENT_FLAG_SHIFTKEY, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "EVENT_FLAG_ALTKEY", EVENT_FLAG_ALTKEY, CONST_CS | CONST_PERSISTENT);
 }

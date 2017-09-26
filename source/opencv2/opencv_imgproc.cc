@@ -26,7 +26,10 @@ void opencv_imgproc_init(int module_number)
 {
     opencv_color_conversion_code_init(module_number);
     opencv_line_type_init(module_number);
-    opencv_morph_shapes(module_number);
+    opencv_morph_shapes_init(module_number);
+    opencv_morph_types_init(module_number);
+    opencv_flood_fill_flags_init(module_number);
+    opencv_threshold_types_init(module_number);
 }
 
 /**
@@ -35,15 +38,15 @@ void opencv_imgproc_init(int module_number)
  * @param return_value
  */
 PHP_FUNCTION(opencv_cv_t_color){
-    long code;
+    long code, dstCn = 0;
     Mat dstImg;
     zval *mat_zval;
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Ol", &mat_zval,opencv_mat_ce, &code) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Ol|l", &mat_zval,opencv_mat_ce, &code, &dstCn) == FAILURE) {
         RETURN_NULL();
     }
     //get src mat object from mat_zval
     opencv_mat_object *src_obj = Z_PHP_MAT_OBJ_P(mat_zval);
-    cvtColor(*(src_obj->mat), dstImg, (int)code);
+    cvtColor(*(src_obj->mat), dstImg, (int)code, (int)dstCn);
 
     //new PHP Mat bing cv::cvtColor dstImg.
     zval instance;
@@ -983,6 +986,67 @@ PHP_FUNCTION(opencv_morphology_ex){
     RETURN_NULL();
 }
 
+
+PHP_FUNCTION(opencv_flood_fill){
+    zval *image_zval, *seed_point_zval, *new_val_zval, *mask_zval = NULL, *rect_zval = NULL, *lo_diff_zval = NULL, *up_diff_zval = NULL;
+    long flags = 4;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OOOO!|O!OOl",
+                              &image_zval, opencv_mat_ce,
+                              &seed_point_zval, opencv_point_ce,
+                              &new_val_zval, opencv_scalar_ce,
+                              &mask_zval, opencv_mat_ce,
+                              &rect_zval, opencv_rect_ce,
+                              &lo_diff_zval, opencv_scalar_ce,
+                              &up_diff_zval, opencv_scalar_ce,
+                              &flags) == FAILURE) {
+        RETURN_NULL();
+    }
+    opencv_mat_object *image_object;
+    opencv_point_object  *seed_point_object;
+    opencv_scalar_object  *new_value_object;
+
+    image_object = Z_PHP_MAT_OBJ_P(image_zval);
+    seed_point_object = Z_PHP_POINT_OBJ_P(seed_point_zval);
+    new_value_object = Z_PHP_SCALAR_OBJ_P(new_val_zval);
+
+    Rect *rect = 0 ;
+    Scalar lo_diff = Scalar(), up_diff = Scalar();
+    opencv_rect_object *rect_object;
+    if(rect_zval != NULL){
+        rect_object = Z_PHP_RECT_OBJ_P(rect_zval);
+        rect = rect_object->rect;
+    }
+    if(lo_diff_zval != NULL){
+        opencv_scalar_object *lo_diff_object = Z_PHP_SCALAR_OBJ_P(lo_diff_zval);
+        lo_diff = *lo_diff_object->scalar;
+    }
+
+    if(up_diff_zval != NULL){
+        opencv_scalar_object *up_diff_object = Z_PHP_SCALAR_OBJ_P(up_diff_zval);
+        up_diff = *up_diff_object->scalar;
+    }
+
+    int result;
+    try {
+        if(mask_zval == NULL){
+            result = floodFill(*image_object->mat, *seed_point_object->point, *new_value_object->scalar, rect, lo_diff, up_diff, (int)flags);
+        }else{
+            opencv_mat_object *mask_object = Z_PHP_MAT_OBJ_P(mask_zval);
+            result= floodFill(*image_object->mat, *mask_object->mat, *seed_point_object->point, *new_value_object->scalar, rect, lo_diff, up_diff, (int)flags);
+        }
+
+        if(rect_zval != NULL){
+            opencv_rect_update_property_by_c_rect(rect_zval,rect_object->rect);
+        }
+
+    }catch (Exception e){
+        opencv_throw_exception(e.what());
+        RETURN_NULL();
+    }
+    RETURN_LONG(result);
+}
+
 /**
  * color conversion code in CV\cvtColor,opencv enum ColorConversionCodes
  * @param module_number
@@ -1249,8 +1313,38 @@ void opencv_line_type_init(int module_number){
     REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "LINE_AA", LINE_AA, CONST_CS | CONST_PERSISTENT);
 }
 
-void opencv_morph_shapes(int module_number){
+void opencv_morph_shapes_init(int module_number){
     REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "MORPH_RECT", MORPH_RECT, CONST_CS | CONST_PERSISTENT);
     REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "MORPH_CROSS", MORPH_CROSS, CONST_CS | CONST_PERSISTENT);
     REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "MORPH_ELLIPSE", MORPH_ELLIPSE, CONST_CS | CONST_PERSISTENT);
+}
+
+void opencv_morph_types_init(int module_number){
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "MORPH_ERODE", MORPH_ERODE, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "MORPH_DILATE", MORPH_DILATE, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "MORPH_OPEN", MORPH_OPEN, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "MORPH_CLOSE", MORPH_CLOSE, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "MORPH_GRADIENT", MORPH_GRADIENT, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "MORPH_TOPHAT", MORPH_TOPHAT, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "MORPH_BLACKHAT", MORPH_BLACKHAT, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "MORPH_HITMISS", MORPH_HITMISS, CONST_CS | CONST_PERSISTENT);
+}
+
+//! floodfill algorithm flags
+void opencv_flood_fill_flags_init(int module_number){
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "FLOODFILL_FIXED_RANGE", FLOODFILL_FIXED_RANGE, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "FLOODFILL_MASK_ONLY", FLOODFILL_MASK_ONLY, CONST_CS | CONST_PERSISTENT);
+}
+
+//! type of the threshold operation
+//! ![threshold types](pics/threshold.png)
+void opencv_threshold_types_init(int module_number){
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "THRESH_BINARY", THRESH_BINARY, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "THRESH_BINARY_INV", THRESH_BINARY_INV, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "THRESH_TRUNC", THRESH_TRUNC, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "THRESH_TOZERO", THRESH_TOZERO, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "THRESH_TOZERO_INV", THRESH_TOZERO_INV, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "THRESH_MASK", THRESH_MASK, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "THRESH_OTSU", THRESH_OTSU, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "THRESH_TRIANGLE", THRESH_TRIANGLE, CONST_CS | CONST_PERSISTENT);
 }

@@ -19,6 +19,8 @@
 #define PHP_OPENCV_HIGHGUI_H
 
 extern void opencv_highgui_init(int module_number);
+extern void opencv_highgui_mouse_event_types_init(int module_number);
+extern void opencv_highgui_mouse_event_flags_init(int module_number);
 
 PHP_FUNCTION(opencv_imshow);
 PHP_FUNCTION(opencv_wait_key);
@@ -34,5 +36,6 @@ ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_create_trackbar);
 PHP_FUNCTION(opencv_destroy_window);
 PHP_FUNCTION(opencv_get_track_bar_pos);
+PHP_FUNCTION(opencv_set_mouse_callback);
 
 #endif //OPENCV_OPENCV_HIGHGUI_H

@@ -34,5 +34,6 @@ ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_create_trackbar);
 PHP_FUNCTION(opencv_destroy_window);
 PHP_FUNCTION(opencv_get_track_bar_pos);
+PHP_FUNCTION(opencv_set_mouse_callback);
 
 #endif //OPENCV_OPENCV_HIGHGUI_H

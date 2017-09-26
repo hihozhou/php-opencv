@@ -169,16 +169,15 @@ PHP_FUNCTION(opencv_create_trackbar){
 
     zend_fcall_info fci;
     zend_fcall_info_cache fci_cache;
-    zend_bool is_null;
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "ssll|f!",
                               &trackbarname, &trackbarname_len,
                               &winname,&winname_len,
                               &value,&count,
-                              &fci, &fci_cache,&is_null) == FAILURE) {
+                              &fci, &fci_cache) == FAILURE) {
         return;
     }
     opencv_fcall_info_cb *cb = 0;
-    if (fci.size > 0 && ZEND_NUM_ARGS() > 4) {
+    if (fci.size > 0 && ZEND_NUM_ARGS() > 4) {//check callback param is valid
         cb = opencv_fcall_info_cb_create(&fci, &fci_cache);
     }
     int *trackbar_value_ptr = new int(value);
@@ -212,6 +211,53 @@ PHP_FUNCTION(opencv_get_track_bar_pos){
     }
     RETURN_LONG(getTrackbarPos(trackbarname, winname))
 }
+
+
+void opencv_on_mouse_callback(int event, int x, int y, int flags, void* userdata){
+    if(userdata != 0){
+        opencv_fcall_info_cb *fci_s=(opencv_fcall_info_cb*)userdata;
+        zval retval;
+        zval args[4];
+        ZVAL_LONG(&args[0], (long)event);
+        ZVAL_LONG(&args[1], (long)x);
+        ZVAL_LONG(&args[2], (long)y);
+        ZVAL_LONG(&args[3], (long)flags);
+        fci_s->fci->param_count = 4;
+        fci_s->fci->params = args;
+        fci_s->fci->retval = &retval;
+
+        zend_call_function(fci_s->fci, fci_s->fci_cache);
+        zval_ptr_dtor(&args[0]);
+        zval_ptr_dtor(&args[1]);
+        zval_ptr_dtor(&args[2]);
+        zval_ptr_dtor(&args[3]);
+    }
+}
+
+/**
+ * CV\setMouseCallback
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_set_mouse_callback){
+    char *winname;
+    long winname_len;
+
+    zend_fcall_info fci;
+    zend_fcall_info_cache fci_cache;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s|f!",
+                              &winname,&winname_len,
+                              &fci, &fci_cache) == FAILURE) {
+        return;
+    }
+    opencv_fcall_info_cb *cb = 0;
+    if (fci.size > 0 && ZEND_NUM_ARGS() > 1) {//check callback param is valid
+        cb = opencv_fcall_info_cb_create(&fci, &fci_cache);
+    }
+    setMouseCallback(winname, opencv_on_mouse_callback, cb);
+    RETURN_NULL();
+}
+
 
 
 void opencv_highgui_init(int module_number)

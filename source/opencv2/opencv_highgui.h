@@ -19,6 +19,8 @@
 #define PHP_OPENCV_HIGHGUI_H
 
 extern void opencv_highgui_init(int module_number);
+extern void opencv_highgui_mouse_event_types_init(int module_number);
+extern void opencv_highgui_mouse_event_flags_init(int module_number);
 
 PHP_FUNCTION(opencv_imshow);
 PHP_FUNCTION(opencv_wait_key);

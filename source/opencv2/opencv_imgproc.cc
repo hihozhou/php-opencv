@@ -36,15 +36,15 @@ void opencv_imgproc_init(int module_number)
  * @param return_value
  */
 PHP_FUNCTION(opencv_cv_t_color){
-    long code;
+    long code, dstCn = 0;
     Mat dstImg;
     zval *mat_zval;
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Ol", &mat_zval,opencv_mat_ce, &code) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Ol|l", &mat_zval,opencv_mat_ce, &code, &dstCn) == FAILURE) {
         RETURN_NULL();
     }
     //get src mat object from mat_zval
     opencv_mat_object *src_obj = Z_PHP_MAT_OBJ_P(mat_zval);
-    cvtColor(*(src_obj->mat), dstImg, (int)code);
+    cvtColor(*(src_obj->mat), dstImg, (int)code, (int)dstCn);
 
     //new PHP Mat bing cv::cvtColor dstImg.
     zval instance;

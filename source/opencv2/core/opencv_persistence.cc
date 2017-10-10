@@ -42,7 +42,7 @@ zend_object* opencv_file_storage_create_handler(zend_class_entry *type){
  */
 PHP_METHOD(opencv_file_storage, __construct){
     char *source;
-    long source_len = 0, flags;
+    long source_len = 0, flags = FileStorage::READ;
     FileStorage *fs;
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "|sl", &source, &source_len, &flags) == FAILURE) {
         RETURN_NULL();
@@ -215,6 +215,16 @@ PHP_METHOD(opencv_file_storage, release){
 }
 
 /**
+ * CV\FileStorage->isOpened()
+ * @param execute_data
+ * @param return_value
+ */
+PHP_METHOD(opencv_file_storage, is_opened){
+    opencv_file_storage_object *obj = Z_PHP_FILE_STORAGE_OBJ_P(getThis());
+    RETURN_BOOL(obj->fileStorage->isOpened());
+}
+
+/**
  * opencv_file_storage_methods[]
  */
 const zend_function_entry opencv_file_storage_methods[] = {
@@ -223,6 +233,7 @@ const zend_function_entry opencv_file_storage_methods[] = {
         PHP_ME(opencv_file_storage, write, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_file_storage, read, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_file_storage, release, NULL, ZEND_ACC_PUBLIC)
+        PHP_MALIAS(opencv_file_storage, isOpened ,is_opened, NULL, ZEND_ACC_PUBLIC)
         PHP_FE_END
 };
 /* }}} */

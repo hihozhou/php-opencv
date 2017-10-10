@@ -48,7 +48,8 @@ if test "$PHP_OPENCV" != "no"; then
     source/opencv2/opencv_objdetect.cc \
     source/opencv2/opencv_videoio.cc \
     source/opencv2/opencv_face.cc \
-    source/opencv2/face/opencv_facerec.cc"
+    source/opencv2/face/opencv_facerec.cc \
+    source/opencv2/opencv_ml.cc"
 
 
     PHP_NEW_EXTENSION(opencv, $opencv_source_file, $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)

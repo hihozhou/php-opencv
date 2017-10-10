@@ -171,10 +171,12 @@ PHP_METHOD(opencv_video_capture, read)
         real_object = Z_PHP_MAT_OBJ_P(mat_real_zval);
     }
     opencv_video_capture_object *this_object = Z_PHP_VIDEO_CAPTURE_P(getThis());
-    *(this_object->videoCapture) >> mat;
-    real_object->mat = new Mat(mat);
-    opencv_mat_update_property_by_c_mat(mat_real_zval, real_object->mat);
-    RETURN_NULL();
+    bool result = this_object->videoCapture->read(mat);
+    if(result){
+        real_object->mat = new Mat(mat);
+        opencv_mat_update_property_by_c_mat(mat_real_zval, real_object->mat);
+    }
+    RETURN_BOOL(result);
 }
 
 /**

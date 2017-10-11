@@ -16,12 +16,22 @@
 
 #include "../../php_opencv.h"
 #include "opencv_ml.h"
-#include <opencv2/ml.hpp>
+#include "core/opencv_mat.h"
 
 using namespace cv::ml;
 
 void opencv_ml_init(int module_number){
+    opencv_ml_constants_init(module_number);
     opencv_k_nearest_init(module_number);
+}
+
+void opencv_ml_constants_init(int module_number){
+    opencv_ml_sample_types_init(module_number);
+}
+
+void opencv_ml_sample_types_init(int module_number){
+    REGISTER_NS_LONG_CONSTANT(OPENCV_ML_NS, "ROW_SAMPLE", ROW_SAMPLE, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_ML_NS, "COL_SAMPLE", COL_SAMPLE, CONST_CS | CONST_PERSISTENT);
 }
 
 /****************************************************************************************\
@@ -75,6 +85,25 @@ PHP_METHOD(opencv_k_nearest, set_default_k)
     RETURN_NULL();
 }
 
+PHP_METHOD(opencv_k_nearest, train)
+{
+    zval *samples_zval, *responses_zval;
+    long layout;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OlO",
+                              &samples_zval, opencv_mat_ce,
+                              &layout,
+                              &responses_zval, opencv_mat_ce
+    ) == FAILURE) {
+        RETURN_NULL();
+    }
+    opencv_k_nearest_object *obj = Z_PHP_K_NEAREST_OBJ_P(getThis());
+    opencv_mat_object *samples_obj = Z_PHP_MAT_OBJ_P(samples_zval);
+    opencv_mat_object *responses_obj = Z_PHP_MAT_OBJ_P(responses_zval);
+
+    RETURN_BOOL(obj->KNearest->train(*samples_obj->mat, (int)layout, *responses_obj->mat));
+}
+
+
 
 /**
  * opencv_k_nearest_methods[]
@@ -82,6 +111,8 @@ PHP_METHOD(opencv_k_nearest, set_default_k)
 const zend_function_entry opencv_k_nearest_methods[] = {
         PHP_ME(opencv_k_nearest, create, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
         PHP_MALIAS(opencv_k_nearest, getDefaultK ,get_default_k, NULL, ZEND_ACC_PUBLIC)
+        PHP_MALIAS(opencv_k_nearest, setDefaultK ,set_default_k, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_k_nearest, train, NULL, ZEND_ACC_PUBLIC)
         PHP_FE_END
 };
 /* }}} */

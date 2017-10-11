@@ -21,6 +21,8 @@
 
 extern void opencv_ml_init(int module_number);
 extern void opencv_k_nearest_init(int module_number);
+extern void opencv_ml_constants_init(int module_number);
+extern void opencv_ml_sample_types_init(int module_number);
 
 
 /****************************************************************************************\

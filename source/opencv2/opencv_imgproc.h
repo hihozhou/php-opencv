@@ -24,6 +24,7 @@ void opencv_morph_shapes_init(int module_number);
 void opencv_morph_types_init(int module_number);
 void opencv_flood_fill_flags_init(int module_number);
 void opencv_threshold_types_init(int module_number);
+void opencv_adaptive_threshold_types_init(int module_number);
 
 PHP_FUNCTION(opencv_cv_t_color);
 PHP_FUNCTION(opencv_ellipse);
@@ -186,6 +187,17 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_threshold_arginfo, 0, 0, 5)
                 ZEND_ARG_INFO(0, type)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_threshold);
+
+ZEND_BEGIN_ARG_INFO_EX(opencv_adaptive_threshold_arginfo, 0, 0, 7)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, maxValue)
+                ZEND_ARG_INFO(0, adaptiveMethod)
+                ZEND_ARG_INFO(0, thresholdType)
+                ZEND_ARG_INFO(0, blockSize)
+                ZEND_ARG_INFO(0, C)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_adaptive_threshold);
 
 ZEND_BEGIN_ARG_INFO_EX(opencv_morphology_ex_arginfo, 0, 0, 8)
                 ZEND_ARG_INFO(0, src)

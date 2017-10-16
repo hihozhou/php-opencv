@@ -30,6 +30,7 @@ void opencv_imgproc_init(int module_number)
     opencv_morph_types_init(module_number);
     opencv_flood_fill_flags_init(module_number);
     opencv_threshold_types_init(module_number);
+    opencv_adaptive_threshold_types_init(module_number);
 }
 
 /**
@@ -680,6 +681,42 @@ PHP_FUNCTION(opencv_threshold){
     }
     RETURN_DOUBLE(threshold(*src_object->mat, *dst_object->mat, thresh, maxval, (int)type));
 }
+
+
+
+PHP_FUNCTION(opencv_adaptive_threshold){
+
+    zval *src_zval, *dst_zval;
+    double maxValue, C;
+    long adaptiveMethod, thresholdType, blockSize;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Ozdllld",
+                              &src_zval, opencv_mat_ce,
+                              &dst_zval,
+                              &maxValue, &adaptiveMethod,
+                              &thresholdType, &blockSize, &C) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *src_object, *dst_object;
+
+    src_object = Z_PHP_MAT_OBJ_P(src_zval);
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval) == opencv_mat_ce){
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        zval_ptr_dtor(dst_real_zval);
+        zval instance;
+        Mat dst;
+        object_init_ex(&instance,opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+        dst_object->mat = new Mat(dst);
+    }
+
+    adaptiveThreshold(*src_object->mat, *dst_object->mat, maxValue, (int)adaptiveMethod, (int)thresholdType, (int)blockSize, C);
+    RETURN_NULL();
+}
+
 
 /**
  * CV\sobel
@@ -1347,4 +1384,10 @@ void opencv_threshold_types_init(int module_number){
     REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "THRESH_MASK", THRESH_MASK, CONST_CS | CONST_PERSISTENT);
     REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "THRESH_OTSU", THRESH_OTSU, CONST_CS | CONST_PERSISTENT);
     REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "THRESH_TRIANGLE", THRESH_TRIANGLE, CONST_CS | CONST_PERSISTENT);
+}
+
+//AdaptiveThresholdTypes
+void opencv_adaptive_threshold_types_init(int module_number){
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "ADAPTIVE_THRESH_MEAN_C", ADAPTIVE_THRESH_MEAN_C, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "ADAPTIVE_THRESH_GAUSSIAN_C", ADAPTIVE_THRESH_GAUSSIAN_C, CONST_CS | CONST_PERSISTENT);
 }

@@ -579,6 +579,64 @@ PHP_METHOD(opencv_mat, set_to)
 }
 
 /**
+ * CV\Mat::add()
+ * @param execute_data
+ * @param return_value
+ */
+PHP_METHOD(opencv_mat, add)
+{
+    zval *value1_zval, *value2_zval;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OO",
+                              &value1_zval, opencv_mat_ce,
+                              &value2_zval, opencv_mat_ce
+    ) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *value1_obj = Z_PHP_MAT_OBJ_P(value1_zval);
+    opencv_mat_object *value2_obj = Z_PHP_MAT_OBJ_P(value2_zval);
+    zval instance;
+    object_init_ex(&instance, opencv_mat_ce);
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(&instance);
+
+    Mat im = *value1_obj->mat + *value2_obj->mat;
+
+    obj->mat=new Mat(im);
+    //update php Mat object property
+    opencv_mat_update_property_by_c_mat(&instance, obj->mat);
+
+    RETURN_ZVAL(&instance,0,0); //return php Mat object
+}
+
+PHP_METHOD(opencv_mat, subtract)
+{
+    zval *value1_zval, *value2_zval;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OO",
+                              &value1_zval, opencv_mat_ce,
+                              &value2_zval, opencv_mat_ce
+    ) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *value1_obj = Z_PHP_MAT_OBJ_P(value1_zval);
+    opencv_mat_object *value2_obj = Z_PHP_MAT_OBJ_P(value2_zval);
+    zval instance;
+    object_init_ex(&instance, opencv_mat_ce);
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(&instance);
+
+    Mat im = *value1_obj->mat - *value2_obj->mat;
+
+    obj->mat=new Mat(im);
+    //update php Mat object property
+    opencv_mat_update_property_by_c_mat(&instance, obj->mat);
+
+    RETURN_ZVAL(&instance,0,0); //return php Mat object
+}
+
+
+/**
  * opencv_mat_methods[]
  */
 const zend_function_entry opencv_mat_methods[] = {
@@ -604,6 +662,8 @@ const zend_function_entry opencv_mat_methods[] = {
         PHP_ME(opencv_mat, plus, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, divide, NULL, ZEND_ACC_PUBLIC)
         PHP_MALIAS(opencv_mat, setTo ,set_to, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_mat, add , NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+        PHP_ME(opencv_mat, subtract , NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
         PHP_FE_END
 };
 /* }}} */

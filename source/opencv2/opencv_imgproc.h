@@ -25,6 +25,8 @@ void opencv_morph_types_init(int module_number);
 void opencv_flood_fill_flags_init(int module_number);
 void opencv_threshold_types_init(int module_number);
 void opencv_adaptive_threshold_types_init(int module_number);
+void opencv_retrieval_modes_init(int module_number);
+void opencv_contour_approximation_modes_init(int module_number);
 
 PHP_FUNCTION(opencv_cv_t_color);
 PHP_FUNCTION(opencv_ellipse);
@@ -222,5 +224,15 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_flood_fill_arginfo, 0, 0, 8)
                 ZEND_ARG_INFO(0, flags)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_flood_fill);
+
+ZEND_BEGIN_ARG_INFO_EX(oopencv_find_contours_without_hierarchy_arginfo, 0, 0, 5)
+                ZEND_ARG_INFO(0, image)
+                ZEND_ARG_INFO(1, contours)
+                ZEND_ARG_INFO(0, mode)
+                ZEND_ARG_INFO(0, method)
+                ZEND_ARG_INFO(1, offset)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_find_contours_without_hierarchy);
+
 
 #endif //OPENCV_OPENCV_IMGPROC_H

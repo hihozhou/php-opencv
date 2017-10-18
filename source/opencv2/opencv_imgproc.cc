@@ -31,6 +31,8 @@ void opencv_imgproc_init(int module_number)
     opencv_flood_fill_flags_init(module_number);
     opencv_threshold_types_init(module_number);
     opencv_adaptive_threshold_types_init(module_number);
+    opencv_retrieval_modes_init(module_number);
+    opencv_contour_approximation_modes_init(module_number);
 }
 
 /**
@@ -1084,6 +1086,69 @@ PHP_FUNCTION(opencv_flood_fill){
     RETURN_LONG(result);
 }
 
+//todo
+PHP_FUNCTION(opencv_find_contours_without_hierarchy){
+    zval *image_zval, *contours_zval, *offset_zval = NULL;
+    long mode, method;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Ozll|z",
+                              &image_zval, opencv_mat_ce,
+                              &contours_zval,
+                              &mode, &method,
+                              &offset_zval) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *image_object = Z_PHP_MAT_OBJ_P(image_zval);
+    zval *contours_real_zval = Z_REFVAL_P(contours_zval);
+    zval *offset_real_zval;
+
+    Point offset;
+    opencv_point_object *offset_object;
+    if(offset_zval != NULL){
+        offset_real_zval = Z_REFVAL_P(offset_zval);
+        if(Z_TYPE_P(offset_real_zval) == IS_OBJECT && Z_OBJCE_P(offset_real_zval) == opencv_point_ce){
+            // is Point object
+            offset_object = Z_PHP_POINT_OBJ_P(offset_real_zval);
+        } else{
+            // isn't Point object
+            zval_ptr_dtor(offset_real_zval);
+            zval instance;
+            object_init_ex(&instance,opencv_point_ce);
+            ZVAL_COPY_VALUE(offset_real_zval, &instance);// Cover dst_real_zval by Point object
+            offset_object = Z_PHP_POINT_OBJ_P(offset_real_zval);
+        }
+    } else{
+        offset = Point();
+    }
+
+    std::vector<std::vector<cv::Point> > contours;
+    findContours(*image_object->mat, contours, (int)mode, (int)method, offset);
+
+    if(offset_zval != NULL){
+        offset_object->point = new Point(offset);
+        opencv_point_update_property_by_c_point(offset_real_zval, offset_object->point);
+    }
+    zval_dtor(contours_real_zval);//if contours_real_zval value not eq null ,free contours_real_zval to avoid memory leaks detected
+    array_init(contours_real_zval);
+    int point_count = 0;
+    for(unsigned long i=0; i < contours.size(); i++){
+        zval *OPENCV_CONNECT(zval_arr,i);
+        array_init(OPENCV_CONNECT(zval_arr,i));
+        for(unsigned long j=0; j < contours.at(i).size(); j++){
+            zval OPENCV_CONNECT(zval_point,point_count);
+            object_init_ex(&OPENCV_CONNECT(zval_point,point_count), opencv_point_ce);
+            Z_PHP_POINT_OBJ_P(&OPENCV_CONNECT(zval_point,point_count))->point=new Point(contours.at(i).at(j));
+            opencv_point_update_property_by_c_point(&OPENCV_CONNECT(zval_point,point_count), Z_PHP_POINT_OBJ_P(&OPENCV_CONNECT(zval_point,point_count))->point);
+            add_next_index_zval(OPENCV_CONNECT(zval_arr,i),&OPENCV_CONNECT(zval_point,point_count));
+            point_count++;
+        }
+        add_next_index_zval(contours_real_zval,OPENCV_CONNECT(zval_arr,i));
+
+    }
+    RETURN_NULL();
+}
+
 /**
  * color conversion code in CV\cvtColor,opencv enum ColorConversionCodes
  * @param module_number
@@ -1390,4 +1455,19 @@ void opencv_threshold_types_init(int module_number){
 void opencv_adaptive_threshold_types_init(int module_number){
     REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "ADAPTIVE_THRESH_MEAN_C", ADAPTIVE_THRESH_MEAN_C, CONST_CS | CONST_PERSISTENT);
     REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "ADAPTIVE_THRESH_GAUSSIAN_C", ADAPTIVE_THRESH_GAUSSIAN_C, CONST_CS | CONST_PERSISTENT);
+}
+
+void opencv_retrieval_modes_init(int module_number){
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "RETR_EXTERNAL", RETR_EXTERNAL, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "RETR_LIST", RETR_LIST, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "RETR_CCOMP", RETR_CCOMP, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "RETR_TREE", RETR_TREE, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "RETR_FLOODFILL", RETR_FLOODFILL, CONST_CS | CONST_PERSISTENT);
+}
+
+void opencv_contour_approximation_modes_init(int module_number){
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "CHAIN_APPROX_NONE", CHAIN_APPROX_NONE, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "CHAIN_APPROX_SIMPLE", CHAIN_APPROX_SIMPLE, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "CHAIN_APPROX_TC89_L1", CHAIN_APPROX_TC89_L1, CONST_CS | CONST_PERSISTENT);
+    REGISTER_NS_LONG_CONSTANT(OPENCV_NS, "CHAIN_APPROX_TC89_KCOS", CHAIN_APPROX_TC89_KCOS, CONST_CS | CONST_PERSISTENT);
 }

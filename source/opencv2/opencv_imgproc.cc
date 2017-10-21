@@ -1086,7 +1086,11 @@ PHP_FUNCTION(opencv_flood_fill){
     RETURN_LONG(result);
 }
 
-//todo
+/**
+ * CV\findContoursWithoutHierarchy()
+ * @param execute_data
+ * @param return_value
+ */
 PHP_FUNCTION(opencv_find_contours_without_hierarchy){
     zval *image_zval, *contours_zval, *offset_zval = NULL;
     long mode, method;
@@ -1147,6 +1151,101 @@ PHP_FUNCTION(opencv_find_contours_without_hierarchy){
 
     }
     RETURN_NULL();
+}
+
+/**
+ * //todo hierarchy param
+ * CV\drawContours()
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_draw_contours){
+    zval *image_zval, *contours_zval, *color_zval, *hierarchy_zval, *offset_zval = NULL;
+    long contourIdx, thickness = 1, lineType = LINE_8, maxLevel = INT_MAX;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OalO|llalz",
+                              &image_zval, opencv_mat_ce,
+                              &contours_zval,
+                              &contourIdx,
+                              &color_zval, opencv_scalar_ce,
+                              &thickness, &lineType,
+                              &hierarchy_zval,
+                              &maxLevel, &offset_zval
+    ) == FAILURE) {
+        RETURN_NULL();
+    }
+    std::vector<std::vector<cv::Point> >contours;
+    std::vector<cv::Point> contour;
+    opencv_point_object *point_object;
+    opencv_mat_object *image_object = Z_PHP_MAT_OBJ_P(image_zval);
+    opencv_scalar_object *color_object = Z_PHP_SCALAR_OBJ_P(color_zval);
+    zend_ulong _h;
+    zend_ulong _h2;
+    zval *array_val_zval;
+    zval *array_val_zval2;
+    ZEND_HASH_FOREACH_NUM_KEY_VAL(Z_ARRVAL_P(contours_zval),_h,array_val_zval){//get point arrays
+                again1:
+                if(Z_TYPE_P(array_val_zval) == IS_ARRAY){
+                    contour.clear();
+                    ZEND_HASH_FOREACH_NUM_KEY_VAL(Z_ARRVAL_P(array_val_zval),_h2,array_val_zval2){//get points object
+                                again2:
+                                if(Z_TYPE_P(array_val_zval2) == IS_OBJECT && Z_OBJCE_P(array_val_zval2) == opencv_point_ce){
+                                    point_object = Z_PHP_POINT_OBJ_P(array_val_zval2);
+                                    contour.push_back(*point_object->point);
+                                }else if(Z_TYPE_P(array_val_zval2) == IS_REFERENCE){
+                                    array_val_zval2 = Z_REFVAL_P(array_val_zval2);
+                                    goto again2;
+                                } else {
+                                    opencv_throw_exception("The 2D array element can only be Point object.");
+                                    RETURN_NULL();
+                                }
+                            }ZEND_HASH_FOREACH_END();
+                    contours.push_back(contour);
+                }else if(Z_TYPE_P(array_val_zval) == IS_REFERENCE){
+                    array_val_zval = Z_REFVAL_P(array_val_zval);
+                    goto again1;
+                } else {
+                    opencv_throw_exception("The parameter contours can only be a Point object two bit array.");
+                    RETURN_NULL();
+                }
+            }ZEND_HASH_FOREACH_END();
+    InputArray hierarchy = noArray();
+    zval *offset_real_zval;
+
+    Point offset;
+    opencv_point_object *offset_object;
+    if(offset_zval != NULL){
+        offset_real_zval = Z_REFVAL_P(offset_zval);
+        if(Z_TYPE_P(offset_real_zval) == IS_OBJECT && Z_OBJCE_P(offset_real_zval) == opencv_point_ce){
+            // is Point object
+            offset_object = Z_PHP_POINT_OBJ_P(offset_real_zval);
+        } else{
+            // isn't Point object
+            zval_ptr_dtor(offset_real_zval);
+            zval instance;
+            object_init_ex(&instance,opencv_point_ce);
+            ZVAL_COPY_VALUE(offset_real_zval, &instance);// Cover dst_real_zval by Point object
+            offset_object = Z_PHP_POINT_OBJ_P(offset_real_zval);
+        }
+    } else{
+        offset = Point();
+    }
+    try {
+        drawContours(*image_object->mat, contours, (int)contourIdx, *color_object->scalar,
+                     (int)thickness, (int)lineType, hierarchy, (int)maxLevel, offset);
+    }catch (Exception e){
+        opencv_throw_exception(e.what());
+    }
+
+
+    if(offset_zval != NULL){
+        offset_object->point = new Point(offset);
+        opencv_point_update_property_by_c_point(offset_real_zval, offset_object->point);
+    }
+
+    RETURN_NULL();
+
+
 }
 
 /**

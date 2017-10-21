@@ -225,7 +225,7 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_flood_fill_arginfo, 0, 0, 8)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_flood_fill);
 
-ZEND_BEGIN_ARG_INFO_EX(oopencv_find_contours_without_hierarchy_arginfo, 0, 0, 5)
+ZEND_BEGIN_ARG_INFO_EX(opencv_find_contours_without_hierarchy_arginfo, 0, 0, 5)
                 ZEND_ARG_INFO(0, image)
                 ZEND_ARG_INFO(1, contours)
                 ZEND_ARG_INFO(0, mode)
@@ -233,6 +233,19 @@ ZEND_BEGIN_ARG_INFO_EX(oopencv_find_contours_without_hierarchy_arginfo, 0, 0, 5)
                 ZEND_ARG_INFO(1, offset)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_find_contours_without_hierarchy);
+
+ZEND_BEGIN_ARG_INFO_EX(opencv_draw_contours_arginfo, 0, 0, 9)
+                ZEND_ARG_INFO(0, image)
+                ZEND_ARG_INFO(1, contours)
+                ZEND_ARG_INFO(0, contourIdx)
+                ZEND_ARG_INFO(0, color)
+                ZEND_ARG_INFO(0, thickness)
+                ZEND_ARG_INFO(0, lineType)
+                ZEND_ARG_INFO(0, hierarchy)
+                ZEND_ARG_INFO(0, maxLevel)
+                ZEND_ARG_INFO(1, offset)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_draw_contours);
 
 
 #endif //OPENCV_OPENCV_IMGPROC_H

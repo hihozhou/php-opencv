@@ -246,6 +246,7 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_draw_contours_arginfo, 0, 0, 9)
                 ZEND_ARG_INFO(1, offset)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_draw_contours);
+PHP_FUNCTION(opencv_bounding_rect);
 
 
 #endif //OPENCV_OPENCV_IMGPROC_H

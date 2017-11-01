@@ -1249,6 +1249,54 @@ PHP_FUNCTION(opencv_draw_contours){
 }
 
 /**
+ * todo param can Mat
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_bounding_rect){
+    zval *points_zval;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "a", &points_zval) == FAILURE) {
+        RETURN_NULL();
+    }
+    std::vector<cv::Point> points;
+    opencv_point_object *point_object;
+    Rect return_rect;
+    unsigned long src_count = zend_hash_num_elements(Z_ARRVAL_P(points_zval));
+    points.reserve(src_count);//指定长度
+    zend_ulong _h;
+    zval *array_val_zval;
+    ZEND_HASH_FOREACH_NUM_KEY_VAL(Z_ARRVAL_P(points_zval),_h,array_val_zval){//get point arrays
+                again1:
+                if(Z_TYPE_P(array_val_zval) == IS_OBJECT && Z_OBJCE_P(array_val_zval) == opencv_point_ce){
+                    point_object = Z_PHP_POINT_OBJ_P(array_val_zval);
+                    points.push_back(*point_object->point);
+                }else if(Z_TYPE_P(array_val_zval) == IS_REFERENCE){
+                    array_val_zval = Z_REFVAL_P(array_val_zval);
+                    goto again1;
+                } else {
+                    opencv_throw_exception("The parameter contours can only be a Point object two bit array.");
+                    RETURN_NULL();
+                }
+            }ZEND_HASH_FOREACH_END();
+    try {
+        return_rect = boundingRect(points);
+    }catch (Exception e){
+        opencv_throw_exception(e.what());
+    }
+
+    zval instance;
+    object_init_ex(&instance, opencv_rect_ce);
+    opencv_rect_object *rect_obj = Z_PHP_RECT_OBJ_P(&instance);
+
+    rect_obj->rect = new Rect(return_rect);
+
+    opencv_rect_update_property_by_c_rect(&instance,rect_obj->rect);
+
+    RETURN_ZVAL(&instance,0,0); //return php Rect object
+}
+
+/**
  * color conversion code in CV\cvtColor,opencv enum ColorConversionCodes
  * @param module_number
  */

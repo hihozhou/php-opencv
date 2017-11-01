@@ -241,6 +241,7 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, adaptiveThreshold, ZEND_FN(opencv_adaptive_threshold), opencv_adaptive_threshold_arginfo)
     ZEND_NS_NAMED_FE(OPENCV_NS, findContoursWithoutHierarchy, ZEND_FN(opencv_find_contours_without_hierarchy), opencv_find_contours_without_hierarchy_arginfo)
     ZEND_NS_NAMED_FE(OPENCV_NS, drawContours, ZEND_FN(opencv_draw_contours), opencv_draw_contours_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, boundingRect, ZEND_FN(opencv_bounding_rect), NULL)
 	PHP_FE_END	/* Must be the last line in opencv_functions[] */
 };
 /* }}} */

@@ -49,6 +49,7 @@ if test "$PHP_OPENCV" != "no"; then
     source/opencv2/opencv_videoio.cc \
     source/opencv2/opencv_face.cc \
     source/opencv2/face/opencv_facerec.cc \
+    source/opencv2/core/opencv_cvdef.cc \
     source/opencv2/opencv_ml.cc"
 
 

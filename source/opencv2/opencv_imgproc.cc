@@ -1102,7 +1102,6 @@ PHP_FUNCTION(opencv_find_contours_without_hierarchy){
                               &offset_zval) == FAILURE) {
         RETURN_NULL();
     }
-
     opencv_mat_object *image_object = Z_PHP_MAT_OBJ_P(image_zval);
     zval *contours_real_zval = Z_REFVAL_P(contours_zval);
     zval *offset_real_zval;
@@ -1137,17 +1136,17 @@ PHP_FUNCTION(opencv_find_contours_without_hierarchy){
     array_init(contours_real_zval);
     int point_count = 0;
     for(unsigned long i=0; i < contours.size(); i++){
-        zval *OPENCV_CONNECT(zval_arr,i);
-        array_init(OPENCV_CONNECT(zval_arr,i));
+        zval OPENCV_CONNECT(zval_arr,i);
+        array_init(&OPENCV_CONNECT(zval_arr,i));
         for(unsigned long j=0; j < contours.at(i).size(); j++){
             zval OPENCV_CONNECT(zval_point,point_count);
             object_init_ex(&OPENCV_CONNECT(zval_point,point_count), opencv_point_ce);
             Z_PHP_POINT_OBJ_P(&OPENCV_CONNECT(zval_point,point_count))->point=new Point(contours.at(i).at(j));
             opencv_point_update_property_by_c_point(&OPENCV_CONNECT(zval_point,point_count), Z_PHP_POINT_OBJ_P(&OPENCV_CONNECT(zval_point,point_count))->point);
-            add_next_index_zval(OPENCV_CONNECT(zval_arr,i),&OPENCV_CONNECT(zval_point,point_count));
+            add_next_index_zval(&OPENCV_CONNECT(zval_arr,i),&OPENCV_CONNECT(zval_point,point_count));
             point_count++;
         }
-        add_next_index_zval(contours_real_zval,OPENCV_CONNECT(zval_arr,i));
+        add_next_index_zval(contours_real_zval,&OPENCV_CONNECT(zval_arr,i));
 
     }
     RETURN_NULL();

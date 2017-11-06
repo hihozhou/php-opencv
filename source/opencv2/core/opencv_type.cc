@@ -22,6 +22,7 @@ zend_class_entry *opencv_point_ce;
 zend_class_entry *opencv_scalar_ce;
 zend_class_entry *opencv_size_ce;
 zend_class_entry *opencv_rect_ce;
+zend_class_entry *opencv_rotated_rect_ce;
 
 /**
  * -----------------------------------【CV\Point】--------------------------------------
@@ -542,7 +543,7 @@ void opencv_rect_write_property(zval *object, zval *member, zval *value, void **
 
 
 /**
- * Scalar Init
+ * Rect Init
  */
 void opencv_rect_init(int module_number){
     zend_class_entry ce;
@@ -557,6 +558,117 @@ void opencv_rect_init(int module_number){
     opencv_rect_object_handlers.free_obj = opencv_rect_free_obj;
 }
 
+//-----------------------------------【CV\RotatedRect】--------------------------------
+//
+//-------------------------------------------------------------------------------------
+
+zend_object_handlers opencv_rotated_rect_object_handlers;
+
+zend_object* opencv_rotated_rect_create_handler(zend_class_entry *type)
+{
+    int size = sizeof(opencv_rotated_rect_object);
+    opencv_rotated_rect_object *obj = (opencv_rotated_rect_object *)ecalloc(1,size);
+    memset(obj, 0, sizeof(opencv_rotated_rect_object));
+    zend_object_std_init(&obj->std, type);
+    object_properties_init(&obj->std, type);
+    obj->std.ce = type;
+    obj->std.handlers = &opencv_rotated_rect_object_handlers;
+    return &obj->std;
+}
+
+
+/**
+ * RotatedRect Class write_property
+ * @param object
+ * @param member
+ * @param value
+ * @param cache_slot
+ */
+void opencv_rotated_rect_write_property(zval *object, zval *member, zval *value, void **cache_slot){
+
+//    zend_string *str = zval_get_string(member);
+//    char *memberName=ZSTR_VAL(str);
+//    opencv_rect_object *obj = Z_PHP_RECT_OBJ_P(object);
+//
+//    if(strcmp(memberName, "x") == 0 && obj->rect->x!=(int)zval_get_long(value)){
+//        obj->rect->x=(int)zval_get_long(value);
+//    }else if(strcmp(memberName, "y") == 0 && obj->rect->y!=(int)zval_get_long(value)){
+//        obj->rect->y=(int)zval_get_long(value);
+//    }else if(strcmp(memberName, "width") == 0 && obj->rect->width!=(int)zval_get_long(value)){
+//        obj->rect->width=(int)zval_get_long(value);
+//    }else if(strcmp(memberName, "height") == 0 && obj->rect->height!=(int)zval_get_long(value)){
+//        obj->rect->height=(int)zval_get_long(value);
+//    }
+//    zend_string_release(str);//free zend_string not memberName(zend_string->val)
+    std_object_handlers.write_property(object,member,value,cache_slot);
+
+}
+
+
+void opencv_rotated_rect_free_obj(zend_object *object)
+{
+    opencv_rotated_rect_object *obj;
+    obj = get_rotated_rect_obj(object);
+    delete obj->rotatedRect;
+    zend_object_std_dtor(object);
+}
+
+/**
+ * todo center is Point2f and size is Size2f
+ * RotatedRect __construct
+ * @param execute_data
+ * @param return_value
+ */
+PHP_METHOD(opencv_rotated_rect, __construct)
+{
+    zval *center_zval = NULL, *size_zval;
+    double angle = 0.0;
+    Point center = Point();
+    Size size = Size();
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "|OOd",
+                              &center_zval, opencv_point_ce,
+                              &size_zval, opencv_size_ce,
+                              &angle) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    if(center_zval != NULL){
+        opencv_point_object *center_object = Z_PHP_POINT_OBJ_P(center_zval);
+        center = *center_object->point;
+    }
+
+    if(size_zval != NULL){
+        opencv_size_object *size_object = Z_PHP_SIZE_OBJ_P(size_zval);
+        size = *size_object->size;
+    }
+
+    opencv_rotated_rect_object *obj = Z_PHP_ROTATED_RECT_OBJ_P(getThis());
+    obj->rotatedRect = new RotatedRect(center, size, (float)angle);
+//    opencv_rect_update_property_by_c_rect(getThis(),obj->rect);
+}
+
+/**
+ * opencv_rect_methods[]
+ */
+const zend_function_entry opencv_rotated_rect_methods[] = {
+        PHP_ME(opencv_rotated_rect, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+        PHP_FE_END
+};
+/* }}} */
+
+void opencv_rotated_rect_init(int module_number){
+    zend_class_entry ce;
+    INIT_NS_CLASS_ENTRY(ce,OPENCV_NS, "RotatedRect", opencv_rotated_rect_methods);
+    opencv_rotated_rect_ce = zend_register_internal_class(&ce);
+
+    opencv_rotated_rect_ce->create_object = opencv_rotated_rect_create_handler;
+    memcpy(&opencv_rotated_rect_object_handlers,
+           zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+    opencv_rotated_rect_object_handlers.clone_obj = NULL;
+    opencv_rotated_rect_object_handlers.write_property = opencv_rotated_rect_write_property;
+    opencv_rotated_rect_object_handlers.free_obj = opencv_rotated_rect_free_obj;
+}
+
 
 /**
  * Type Init
@@ -566,4 +678,5 @@ void opencv_type_init(int module_number){
     opencv_scalar_init(module_number);
     opencv_size_init(module_number);
     opencv_rect_init(module_number);
+    opencv_rotated_rect_init(module_number);
 }

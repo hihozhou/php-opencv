@@ -23,12 +23,14 @@ extern zend_class_entry *opencv_point_ce;
 extern zend_class_entry *opencv_scalar_ce;
 extern zend_class_entry *opencv_size_ce;
 extern zend_class_entry *opencv_rect_ce;
+extern zend_class_entry *opencv_rotated_rect_ce;
 
 
 #define Z_PHP_POINT_OBJ_P(zv)  get_point_obj(Z_OBJ_P(zv))
 #define Z_PHP_SCALAR_OBJ_P(zv)  get_scalar_obj(Z_OBJ_P(zv))
 #define Z_PHP_SIZE_OBJ_P(zv)  get_size_obj(Z_OBJ_P(zv))
 #define Z_PHP_RECT_OBJ_P(zv)  get_rect_obj(Z_OBJ_P(zv))
+#define Z_PHP_ROTATED_RECT_OBJ_P(zv)  get_rotated_rect_obj(Z_OBJ_P(zv))
 
 
 typedef struct _opencv_point_object{
@@ -51,6 +53,11 @@ typedef struct _opencv_rect_object{
     Rect *rect;
 }opencv_rect_object;
 
+
+typedef struct _opencv_rotated_rect_object{
+    zend_object std;
+    RotatedRect *rotatedRect;
+}opencv_rotated_rect_object;
 
 /**
  * @param obj
@@ -75,6 +82,11 @@ static inline opencv_rect_object* get_rect_obj(zend_object *obj) {
     return (opencv_rect_object*)((char*)(obj) - XtOffsetOf(opencv_rect_object, std));
 }
 
+static inline opencv_rotated_rect_object* get_rotated_rect_obj(zend_object *obj) {
+    return (opencv_rotated_rect_object*)((char*)(obj) - XtOffsetOf(opencv_rotated_rect_object, std));
+}
+
+
 void opencv_size_update_property_by_c_size(zval *z, Size *size);
 
 void opencv_rect_update_property_by_c_rect(zval *z, Rect *rect);
@@ -82,5 +94,7 @@ void opencv_rect_update_property_by_c_rect(zval *z, Rect *rect);
 void opencv_scalar_update_property_by_c_scalar(zval *z,Scalar *scalar);
 
 void opencv_point_update_property_by_c_point(zval *z, Point *point);
+
+void opencv_rotated_rect_update_property_by_c_rotated_rect(zval *z, RotatedRect *totatedRect);
 
 #endif //OPENCV_OPENCV_TYPE_H

@@ -613,6 +613,32 @@ void opencv_rotated_rect_free_obj(zend_object *object)
     zend_object_std_dtor(object);
 }
 
+void opencv_rotated_rect_update_property_by_c_rotated_rect(zval *z, RotatedRect *rotatedRect){
+    //RotatedRect->angle
+    zend_update_property_double(opencv_rotated_rect_ce, z, "angle", sizeof("angle")-1, rotatedRect->angle);
+    //RotatedRect->center
+    zval center_zval;
+    object_init_ex(&center_zval, opencv_point_ce);
+    opencv_point_object *center_object = Z_PHP_POINT_OBJ_P(&center_zval);
+    center_object->point = new Point(rotatedRect->center.x,rotatedRect->center.y);
+    opencv_point_update_property_by_c_point(&center_zval, center_object->point);
+    zend_update_property(opencv_rotated_rect_ce, z, "center", sizeof("center")-1, &center_zval);
+    //RotatedRect->size
+    zval size_zval;
+    object_init_ex(&size_zval, opencv_size_ce);
+    opencv_size_object *size_object = Z_PHP_SIZE_OBJ_P(&size_zval);
+    size_object->size = new Size(rotatedRect->size);
+    opencv_size_update_property_by_c_size(&size_zval, size_object->size);
+    zend_update_property(opencv_rotated_rect_ce, z, "size", sizeof("size")-1, &size_zval);
+    /**
+     * 数组center_zval在object_init_ex()后refcount=1，
+     * 插入成员属性zend_update_property()会自动加一次，变为2，
+     * 对象销毁后只会减1，需要要在zend_update_property()后主动减一次引用
+     */
+    Z_DELREF(center_zval);
+    Z_DELREF(size_zval);
+}
+
 /**
  * todo center is Point2f and size is Size2f
  * RotatedRect __construct
@@ -644,7 +670,7 @@ PHP_METHOD(opencv_rotated_rect, __construct)
 
     opencv_rotated_rect_object *obj = Z_PHP_ROTATED_RECT_OBJ_P(getThis());
     obj->rotatedRect = new RotatedRect(center, size, (float)angle);
-//    opencv_rect_update_property_by_c_rect(getThis(),obj->rect);
+    opencv_rotated_rect_update_property_by_c_rotated_rect(getThis(), obj->rotatedRect);
 }
 
 /**

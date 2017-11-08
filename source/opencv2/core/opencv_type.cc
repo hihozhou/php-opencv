@@ -16,6 +16,7 @@
 
 
 #include "../../../php_opencv.h"
+#include "../../../opencv_exception.h"
 #include "opencv_type.h"
 
 zend_class_entry *opencv_point_ce;
@@ -82,7 +83,7 @@ const zend_function_entry opencv_point_methods[] = {
 
 zend_object* opencv_point_create_handler(zend_class_entry *type)
 {
-    int size = sizeof(opencv_point_object);
+    size_t size = sizeof(opencv_point_object);
     opencv_point_object *obj = (opencv_point_object *)ecalloc(1,size);
     memset(obj, 0, sizeof(opencv_point_object));
     zend_object_std_init(&obj->std, type);
@@ -153,7 +154,7 @@ zend_object_handlers opencv_scalar_object_handlers;
 
 zend_object* opencv_scalar_create_handler(zend_class_entry *type)
 {
-    int size = sizeof(opencv_scalar_object);
+    size_t size = sizeof(opencv_scalar_object);
     opencv_scalar_object *obj = (opencv_scalar_object *)ecalloc(1,size);
     memset(obj, 0, sizeof(opencv_scalar_object));
     zend_object_std_init(&obj->std, type);
@@ -257,7 +258,7 @@ zend_object_handlers opencv_size_object_handlers;
 
 zend_object* opencv_size_create_handler(zend_class_entry *type)
 {
-    int size = sizeof(opencv_size_object);
+    size_t size = sizeof(opencv_size_object);
     opencv_size_object *obj = (opencv_size_object *)ecalloc(1,size);
     memset(obj, 0, sizeof(opencv_size_object));
     zend_object_std_init(&obj->std, type);
@@ -374,7 +375,7 @@ zend_object_handlers opencv_rect_object_handlers;
 
 zend_object* opencv_rect_create_handler(zend_class_entry *type)
 {
-    int size = sizeof(opencv_rect_object);
+    size_t size = sizeof(opencv_rect_object);
     opencv_rect_object *obj = (opencv_rect_object *)ecalloc(1,size);
     memset(obj, 0, sizeof(opencv_rect_object));
     zend_object_std_init(&obj->std, type);
@@ -566,7 +567,7 @@ zend_object_handlers opencv_rotated_rect_object_handlers;
 
 zend_object* opencv_rotated_rect_create_handler(zend_class_entry *type)
 {
-    int size = sizeof(opencv_rotated_rect_object);
+    size_t size = sizeof(opencv_rotated_rect_object);
     opencv_rotated_rect_object *obj = (opencv_rotated_rect_object *)ecalloc(1,size);
     memset(obj, 0, sizeof(opencv_rotated_rect_object));
     zend_object_std_init(&obj->std, type);
@@ -578,6 +579,7 @@ zend_object* opencv_rotated_rect_create_handler(zend_class_entry *type)
 
 
 /**
+ * //todo $rotatedRect->property = &$a
  * RotatedRect Class write_property
  * @param object
  * @param member
@@ -586,20 +588,31 @@ zend_object* opencv_rotated_rect_create_handler(zend_class_entry *type)
  */
 void opencv_rotated_rect_write_property(zval *object, zval *member, zval *value, void **cache_slot){
 
-//    zend_string *str = zval_get_string(member);
-//    char *memberName=ZSTR_VAL(str);
-//    opencv_rect_object *obj = Z_PHP_RECT_OBJ_P(object);
-//
-//    if(strcmp(memberName, "x") == 0 && obj->rect->x!=(int)zval_get_long(value)){
-//        obj->rect->x=(int)zval_get_long(value);
-//    }else if(strcmp(memberName, "y") == 0 && obj->rect->y!=(int)zval_get_long(value)){
-//        obj->rect->y=(int)zval_get_long(value);
-//    }else if(strcmp(memberName, "width") == 0 && obj->rect->width!=(int)zval_get_long(value)){
-//        obj->rect->width=(int)zval_get_long(value);
-//    }else if(strcmp(memberName, "height") == 0 && obj->rect->height!=(int)zval_get_long(value)){
-//        obj->rect->height=(int)zval_get_long(value);
-//    }
-//    zend_string_release(str);//free zend_string not memberName(zend_string->val)
+    zend_string *str = zval_get_string(member);
+    char *memberName = ZSTR_VAL(str);
+    opencv_rotated_rect_object *obj = Z_PHP_ROTATED_RECT_OBJ_P(object);
+    if(strcmp(memberName, "angle") == 0 && obj->rotatedRect->angle != (int)zval_get_long(value)){
+        obj->rotatedRect->angle = (float)zval_get_long(value);
+    }else if(strcmp(memberName, "center") == 0 ){
+        if(Z_TYPE_P(value) == IS_OBJECT && Z_OBJCE_P(value) == opencv_point_ce){
+            opencv_point_object *value_object = Z_PHP_POINT_OBJ_P(value);
+            if(Point2f(*value_object->point) != obj->rotatedRect->center){
+                obj->rotatedRect->center = Point2f(*value_object->point);
+            }
+        }else{
+            opencv_throw_exception("set property center only expect param is Point object.");
+        }
+    }else if(strcmp(memberName, "size") == 0 ){
+        if(Z_TYPE_P(value) == IS_OBJECT && Z_OBJCE_P(value) == opencv_size_ce){
+            opencv_size_object *value_object = Z_PHP_SIZE_OBJ_P(value);
+            if(Size2f(*value_object->size) != obj->rotatedRect->size){
+                obj->rotatedRect->size = Size2f(*value_object->size);
+            }
+        }else{
+            opencv_throw_exception("set property size only expect param is Size object.");
+        }
+    }
+    zend_string_release(str);//free zend_string not memberName(zend_string->val)
     std_object_handlers.write_property(object,member,value,cache_slot);
 
 }

@@ -1295,6 +1295,89 @@ PHP_FUNCTION(opencv_bounding_rect){
     RETURN_ZVAL(&instance,0,0); //return php Rect object
 }
 
+
+/**
+ * CV\getRotationMatrix2D
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_get_rotation_matrix2D){
+    zval *center_zval;
+    double angle, scale;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Odd", &center_zval, opencv_point_ce, &angle, &scale) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_point_object *center_object = Z_PHP_POINT_OBJ_P(center_zval);
+    Mat mat = getRotationMatrix2D(Point2f(*center_object->point), angle, scale);
+
+    zval instance;
+    object_init_ex(&instance, opencv_mat_ce);
+    opencv_mat_object *instance_object = Z_PHP_MAT_OBJ_P(&instance);
+
+    instance_object->mat = new Mat(mat);
+
+    opencv_mat_update_property_by_c_mat(&instance,instance_object->mat);
+
+    RETURN_ZVAL(&instance,0,0); //return php Rect object
+
+}
+
+
+/**
+ * CV\warpAffine
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_warp_affine){
+    zval *src_zval, *dst_zval, *M_zval, *dsize_zval, *border_value_zval = NULL;
+    long flags = INTER_LINEAR, borderMode = BORDER_CONSTANT;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OzOO|llO",
+                              &src_zval, opencv_mat_ce,
+                              &dst_zval,
+                              &M_zval, opencv_mat_ce,
+                              &dsize_zval, opencv_size_ce,
+                              &flags, &borderMode,
+                              &border_value_zval, opencv_scalar_ce) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    Scalar borderValue = Scalar();
+    if(border_value_zval != NULL){
+        opencv_scalar_object *border_value_object = Z_PHP_SCALAR_OBJ_P(border_value_zval);
+        borderValue = *border_value_object->scalar;
+    }
+    opencv_mat_object *src_object = Z_PHP_MAT_OBJ_P(src_zval);
+    opencv_mat_object *M_object = Z_PHP_MAT_OBJ_P(M_zval);
+    opencv_size_object *dsize_object = Z_PHP_SIZE_OBJ_P(dsize_zval);
+
+    opencv_mat_object *dst_object;
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+
+    if(Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval) == opencv_mat_ce){
+        // is Point object
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else{
+        // isn't Mat object
+        zval_ptr_dtor(dst_real_zval);
+        zval instance;
+        object_init_ex(&instance, opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);// Cover dst_real_zval by Mat object
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    }
+    Mat dst;
+    warpAffine(*src_object->mat, dst, *M_object->mat, *dsize_object->size, (int)flags, (int)borderMode, borderValue);
+    dst_object->mat = new Mat(dst);
+    opencv_mat_update_property_by_c_mat(dst_real_zval,dst_object->mat);
+
+    RETURN_NULL();
+
+}
+
+
+
 /**
  * color conversion code in CV\cvtColor,opencv enum ColorConversionCodes
  * @param module_number

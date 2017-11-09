@@ -247,6 +247,17 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_draw_contours_arginfo, 0, 0, 9)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_draw_contours);
 PHP_FUNCTION(opencv_bounding_rect);
+PHP_FUNCTION(opencv_get_rotation_matrix2D);
+ZEND_BEGIN_ARG_INFO_EX(opencv_warp_affine_arginfo, 0, 0, 7)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, M)
+                ZEND_ARG_INFO(0, dsize)
+                ZEND_ARG_INFO(0, flags)
+                ZEND_ARG_INFO(0, borderMode)
+                ZEND_ARG_INFO(0, borderValue)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_warp_affine);
 
 
 #endif //OPENCV_OPENCV_IMGPROC_H

@@ -258,6 +258,14 @@ ZEND_BEGIN_ARG_INFO_EX(opencv_warp_affine_arginfo, 0, 0, 7)
                 ZEND_ARG_INFO(0, borderValue)
 ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_warp_affine);
+ZEND_BEGIN_ARG_INFO_EX(opencv_get_rect_sub_pix_arginfo, 0, 0, 5)
+                ZEND_ARG_INFO(0, image)
+                ZEND_ARG_INFO(0, patchSize)
+                ZEND_ARG_INFO(0, center)
+                ZEND_ARG_INFO(1, patch)
+                ZEND_ARG_INFO(0, patchType)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_get_rect_sub_pix);
 
 
 #endif //OPENCV_OPENCV_IMGPROC_H

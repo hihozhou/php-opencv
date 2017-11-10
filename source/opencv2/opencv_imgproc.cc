@@ -1377,6 +1377,53 @@ PHP_FUNCTION(opencv_warp_affine){
 }
 
 
+/**
+ * CV\getRectSubPix
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_get_rect_sub_pix){
+    zval *image_zval, *patch_size_zval, *center_zval, *patch_zval;
+    long patchType = -1;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "OOOz|l",
+                              &image_zval, opencv_mat_ce,
+                              &patch_size_zval, opencv_size_ce,
+                              &center_zval, opencv_point_ce,
+                              &patch_zval,
+                              &patchType) == FAILURE) {
+        RETURN_NULL();
+    }
+
+
+    opencv_mat_object *image_object = Z_PHP_MAT_OBJ_P(image_zval);
+    opencv_size_object *patch_size_object = Z_PHP_SIZE_OBJ_P(patch_size_zval);
+    opencv_point_object *center_object = Z_PHP_POINT_OBJ_P(center_zval);
+
+    opencv_mat_object *patch_object;
+    zval *patch_real_zval = Z_REFVAL_P(patch_zval);
+
+    if(Z_TYPE_P(patch_real_zval) == IS_OBJECT && Z_OBJCE_P(patch_real_zval) == opencv_mat_ce){
+        // is Point object
+        patch_object = Z_PHP_MAT_OBJ_P(patch_real_zval);
+    } else{
+        // isn't Mat object
+        zval_ptr_dtor(patch_real_zval);
+        zval instance;
+        object_init_ex(&instance, opencv_mat_ce);
+        ZVAL_COPY_VALUE(patch_real_zval, &instance);// Cover dst_real_zval by Mat object
+        patch_object = Z_PHP_MAT_OBJ_P(patch_real_zval);
+    }
+    Mat patch;
+    getRectSubPix(*image_object->mat, *patch_size_object->size, Point2f(*center_object->point), patch, (int)patchType);
+    patch_object->mat = new Mat(patch);
+    opencv_mat_update_property_by_c_mat(patch_real_zval,patch_object->mat);
+
+    RETURN_NULL();
+
+}
+
+
 
 /**
  * color conversion code in CV\cvtColor,opencv enum ColorConversionCodes

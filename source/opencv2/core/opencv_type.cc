@@ -18,6 +18,8 @@
 #include "../../../php_opencv.h"
 #include "../../../opencv_exception.h"
 #include "opencv_type.h"
+#include <algorithm>
+#include <iostream>
 
 zend_class_entry *opencv_point_ce;
 zend_class_entry *opencv_scalar_ce;
@@ -686,11 +688,33 @@ PHP_METHOD(opencv_rotated_rect, __construct)
     opencv_rotated_rect_update_property_by_c_rotated_rect(getThis(), obj->rotatedRect);
 }
 
+
+PHP_METHOD(opencv_rotated_rect, points)
+{
+    opencv_rotated_rect_object *this_object = Z_PHP_ROTATED_RECT_OBJ_P(getThis());
+
+    cv::Point2f pts[4];
+    this_object->rotatedRect->points(pts);
+    zval instance;
+
+    array_init(&instance);
+    for (int i = 0; i < 4; i++) {
+        zval OPENCV_CONNECT(point_zval,i);
+        object_init_ex(&OPENCV_CONNECT(point_zval,i), opencv_point_ce);
+        Z_PHP_POINT_OBJ_P(&OPENCV_CONNECT(point_zval,i))->point = new Point(pts[i]);
+        opencv_point_update_property_by_c_point(&OPENCV_CONNECT(point_zval,i), Z_PHP_POINT_OBJ_P(&OPENCV_CONNECT(point_zval,i))->point);
+        add_next_index_zval(&instance,&OPENCV_CONNECT(point_zval,i));
+    }
+    RETURN_ZVAL(&instance,0,0);
+
+}
+
 /**
  * opencv_rect_methods[]
  */
 const zend_function_entry opencv_rotated_rect_methods[] = {
         PHP_ME(opencv_rotated_rect, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+        PHP_ME(opencv_rotated_rect, points, NULL, ZEND_ACC_PUBLIC)
         PHP_FE_END
 };
 /* }}} */

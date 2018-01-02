@@ -159,6 +159,7 @@ const zend_function_entry opencv_lbph_face_recognizer_methods[] = {
         PHP_ME(opencv_lbph_face_recognizer, create, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
         PHP_ME(opencv_lbph_face_recognizer, train, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_lbph_face_recognizer, predict, NULL, ZEND_ACC_PUBLIC)
+        // todo
         PHP_ME(opencv_lbph_face_recognizer, predictConfidence, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_lbph_face_recognizer, read, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_lbph_face_recognizer, write, NULL, ZEND_ACC_PUBLIC)

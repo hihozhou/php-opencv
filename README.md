@@ -31,7 +31,7 @@ make install
 php.ini
 
 ```
-extension="opencv.so"
+extension="your opencv.so path"
 ```
 ## Example
 

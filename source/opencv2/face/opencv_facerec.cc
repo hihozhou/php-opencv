@@ -114,6 +114,43 @@ PHP_METHOD(opencv_lbph_face_recognizer, predict)
     RETURN_LONG(predict_label);
 }
 
+PHP_METHOD(opencv_lbph_face_recognizer, predictConfidence)
+{
+    zval *src_zval;
+    int label = 0;
+    double confidence = 0;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "o", &src_zval, opencv_mat_ce) == FAILURE) {
+        RETURN_NULL();
+    }
+    opencv_lbph_face_recognizer_object *obj = Z_PHP_LBPH_FACE_RECOGNIZER_OBJ_P(getThis());
+    opencv_mat_object *src_object = Z_PHP_MAT_OBJ_P(src_zval);
+    obj->faceRecognizer->predict(*src_object->mat, label, confidence);
+    RETURN_DOUBLE(confidence);
+}
+
+PHP_METHOD(opencv_lbph_face_recognizer, read)
+{
+    char *filename;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &filename) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_lbph_face_recognizer_object *obj = Z_PHP_LBPH_FACE_RECOGNIZER_OBJ_P(getThis());
+    obj->faceRecognizer->read(filename);
+    RETURN_NULL();
+}
+
+PHP_METHOD(opencv_lbph_face_recognizer, write)
+{
+    char *filename;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &filename) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_lbph_face_recognizer_object *obj = Z_PHP_LBPH_FACE_RECOGNIZER_OBJ_P(getThis());
+    obj->faceRecognizer->write(filename);
+    RETURN_NULL();
+}
 
 /**
  * opencv_lbph_face_recognizer_methods[]
@@ -122,6 +159,10 @@ const zend_function_entry opencv_lbph_face_recognizer_methods[] = {
         PHP_ME(opencv_lbph_face_recognizer, create, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
         PHP_ME(opencv_lbph_face_recognizer, train, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_lbph_face_recognizer, predict, NULL, ZEND_ACC_PUBLIC)
+        // todo
+        PHP_ME(opencv_lbph_face_recognizer, predictConfidence, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_lbph_face_recognizer, read, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_lbph_face_recognizer, write, NULL, ZEND_ACC_PUBLIC)
         PHP_FE_END
 };
 /* }}} */

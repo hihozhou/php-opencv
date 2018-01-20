@@ -11,6 +11,7 @@ os:
 php:
   - 7.0
   - 7.1
+  - 7.2
 
 notifications:
   email: hihozhou@gmail.com
@@ -20,6 +21,7 @@ before_install:
   - sudo apt-get -qq update
   - sudo apt-get install gcc-4.8 -y -qq
   - sudo apt-get install g++-4.8 -y -qq
+  - sudo apt-get install python3-numpy
 
 install:
   # OpenCV dependencies - Details available at: http://docs.opencv.org/trunk/doc/tutorials/introduction/linux_install/linux_install.html

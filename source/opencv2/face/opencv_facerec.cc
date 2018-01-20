@@ -114,6 +114,89 @@ PHP_METHOD(opencv_lbph_face_recognizer, predict)
     RETURN_LONG(predict_label);
 }
 
+PHP_METHOD(opencv_lbph_face_recognizer, predictConfidence)
+{
+    zval *src_zval;
+    int label = 0;
+    double confidence = 0;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "o", &src_zval, opencv_mat_ce) == FAILURE) {
+        RETURN_NULL();
+    }
+    opencv_lbph_face_recognizer_object *obj = Z_PHP_LBPH_FACE_RECOGNIZER_OBJ_P(getThis());
+    opencv_mat_object *src_object = Z_PHP_MAT_OBJ_P(src_zval);
+    obj->faceRecognizer->predict(*src_object->mat, label, confidence);
+    RETURN_DOUBLE(confidence);
+}
+
+PHP_METHOD(opencv_lbph_face_recognizer, read)
+{
+    char *filename;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &filename) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_lbph_face_recognizer_object *obj = Z_PHP_LBPH_FACE_RECOGNIZER_OBJ_P(getThis());
+    obj->faceRecognizer->read(filename);
+    RETURN_NULL();
+}
+
+PHP_METHOD(opencv_lbph_face_recognizer, write)
+{
+    char *filename;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &filename) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_lbph_face_recognizer_object *obj = Z_PHP_LBPH_FACE_RECOGNIZER_OBJ_P(getThis());
+    obj->faceRecognizer->write(filename);
+    RETURN_NULL();
+}
+
+PHP_METHOD(opencv_lbph_face_recognizer, update)
+{
+    zval *src_zval, *labels_zval;
+    zend_ulong _h;
+    zval *array_val_zval;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "aa", &src_zval, &labels_zval) == FAILURE) {
+        RETURN_NULL();
+    }
+    std::vector<Mat> src;
+    std::vector<int> labels;
+    //check
+    opencv_lbph_face_recognizer_object *obj = Z_PHP_LBPH_FACE_RECOGNIZER_OBJ_P(getThis());
+    unsigned long src_count = zend_hash_num_elements(Z_ARRVAL_P(src_zval));
+    src.reserve(src_count);//指定长度
+    opencv_mat_object *mat_obj;
+
+    ZEND_HASH_FOREACH_NUM_KEY_VAL(Z_ARRVAL_P(src_zval),_h,array_val_zval){
+                //check array_val_zval is Mat object
+                again1:
+                if(Z_TYPE_P(array_val_zval) == IS_OBJECT && Z_OBJCE_P(array_val_zval)==opencv_mat_ce){
+                    mat_obj = Z_PHP_MAT_OBJ_P(array_val_zval);
+                    src.push_back(*mat_obj->mat);
+                }else if(Z_TYPE_P(array_val_zval) == IS_REFERENCE){
+                    array_val_zval = Z_REFVAL_P(array_val_zval);
+                    goto again1;
+                } else {
+                    opencv_throw_exception("array value just Mat object.");
+                    RETURN_NULL();
+                }
+            }ZEND_HASH_FOREACH_END();
+    ZEND_HASH_FOREACH_NUM_KEY_VAL(Z_ARRVAL_P(labels_zval),_h,array_val_zval){
+                again2:
+                if(Z_TYPE_P(array_val_zval) == IS_LONG){
+                    labels.push_back((int)zval_get_long(array_val_zval));
+                }else if(Z_TYPE_P(array_val_zval) == IS_REFERENCE){
+                    array_val_zval = Z_REFVAL_P(array_val_zval);
+                    goto again2;
+                } else {
+                    opencv_throw_exception("array value just number.");
+                    RETURN_NULL();
+                }
+            }ZEND_HASH_FOREACH_END();
+    obj->faceRecognizer->update(src,labels);
+    RETURN_NULL();
+}
 
 /**
  * opencv_lbph_face_recognizer_methods[]
@@ -122,6 +205,11 @@ const zend_function_entry opencv_lbph_face_recognizer_methods[] = {
         PHP_ME(opencv_lbph_face_recognizer, create, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
         PHP_ME(opencv_lbph_face_recognizer, train, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_lbph_face_recognizer, predict, NULL, ZEND_ACC_PUBLIC)
+        // todo
+        PHP_ME(opencv_lbph_face_recognizer, predictConfidence, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_lbph_face_recognizer, read, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_lbph_face_recognizer, write, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_lbph_face_recognizer, update, NULL, ZEND_ACC_PUBLIC)
         PHP_FE_END
 };
 /* }}} */

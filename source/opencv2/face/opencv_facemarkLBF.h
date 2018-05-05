@@ -13,48 +13,27 @@
  | Author: HaiHao Zhou  <hihozhou@gmail.com>                            |
  +----------------------------------------------------------------------+
  */
-#include "../../php_opencv.h"
-#include "opencv_face.h"
 
-zend_class_entry *opencv_face_recognizer_ce;
 
-#ifdef HAVE_OPENCV_FACE
-
-#include <opencv2/face.hpp>
-using namespace face;
-
-#include "face/opencv_facerec.h"
-#include "face/opencv_facemarkLBF.h"
+#ifndef PHP_OPENCV_FACEMARK_LBF_H
+#define PHP_OPENCV_FACEMARK_LBF_H
 
 
 /**
- * opencv_face_recognizer_methods[]
+ * -----------------------------------【CV\LBPHFaceRecognizer】-------------------------
+ *
+ * -------------------------------------------------------------------------------------
  */
-const zend_function_entry opencv_face_recognizer_methods[] = {
-        PHP_FE_END
-};
-/* }}} */
+extern void opencv_facemark_lbf_init(int module_number);
 
 
-void opencv_face_recognizer_init(int module_number){
-    zend_class_entry ce;
-    INIT_NS_CLASS_ENTRY(ce,OPENCV_FACE_NS, "FaceRecognizer", opencv_face_recognizer_methods);
-    opencv_face_recognizer_ce = zend_register_internal_class(&ce);
-}
 
-void opencv_face_init(int module_number){
-    opencv_face_recognizer_init(module_number);
-    opencv_lbph_face_recognizer_init(module_number);
-    opencv_base_face_recognizer_init(module_number);
-    opencv_facemark_lbf_init(module_number);
-    opencv_base_facemark_init(module_number);
-}
+/**
+ * -----------------------------------【CV\BaseFaceRecognizer】-------------------------
+ *
+ * -------------------------------------------------------------------------------------
+ */
+extern void opencv_base_facemark_init(int module_number);
 
-#else
 
-void opencv_face_init(int module_number){
-
-}
-
-#endif
-
+#endif //PHP_OPENCV_FACEMARK_LBF_H

@@ -1,5 +1,5 @@
 --TEST--
-Check for opencv presence
+FacemarkLBF::create
 --SKIPIF--
 <?php if (!extension_loaded("opencv")) print "skip"; ?>
 --FILE--

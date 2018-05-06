@@ -381,7 +381,7 @@ PHP_METHOD(opencv_mat, at)
         //get px value
         switch (this_object->mat->channels()){
             case 1:
-                this_object->mat->at<uchar>((int)row,(int)col);
+            RETURN_LONG(this_object->mat->at<uchar>((int)row,(int)col));
                 break;
             case 2:
             RETURN_LONG(this_object->mat->at<Vec2b>((int)row,(int)col)[channel]);

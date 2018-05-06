@@ -59,7 +59,8 @@ PHP_METHOD(opencv_facemark_lbf, create)
 PHP_METHOD(opencv_facemark_lbf, loadModel)
 {
     char *filename;
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &filename) == FAILURE) {
+    size_t filename_len;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &filename, &filename_len) == FAILURE) {
         RETURN_NULL();
     }
 

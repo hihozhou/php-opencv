@@ -18,4 +18,11 @@ CV\Mat::__set_state(array(
    'rows' => -1,
    'cols' => -1,
    'dims' => 4,
+   'shape' => 
+  array (
+    0 => 1,
+    1 => 3,
+    2 => 48,
+    3 => 48,
+  ),
 ))

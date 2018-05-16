@@ -131,7 +131,8 @@ PHP_METHOD(opencv_lbph_face_recognizer, predictConfidence)
 PHP_METHOD(opencv_lbph_face_recognizer, read)
 {
     char *filename;
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &filename) == FAILURE) {
+    size_t filename_len;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &filename, &filename_len) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -143,7 +144,8 @@ PHP_METHOD(opencv_lbph_face_recognizer, read)
 PHP_METHOD(opencv_lbph_face_recognizer, write)
 {
     char *filename;
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &filename) == FAILURE) {
+    size_t filename_len;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &filename, &filename_len) == FAILURE) {
         RETURN_NULL();
     }
 

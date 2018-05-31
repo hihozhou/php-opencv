@@ -29,9 +29,10 @@ $src = imread("./tests/Obama_gray.png");
 $gray = cvtColor($src, COLOR_BGR2GRAY);
 equalizeHist($gray, $gray);
 
+$faceLabel = $faceRecognizer->predict($gray, $faceConfidence);
+
 $faceLabel = $faceRecognizer->predict($gray);
 
-$faceConfidence = $faceRecognizer->predictConfidence($gray);
 echo "{$faceLabel}";
 ?>
 --EXPECT--

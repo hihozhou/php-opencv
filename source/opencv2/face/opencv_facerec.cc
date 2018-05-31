@@ -102,30 +102,34 @@ PHP_METHOD(opencv_lbph_face_recognizer, train)
 
 }
 
+ZEND_BEGIN_ARG_INFO_EX(opencv_lbph_face_recognizer_predict_arginfo, 0, 0, 2)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, confidence)
+ZEND_END_ARG_INFO()
+
 PHP_METHOD(opencv_lbph_face_recognizer, predict)
 {
-    zval *src_zval;
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "o", &src_zval, opencv_mat_ce) == FAILURE) {
-        RETURN_NULL();
-    }
-    opencv_lbph_face_recognizer_object *obj = Z_PHP_LBPH_FACE_RECOGNIZER_OBJ_P(getThis());
-    opencv_mat_object *src_object = Z_PHP_MAT_OBJ_P(src_zval);
-    int predict_label = obj->faceRecognizer->predict(*src_object->mat);
-    RETURN_LONG(predict_label);
-}
-
-PHP_METHOD(opencv_lbph_face_recognizer, predictConfidence)
-{
-    zval *src_zval;
-    int label = 0;
+    zval *src_zval, *confidence_zval = NULL;
+    int label;
     double confidence = 0;
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "o", &src_zval, opencv_mat_ce) == FAILURE) {
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "O|z", &src_zval, opencv_mat_ce, &confidence_zval) == FAILURE) {
         RETURN_NULL();
     }
+
     opencv_lbph_face_recognizer_object *obj = Z_PHP_LBPH_FACE_RECOGNIZER_OBJ_P(getThis());
     opencv_mat_object *src_object = Z_PHP_MAT_OBJ_P(src_zval);
     obj->faceRecognizer->predict(*src_object->mat, label, confidence);
-    RETURN_DOUBLE(confidence);
+
+    zval *confidence_real_zval;
+
+    if (confidence_zval != NULL) {
+        confidence_real_zval = Z_REFVAL_P(confidence_zval);
+        zval_ptr_dtor(confidence_real_zval);
+        ZVAL_DOUBLE(confidence_real_zval, confidence);
+    }
+
+    RETURN_LONG(label);
 }
 
 PHP_METHOD(opencv_lbph_face_recognizer, read)
@@ -206,9 +210,7 @@ PHP_METHOD(opencv_lbph_face_recognizer, update)
 const zend_function_entry opencv_lbph_face_recognizer_methods[] = {
         PHP_ME(opencv_lbph_face_recognizer, create, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
         PHP_ME(opencv_lbph_face_recognizer, train, NULL, ZEND_ACC_PUBLIC)
-        PHP_ME(opencv_lbph_face_recognizer, predict, NULL, ZEND_ACC_PUBLIC)
-        // todo
-        PHP_ME(opencv_lbph_face_recognizer, predictConfidence, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_lbph_face_recognizer, predict, opencv_lbph_face_recognizer_predict_arginfo, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_lbph_face_recognizer, read, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_lbph_face_recognizer, write, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_lbph_face_recognizer, update, NULL, ZEND_ACC_PUBLIC)

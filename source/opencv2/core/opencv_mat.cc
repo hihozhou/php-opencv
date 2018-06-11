@@ -220,6 +220,12 @@ PHP_METHOD(opencv_mat, channels)
     RETURN_LONG(obj->mat->channels());
 }
 
+PHP_METHOD(opencv_mat, total)
+{
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
+    RETURN_LONG(obj->mat->total());
+}
+
 PHP_METHOD(opencv_mat, empty)
 {
     opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
@@ -505,12 +511,12 @@ PHP_METHOD(opencv_mat, at)
  */
 PHP_METHOD(opencv_mat, atIdx) // multi dimensions support
 {
-    long channel;
+    long channel = 1;
     zval *value_zval = NULL;
     zval *idx_zval;
     int *idx = nullptr;
 
-    if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, ZEND_NUM_ARGS(), "al|z", &idx_zval, &channel, &value_zval) == FAILURE) {
+    if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, ZEND_NUM_ARGS(), "a|lz", &idx_zval, &channel, &value_zval) == FAILURE) {
         RETURN_NULL();
     }
 

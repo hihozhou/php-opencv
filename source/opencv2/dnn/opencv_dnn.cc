@@ -47,7 +47,7 @@ zend_class_entry *opencv_dnn_net_ce;
 
 zend_class_entry *opencv_base_dnn_net_ce;
 
-PHP_METHOD(opencv_dnn_net, blobFromImage)
+PHP_FUNCTION(opencv_dnn_blob_from_image)
 {
     zval *image_zval, *size_zval, *mean_zval;
     double scalefactor = 1.;
@@ -78,7 +78,7 @@ PHP_METHOD(opencv_dnn_net, blobFromImage)
     RETURN_ZVAL(&instance,0,0); //return php Mat object
 }
 
-PHP_METHOD(opencv_dnn_net, readNetFromTorch)
+PHP_FUNCTION(opencv_dnn_read_net_from_torch)
 {
     char *filename;
     size_t filename_len;
@@ -94,12 +94,7 @@ PHP_METHOD(opencv_dnn_net, readNetFromTorch)
     RETURN_ZVAL(&instance,0,0);
 }
 
-ZEND_BEGIN_ARG_INFO_EX(opencv_dnn_net_readNetFromCaffe_arginfo, 0, 0, 2)
-                ZEND_ARG_INFO(0, prototxt)
-                ZEND_ARG_INFO(0, caffeModel)
-ZEND_END_ARG_INFO()
-
-PHP_METHOD(opencv_dnn_net, readNetFromCaffe)
+PHP_FUNCTION(opencv_dnn_read_net_from_caffe)
 {
     char *prototxt, *caffeModel;
     size_t prototxt_len, caffeModel_len;
@@ -125,6 +120,36 @@ PHP_METHOD(opencv_dnn_net, readNetFromCaffe)
 
     //obj->DNNNet = readNetFromCaffe(protoData.c_str(), protoData.size());
     obj->DNNNet = readNetFromCaffe(protoData.c_str(), protoData.size(), modelData.c_str(), modelData.size());
+
+    RETURN_ZVAL(&instance,0,0);
+}
+
+PHP_FUNCTION(opencv_dnn_read_net_from_tensorflow)
+{
+    char *model, *config;
+    size_t model_len, config_len;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ss", &model, &model_len, &config, &config_len) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    ifstream modelFile;
+    modelFile.open(model);//open the input file
+    stringstream modelStream;
+    modelStream << modelFile.rdbuf();//read the file
+    string modelData = modelStream.str();
+
+    ifstream configFile;
+    configFile.open(config, ios::binary);//open the input file
+    stringstream configStream;
+    configStream << configFile.rdbuf();//read the file
+    string configData = configStream.str();
+
+    zval instance;
+    object_init_ex(&instance, opencv_dnn_net_ce);
+    opencv_dnn_net_object *obj = Z_PHP_DNN_NET_OBJ_P(&instance);
+
+    //obj->DNNNet = readNetFromTensorflow(modelData.c_str(), modelData.size());
+    obj->DNNNet = readNetFromTensorflow(modelData.c_str(), modelData.size(), configData.c_str(), configData.size());
 
     RETURN_ZVAL(&instance,0,0);
 }
@@ -168,9 +193,6 @@ PHP_METHOD(opencv_dnn_net, forward)
  * opencv_dnn_net_methods[]
  */
 const zend_function_entry opencv_dnn_net_methods[] = {
-        PHP_ME(opencv_dnn_net, blobFromImage, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-        PHP_ME(opencv_dnn_net, readNetFromTorch, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-        PHP_ME(opencv_dnn_net, readNetFromCaffe, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
         PHP_ME(opencv_dnn_net, setInput, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_dnn_net, forward, NULL, ZEND_ACC_PUBLIC)
         PHP_FE_END
@@ -193,7 +215,7 @@ zend_object* opencv_dnn_net_handler(zend_class_entry *type)
     return &obj->std;
 }
 
-void opencv_dnn_net_init(int module_number){
+void opencv_dnn_init(int module_number){
     zend_class_entry ce;
     INIT_NS_CLASS_ENTRY(ce,OPENCV_DNN_NS, "Net", opencv_dnn_net_methods);
     opencv_dnn_net_ce = zend_register_internal_class_ex(&ce, opencv_dnn_net_ce);
@@ -204,7 +226,7 @@ void opencv_dnn_net_init(int module_number){
 
 #else
 
-void opencv_dnn_net_init(int module_number){
+void opencv_dnn_init(int module_number){
 
 }
 

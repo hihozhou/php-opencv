@@ -24,6 +24,10 @@
 #include <streambuf>
 
 
-extern void opencv_dnn_net_init(int module_number);
+extern void opencv_dnn_init(int module_number);
 
 #endif
+PHP_FUNCTION(opencv_dnn_blob_from_image);
+PHP_FUNCTION(opencv_dnn_read_net_from_torch);
+PHP_FUNCTION(opencv_dnn_read_net_from_caffe);
+PHP_FUNCTION(opencv_dnn_read_net_from_tensorflow);

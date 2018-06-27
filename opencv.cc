@@ -43,6 +43,7 @@ extern "C" {
 #include "source/opencv2/core/opencv_utility.h"
 #include "source/opencv2/opencv_ml.h"
 #include "source/opencv2/core/opencv_cvdef.h"
+#include "source/opencv2/dnn/opencv_dnn.h"
 
 /* If you declare any globals in php_opencv.h uncomment this:
 ZEND_DECLARE_MODULE_GLOBALS(opencv)
@@ -124,6 +125,7 @@ PHP_MINIT_FUNCTION(opencv)
 	opencv_objdetect_init(module_number);
 	opencv_videoio_init(module_number);
     opencv_face_init(module_number);
+    opencv_dnn_init(module_number);
 	opencv_ml_init(module_number);
     opencv_cvdef_init(module_number);
 
@@ -244,6 +246,10 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, findContoursWithoutHierarchy, ZEND_FN(opencv_find_contours_without_hierarchy), opencv_find_contours_without_hierarchy_arginfo)
     ZEND_NS_NAMED_FE(OPENCV_NS, drawContours, ZEND_FN(opencv_draw_contours), opencv_draw_contours_arginfo)
     ZEND_NS_NAMED_FE(OPENCV_NS, boundingRect, ZEND_FN(opencv_bounding_rect), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_DNN_NS, blobFromImage, ZEND_FN(opencv_dnn_blob_from_image), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_DNN_NS, readNetFromCaffe, ZEND_FN(opencv_dnn_read_net_from_caffe), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_DNN_NS, readNetFromTorch, ZEND_FN(opencv_dnn_read_net_from_torch), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_DNN_NS, readNetFromTensorflow, ZEND_FN(opencv_dnn_read_net_from_tensorflow), NULL)
 	PHP_FE_END	/* Must be the last line in opencv_functions[] */
 };
 /* }}} */

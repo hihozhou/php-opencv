@@ -54,6 +54,107 @@ void opencv_mat_update_property_by_c_mat(zval *z,Mat *mat){
     zend_update_property_long(opencv_mat_ce, z, "cols", sizeof("cols")-1, mat->cols);
     zend_update_property_long(opencv_mat_ce, z, "dims", sizeof("dims")-1, mat->dims);
     zend_update_property_long(opencv_mat_ce, z, "type", sizeof("type")-1, mat->type());
+    //zend_update_property_long(opencv_mat_ce, z, "depth", sizeof("depth")-1, mat->depth());
+
+    if (mat->dims > 2) {
+        zval shape_zval;
+        array_init(&shape_zval);
+        for(int i = 0; i < mat->dims; i++)
+        {
+            add_next_index_long(&shape_zval, mat->size.p[i]);
+        }
+        zend_update_property(opencv_mat_ce, z, "shape", sizeof("shape")-1, &shape_zval);
+    }
+}
+
+void opencv_mat_at(Mat *mat, int *idx, long channel, zval *value_zval, long *return_long_val, double *return_double_val) {
+    uchar *return_uchar_val;
+    schar *return_schar_val;
+    ushort *return_ushort_val;
+    short *return_short_val;
+    int *return_int_val;
+    float *return_float_val;
+
+    switch(mat->type()) {
+        //CV_8U
+        case CV_8UC1: return_uchar_val = &mat->at<uchar>(idx); break;
+        case CV_8UC2: return_uchar_val = &mat->at<Vec2b>(idx)[channel]; break;
+        case CV_8UC3: return_uchar_val = &mat->at<Vec3b>(idx)[channel]; break;
+        case CV_8UC4: return_uchar_val = &mat->at<Vec4b>(idx)[channel]; break;
+
+        //CV_8S
+        case CV_8SC1: return_schar_val = &mat->at<schar>(idx); break;
+        case CV_8SC2: return_schar_val = &mat->at<Vec<schar, 2>>(idx)[channel]; break;
+        case CV_8SC3: return_schar_val = &mat->at<Vec<schar, 3>>(idx)[channel]; break;
+        case CV_8SC4: return_schar_val = &mat->at<Vec<schar, 4>>(idx)[channel]; break;
+
+        //CV_16U
+        case CV_16UC1: return_ushort_val = &mat->at<ushort>(idx); break;
+        case CV_16UC2: return_ushort_val = &mat->at<Vec2w>(idx)[channel]; break;
+        case CV_16UC3: return_ushort_val = &mat->at<Vec3w>(idx)[channel]; break;
+        case CV_16UC4: return_ushort_val = &mat->at<Vec4w>(idx)[channel]; break;
+
+        //CV_16S
+        case CV_16SC1: return_short_val = &mat->at<short>(idx); break;
+        case CV_16SC2: return_short_val = &mat->at<Vec2s>(idx)[channel]; break;
+        case CV_16SC3: return_short_val = &mat->at<Vec3s>(idx)[channel]; break;
+        case CV_16SC4: return_short_val = &mat->at<Vec4s>(idx)[channel]; break;
+
+        //CV_32S
+        case CV_32SC1: return_int_val = &mat->at<int>(idx); break;
+        case CV_32SC2: return_int_val = &mat->at<Vec2i>(idx)[channel]; break;
+        case CV_32SC3: return_int_val = &mat->at<Vec3i>(idx)[channel]; break;
+        case CV_32SC4: return_int_val = &mat->at<Vec4i>(idx)[channel]; break;
+
+        //CV_32F
+        case CV_32FC1: return_float_val = &mat->at<float>(idx); break;
+        case CV_32FC2: return_float_val = &mat->at<Vec2f>(idx)[channel]; break;
+        case CV_32FC3: return_float_val = &mat->at<Vec3f>(idx)[channel]; break;
+        case CV_32FC4: return_float_val = &mat->at<Vec4f>(idx)[channel]; break;
+
+        //CV_64F
+        case CV_64FC1: return_double_val = &mat->at<double>(idx); break;
+        case CV_64FC2: return_double_val = &mat->at<Vec2d>(idx)[channel]; break;
+        case CV_64FC3: return_double_val = &mat->at<Vec3d>(idx)[channel]; break;
+        case CV_64FC4: return_double_val = &mat->at<Vec4d>(idx)[channel]; break;
+
+        default: opencv_throw_exception("Wrong Mat type"); break;
+    }
+
+    //get px value
+    switch(mat->depth()){
+        case CV_8U: *return_long_val = *return_uchar_val; break;
+        case CV_8S: *return_long_val = *return_schar_val; break;
+        case CV_16U: *return_long_val = *return_ushort_val; break;
+        case CV_16S: *return_long_val = *return_short_val; break;
+        case CV_32S: *return_long_val = *return_int_val; break;
+        case CV_32F: *return_double_val = *return_float_val; break;
+        case CV_64F: break;
+
+        default: opencv_throw_exception("Wrong Mat type"); break;
+    }
+
+    //set px value
+    if (value_zval != NULL) {
+        switch(mat->depth()){
+            case CV_32F:
+            case CV_64F: convert_to_double(value_zval); break;
+            default: convert_to_long(value_zval); break;
+        }
+
+        zend_long value = Z_LVAL_P(value_zval);
+        switch(mat->depth()){
+            case CV_8U: *return_uchar_val = saturate_cast<uchar>(Z_LVAL_P(value_zval)); break;
+            case CV_8S: *return_schar_val = saturate_cast<schar>(Z_LVAL_P(value_zval)); break;
+            case CV_16U: *return_ushort_val = saturate_cast<ushort>(Z_LVAL_P(value_zval)); break;
+            case CV_16S: *return_short_val = saturate_cast<short>(Z_LVAL_P(value_zval)); break;
+            case CV_32S: *return_int_val = saturate_cast<int>(Z_LVAL_P(value_zval)); break;
+            case CV_32F: *return_float_val = saturate_cast<float>(Z_DVAL_P(value_zval)); break;
+            case CV_64F: *return_double_val = saturate_cast<double>(Z_DVAL_P(value_zval)); break;
+
+            default: opencv_throw_exception("Wrong Mat type"); break;
+        }
+    }
 }
 
 /**
@@ -117,6 +218,12 @@ PHP_METHOD(opencv_mat, channels)
 {
     opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
     RETURN_LONG(obj->mat->channels());
+}
+
+PHP_METHOD(opencv_mat, total)
+{
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
+    RETURN_LONG(obj->mat->total());
 }
 
 PHP_METHOD(opencv_mat, empty)
@@ -363,7 +470,6 @@ PHP_METHOD(opencv_mat, copy_to)
 }
 
 /**
- * //todo int,fload,double
  * CV\Mat->at
  * @param execute_data
  * @param return_value
@@ -376,77 +482,88 @@ PHP_METHOD(opencv_mat, at)
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "lll|z", &row, &col, &channel, &value_zval) == FAILURE) {
         RETURN_NULL();
     }
+
     opencv_mat_object *this_object = Z_PHP_MAT_OBJ_P(getThis());
-    if(value_zval == NULL){
-        //get px value
-        switch (this_object->mat->channels()){
-            case 1:
-                this_object->mat->at<uchar>((int)row,(int)col);
-                break;
-            case 2:
-            RETURN_LONG(this_object->mat->at<Vec2b>((int)row,(int)col)[channel]);
-                break;
-            case 3:
-            RETURN_LONG(this_object->mat->at<Vec3b>((int)row,(int)col)[channel]);
-                break;
-            case 4:
-            RETURN_LONG(this_object->mat->at<Vec4b>((int)row,(int)col)[channel]);
-                break;
-            default:
-                opencv_throw_exception("Get Mat px only channel in 1,2,3,4.");
-                break;
-        }
+    zval *idx_zval;
+    int *idx;
+    long return_long_val;
+    double return_double_val;
 
+    idx = new int(2);
+    idx[0] = row;
+    idx[1] = col;
 
-    }else{
-        //set px value
-        convert_to_long(value_zval);
-        zend_long value = Z_LVAL_P(value_zval);
-        switch(this_object->mat->depth()){
-            case CV_8U:
-                switch (this_object->mat->channels()){
-                    case 1:
-                        this_object->mat->at<uchar>((int)row,(int)col) = saturate_cast<uchar>(value);
-                        break;
-                    case 2:
-                        this_object->mat->at<Vec2b>((int)row,(int)col)[channel]=saturate_cast<uchar>(value);
-                        break;
-                    case 3:
-                        this_object->mat->at<Vec3b>((int)row,(int)col)[channel]=saturate_cast<uchar>(value);
-                        break;
-                    case 4:
-                        this_object->mat->at<Vec4b>((int)row,(int)col)[channel]=saturate_cast<uchar>(value);
-                        break;
-                    default:
-                        opencv_throw_exception("Get Mat px only channel in 1,2,3,4.");
-                        break;
-                }
-                break;
-            default:
-                switch (this_object->mat->channels()){
-                    case 1:
-                        this_object->mat->at<uchar>((int)row,(int)col) = saturate_cast<char>(value);
-                        break;
-                    case 2:
-                        this_object->mat->at<Vec2b>((int)row,(int)col)[channel]=saturate_cast<char>(value);
-                        break;
-                    case 3:
-                        this_object->mat->at<Vec3b>((int)row,(int)col)[channel]=saturate_cast<char>(value);
-                        break;
-                    case 4:
-                        this_object->mat->at<Vec4b>((int)row,(int)col)[channel]=saturate_cast<char>(value);
-                        break;
-                    default:
-                        opencv_throw_exception("Get Mat px only channel in 1,2,3,4.");
-                        break;
-                }
-                break;
-        }
+    opencv_mat_at(this_object->mat, idx, channel, value_zval, &return_long_val, &return_double_val);
 
+    switch (this_object->mat->depth()){
+        case CV_32F:
+        case CV_64F:
+            RETURN_DOUBLE(return_double_val);
+        default:
+            RETURN_LONG(return_long_val);
     }
-    RETURN_NULL();
 }
 
+/**
+ * CV\Mat->atIdx
+ * @param execute_data
+ * @param return_value
+ */
+PHP_METHOD(opencv_mat, atIdx) // multi dimensions support
+{
+    long channel = 1;
+    zval *value_zval = NULL;
+    zval *idx_zval;
+    int *idx = nullptr;
+
+    if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, ZEND_NUM_ARGS(), "a|lz", &idx_zval, &channel, &value_zval) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_mat_object *this_object = Z_PHP_MAT_OBJ_P(getThis());
+
+    unsigned long idx_count = zend_hash_num_elements(Z_ARRVAL_P(idx_zval));
+
+    if (idx_count == 0) {
+        opencv_throw_exception("array lenght must be >=1");
+        RETURN_NULL();
+    } else if (idx_count != this_object->mat->dims) {
+        opencv_throw_exception("array lenght must be = dims");
+        RETURN_NULL();
+    }
+
+    idx = new int(idx_count);
+    zval *array_val_zval;
+    zend_ulong _h;
+
+    ZEND_HASH_FOREACH_NUM_KEY_VAL(Z_ARRVAL_P(idx_zval),_h,array_val_zval){
+                again:
+                if(Z_TYPE_P(array_val_zval) == IS_LONG){
+                    //idx.push_back((int)zval_get_long(array_val_zval));
+                    idx[_h] = (int)zval_get_long(array_val_zval);
+                }else if(Z_TYPE_P(array_val_zval) == IS_REFERENCE){
+                    array_val_zval = Z_REFVAL_P(array_val_zval);
+                    goto again;
+                } else {
+                    opencv_throw_exception("array value just number.");
+                    RETURN_NULL();
+                }
+    }ZEND_HASH_FOREACH_END();
+
+    long return_long_val;
+    double return_double_val;
+
+    opencv_mat_at(this_object->mat, idx, channel, value_zval, &return_long_val, &return_double_val);
+
+
+    switch (this_object->mat->depth()){
+        case CV_32F:
+        case CV_64F:
+            RETURN_DOUBLE(return_double_val);
+        default:
+            RETURN_LONG(return_long_val);
+    }
+}
 
 ZEND_BEGIN_ARG_INFO_EX(opencv_mat_convert_to_arginfo, 0, 0, 4)
                 ZEND_ARG_INFO(1, dst)
@@ -656,6 +773,7 @@ const zend_function_entry opencv_mat_methods[] = {
         PHP_ME(opencv_mat, row, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, col, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, at, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_mat, atIdx, NULL, ZEND_ACC_PUBLIC)
         PHP_MALIAS(opencv_mat, getImageROI ,get_image_roi, NULL, ZEND_ACC_PUBLIC)
         PHP_MALIAS(opencv_mat, copyTo ,copy_to, opencv_mat_copy_to_arginfo, ZEND_ACC_PUBLIC)
         PHP_MALIAS(opencv_mat, convertTo ,convert_to, opencv_mat_convert_to_arginfo, ZEND_ACC_PUBLIC)

@@ -99,7 +99,7 @@ PHP_FUNCTION(opencv_imdecode)
     object_init_ex(&instance,opencv_mat_ce);
     opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(&instance);
 
-    Mat im = imdecode(Mat(1, buf_len, CV_8UC1, buf), CV_LOAD_IMAGE_UNCHANGED);
+    Mat im = imdecode(Mat(1, buf_len, CV_8UC1, buf), (int)flags);
     if(im.empty() || !im.data){
         char *error_message = (char*)malloc(strlen("Can not load image") + 1);
         strcpy(error_message,"Can not load image");

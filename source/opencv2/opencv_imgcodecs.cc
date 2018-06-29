@@ -80,6 +80,40 @@ PHP_FUNCTION(opencv_imwrite){
     RETURN_TRUE;
 }
 
+/**
+ * CV\imdecode
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_imdecode)
+{
+    long flags;
+    char *buf;
+    long buf_len;
+    flags = IMREAD_COLOR;//flags default value
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s|l", &buf,&buf_len, &flags) == FAILURE) {
+        RETURN_NULL();
+    }
+    zval instance;
+    object_init_ex(&instance,opencv_mat_ce);
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(&instance);
+
+    Mat im = imdecode(Mat(1, buf_len, CV_8UC1, buf), CV_LOAD_IMAGE_UNCHANGED);
+    if(im.empty() || !im.data){
+        char *error_message = (char*)malloc(strlen("Can not load image") + 1);
+        strcpy(error_message,"Can not load image");
+        opencv_throw_exception(error_message);//throw exception
+        free(error_message);
+    }
+
+    obj->mat = new Mat(im);
+
+    //update php Mat object property
+    opencv_mat_update_property_by_c_mat(&instance, obj->mat);
+
+    RETURN_ZVAL(&instance,0,0); //return php Mat object
+}
 
 void opencv_imgcodecs_init(int module_number)
 {

@@ -115,6 +115,8 @@ result:
 
 ![ellipse](tests/ellipse.png)
 
+### Other examples
+- [phpopencv/tutorial-demo](https://github.com/phpopencv/tutorial-demo)
 
 
 ## Features
@@ -137,8 +139,10 @@ result:
 - [ ] 17.ts
 - [x] 18.video
 - [ ] 19.Videostab
+- [X] 20.dnn
 
-
+## Auto complete
+- [hihozhou/php-opencv-ide-helper](https://github.com/hihozhou/php-opencv-ide-helper)
 
 ## Contributors
 

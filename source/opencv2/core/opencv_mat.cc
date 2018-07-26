@@ -30,9 +30,9 @@ zend_class_entry *opencv_mat_ce;
  */
 zend_object* opencv_mat_create_handler(zend_class_entry *type)
 {
-    int size = sizeof(opencv_mat_object);
+    int size = sizeof(opencv_mat_object)+zend_object_properties_size(type);
     opencv_mat_object *obj = (opencv_mat_object *)ecalloc(1,size);
-    memset(obj, 0, sizeof(opencv_mat_object));
+    memset(obj, 0, size);
     zend_object_std_init(&obj->std, type);
     object_properties_init(&obj->std, type);
     obj->std.ce = type;
@@ -827,6 +827,7 @@ void opencv_mat_init(void){
 
     zend_declare_property_null(opencv_mat_ce,"type",sizeof("type") - 1,ZEND_ACC_PRIVATE);//private Mat->type
     opencv_mat_object_handlers.free_obj = opencv_mat_free_obj;
+    opencv_mat_object_handlers.offset = XtOffsetOf(opencv_mat_object, std);
 }
 
 

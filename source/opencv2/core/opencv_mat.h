@@ -28,8 +28,8 @@ extern zend_class_entry *opencv_mat_ce;
 #define Z_PHP_MAT_OBJ_P(zv)  get_mat_obj(Z_OBJ_P(zv))
 
 typedef struct _opencv_mat_object{
-    zend_object std;
     Mat *mat;
+    zend_object std;
 }opencv_mat_object;
 
 

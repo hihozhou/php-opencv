@@ -28,8 +28,8 @@ using namespace std;
 #define Z_PHP_DNN_NET_OBJ_P(zv)  get_dnn_net_obj(Z_OBJ_P(zv))
 
 typedef struct _opencv_dnn_net_object{
-    zend_object std;
     Net DNNNet;
+    zend_object std;
 }opencv_dnn_net_object;
 
 
@@ -205,9 +205,9 @@ const zend_function_entry opencv_dnn_net_methods[] = {
  */
 zend_object* opencv_dnn_net_handler(zend_class_entry *type)
 {
-    size_t size = sizeof(opencv_dnn_net_object);
+    size_t size = sizeof(opencv_dnn_net_object)+zend_object_properties_size(type);
     opencv_dnn_net_object *obj = (opencv_dnn_net_object *)ecalloc(1,size);
-    memset(obj, 0, sizeof(opencv_dnn_net_object));
+    memset(obj, 0, size);
     zend_object_std_init(&obj->std, type);
     object_properties_init(&obj->std, type);
     obj->std.ce = type;
@@ -222,6 +222,7 @@ void opencv_dnn_init(int module_number){
 
     opencv_dnn_net_ce->create_object = opencv_dnn_net_handler;
     memcpy(&opencv_dnn_net_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+    opencv_dnn_net_object_handlers.offset = XtOffsetOf(opencv_dnn_net_object, std);
 }
 
 #else

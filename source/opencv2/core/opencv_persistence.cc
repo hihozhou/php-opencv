@@ -24,9 +24,9 @@ zend_class_entry *opencv_file_storage_ce;
 zend_object_handlers opencv_file_storage_object_handlers;
 
 zend_object* opencv_file_storage_create_handler(zend_class_entry *type){
-    size_t size = sizeof(opencv_file_storage_object);
+    size_t size = sizeof(opencv_file_storage_object)+zend_object_properties_size(type);
     opencv_file_storage_object *obj = (opencv_file_storage_object *)ecalloc(1,size);
-    memset(obj, 0, sizeof(opencv_file_storage_object));
+    memset(obj, 0, size);
     zend_object_std_init(&obj->std, type);
     object_properties_init(&obj->std, type);
     obj->std.ce = type;
@@ -278,5 +278,6 @@ void opencv_file_storage_init(int module_number){
 
 //    zend_declare_property_null(opencv_mat_ce,"type",sizeof("type") - 1,ZEND_ACC_PRIVATE);//private Mat->type
 //    opencv_mat_object_handlers.free_obj = opencv_mat_free_obj;
+    opencv_file_storage_object_handlers.offset = XtOffsetOf(opencv_file_storage_object, std);
     opencv_file_storage_consts_init(module_number);
 }

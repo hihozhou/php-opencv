@@ -123,9 +123,9 @@ const zend_function_entry opencv_k_nearest_methods[] = {
  */
 zend_object* opencv_k_nearest_handler(zend_class_entry *type)
 {
-    size_t size = sizeof(opencv_k_nearest_object);
+    size_t size = sizeof(opencv_k_nearest_object)+zend_object_properties_size(type);
     opencv_k_nearest_object *obj = (opencv_k_nearest_object *)ecalloc(1,size);
-    memset(obj, 0, sizeof(opencv_k_nearest_object));
+    memset(obj, 0, size);
     zend_object_std_init(&obj->std, type);
     object_properties_init(&obj->std, type);
     obj->std.ce = type;
@@ -152,4 +152,5 @@ void opencv_k_nearest_init(int module_number){
            zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     opencv_k_nearest_object_handlers.clone_obj = NULL;
     opencv_k_nearest_object_handlers.free_obj = opencv_k_nearest_free_obj;
+    opencv_k_nearest_object_handlers.offset = XtOffsetOf(opencv_k_nearest_object, std);
 }

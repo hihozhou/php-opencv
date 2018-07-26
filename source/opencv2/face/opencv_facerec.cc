@@ -27,8 +27,8 @@ using namespace cv::face;
 #define Z_PHP_LBPH_FACE_RECOGNIZER_OBJ_P(zv)  get_lbph_face_recognizer_obj(Z_OBJ_P(zv))
 
 typedef struct _opencv_lbph_face_recognizer_object{
-    zend_object std;
     Ptr<LBPHFaceRecognizer> faceRecognizer;
+    zend_object std;
 }opencv_lbph_face_recognizer_object;
 
 
@@ -224,9 +224,9 @@ const zend_function_entry opencv_lbph_face_recognizer_methods[] = {
  */
 zend_object* opencv_lbph_face_recognizer_handler(zend_class_entry *type)
 {
-    size_t size = sizeof(opencv_lbph_face_recognizer_object);
+    size_t size = sizeof(opencv_lbph_face_recognizer_object)+zend_object_properties_size(type);
     opencv_lbph_face_recognizer_object *obj = (opencv_lbph_face_recognizer_object *)ecalloc(1,size);
-    memset(obj, 0, sizeof(opencv_lbph_face_recognizer_object));
+    memset(obj, 0, size);
     zend_object_std_init(&obj->std, type);
     object_properties_init(&obj->std, type);
     obj->std.ce = type;
@@ -253,6 +253,7 @@ void opencv_lbph_face_recognizer_init(int module_number){
            zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     opencv_lbph_face_recognizer_object_handlers.clone_obj = NULL;
     opencv_lbph_face_recognizer_object_handlers.free_obj = opencv_lbph_face_recognizer_free_obj;
+    opencv_lbph_face_recognizer_object_handlers.offset = XtOffsetOf(opencv_lbph_face_recognizer_object, std);
 }
 
 

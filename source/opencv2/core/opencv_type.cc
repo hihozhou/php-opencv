@@ -83,9 +83,9 @@ const zend_function_entry opencv_point_methods[] = {
 
 zend_object* opencv_point_create_handler(zend_class_entry *type)
 {
-    size_t size = sizeof(opencv_point_object);
+    size_t size = sizeof(opencv_point_object)+zend_object_properties_size(type);
     opencv_point_object *obj = (opencv_point_object *)ecalloc(1,size);
-    memset(obj, 0, sizeof(opencv_point_object));
+    memset(obj, 0, size);
     zend_object_std_init(&obj->std, type);
     object_properties_init(&obj->std, type);
     obj->std.ce = type;
@@ -138,6 +138,7 @@ void opencv_point_init(int module_number){
     opencv_point_object_handlers.clone_obj = NULL;
     opencv_point_object_handlers.write_property = opencv_point_write_property;
     opencv_point_object_handlers.free_obj = opencv_point_free_obj;
+    opencv_point_object_handlers.offset = XtOffsetOf(opencv_point_object, std);
 }
 
 
@@ -154,9 +155,9 @@ zend_object_handlers opencv_scalar_object_handlers;
 
 zend_object* opencv_scalar_create_handler(zend_class_entry *type)
 {
-    size_t size = sizeof(opencv_scalar_object);
+    size_t size = sizeof(opencv_scalar_object)+zend_object_properties_size(type);
     opencv_scalar_object *obj = (opencv_scalar_object *)ecalloc(1,size);
-    memset(obj, 0, sizeof(opencv_scalar_object));
+    memset(obj, 0, size);
     zend_object_std_init(&obj->std, type);
     object_properties_init(&obj->std, type);
     obj->std.ce = type;
@@ -245,6 +246,7 @@ void opencv_scalar_init(int module_number){
            zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     opencv_scalar_object_handlers.clone_obj = NULL;
     opencv_scalar_object_handlers.free_obj = opencv_scalar_free_obj;
+    opencv_scalar_object_handlers.offset = XtOffsetOf(opencv_scalar_object, std);
 }
 
 
@@ -258,9 +260,9 @@ zend_object_handlers opencv_size_object_handlers;
 
 zend_object* opencv_size_create_handler(zend_class_entry *type)
 {
-    size_t size = sizeof(opencv_size_object);
+    size_t size = sizeof(opencv_size_object)+zend_object_properties_size(type);
     opencv_size_object *obj = (opencv_size_object *)ecalloc(1,size);
-    memset(obj, 0, sizeof(opencv_size_object));
+    memset(obj, 0, size);
     zend_object_std_init(&obj->std, type);
     object_properties_init(&obj->std, type);
     obj->std.ce = type;
@@ -362,6 +364,7 @@ void opencv_size_init(int module_number){
     opencv_size_object_handlers.clone_obj = NULL;
     opencv_size_object_handlers.write_property = opencv_size_write_property;
     opencv_size_object_handlers.free_obj = opencv_size_free_obj;
+    opencv_size_object_handlers.offset = XtOffsetOf(opencv_size_object, std);
 }
 
 
@@ -375,9 +378,9 @@ zend_object_handlers opencv_rect_object_handlers;
 
 zend_object* opencv_rect_create_handler(zend_class_entry *type)
 {
-    size_t size = sizeof(opencv_rect_object);
+    size_t size = sizeof(opencv_rect_object)+zend_object_properties_size(type);
     opencv_rect_object *obj = (opencv_rect_object *)ecalloc(1,size);
-    memset(obj, 0, sizeof(opencv_rect_object));
+    memset(obj, 0, size);
     zend_object_std_init(&obj->std, type);
     object_properties_init(&obj->std, type);
     obj->std.ce = type;
@@ -557,6 +560,7 @@ void opencv_rect_init(int module_number){
     opencv_rect_object_handlers.clone_obj = NULL;
     opencv_rect_object_handlers.write_property = opencv_rect_write_property;
     opencv_rect_object_handlers.free_obj = opencv_rect_free_obj;
+    opencv_rect_object_handlers.offset = XtOffsetOf(opencv_rect_object, std);
 }
 
 //-----------------------------------【CV\RotatedRect】--------------------------------
@@ -567,9 +571,9 @@ zend_object_handlers opencv_rotated_rect_object_handlers;
 
 zend_object* opencv_rotated_rect_create_handler(zend_class_entry *type)
 {
-    size_t size = sizeof(opencv_rotated_rect_object);
+    size_t size = sizeof(opencv_rotated_rect_object)+zend_object_properties_size(type);
     opencv_rotated_rect_object *obj = (opencv_rotated_rect_object *)ecalloc(1,size);
-    memset(obj, 0, sizeof(opencv_rotated_rect_object));
+    memset(obj, 0, size);
     zend_object_std_init(&obj->std, type);
     object_properties_init(&obj->std, type);
     obj->std.ce = type;
@@ -706,6 +710,7 @@ void opencv_rotated_rect_init(int module_number){
     opencv_rotated_rect_object_handlers.clone_obj = NULL;
     opencv_rotated_rect_object_handlers.write_property = opencv_rotated_rect_write_property;
     opencv_rotated_rect_object_handlers.free_obj = opencv_rotated_rect_free_obj;
+    opencv_rotated_rect_object_handlers.offset = XtOffsetOf(opencv_rotated_rect_object, std);
 }
 
 

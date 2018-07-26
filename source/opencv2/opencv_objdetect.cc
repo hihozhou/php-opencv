@@ -30,9 +30,9 @@ zend_object_handlers opencv_cascade_classifier_object_handlers;
  */
 zend_object* opencv_cascade_classifier_create_handler(zend_class_entry *type)
 {
-    int size = sizeof(opencv_cascade_classifier_object);
+    int size = sizeof(opencv_cascade_classifier_object)+zend_object_properties_size(type);
     opencv_cascade_classifier_object *obj = (opencv_cascade_classifier_object *)ecalloc(1,size);
-    memset(obj, 0, sizeof(opencv_cascade_classifier_object));
+    memset(obj, 0, size);
     zend_object_std_init(&obj->std, type);
     object_properties_init(&obj->std, type);
     obj->std.ce = type;
@@ -167,6 +167,7 @@ void opencv_cascade_classifier_init(int module_number){
     opencv_cascade_classifier_object_handlers.clone_obj = NULL;
 //    opencv_cascade_classifier_object_handlers.write_property = opencv_mat_write_property;
     opencv_cascade_classifier_object_handlers.free_obj = opencv_cascade_classifier_free_obj;
+    opencv_cascade_classifier_object_handlers.offset = XtOffsetOf(opencv_cascade_classifier_object, std);
 }
 
 

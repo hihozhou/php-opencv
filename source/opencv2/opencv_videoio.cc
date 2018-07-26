@@ -24,9 +24,9 @@ zend_object_handlers opencv_video_capture_object_handlers;
 
 zend_object* opencv_video_capture_create_handler(zend_class_entry *type)
 {
-    size_t size = sizeof(opencv_video_capture_object);
+    size_t size = sizeof(opencv_video_capture_object)+zend_object_properties_size(type);
     opencv_video_capture_object *obj = (opencv_video_capture_object *)ecalloc(1,size);
-    memset(obj, 0, sizeof(opencv_video_capture_object));
+    memset(obj, 0, size);
     zend_object_std_init(&obj->std, type);
     object_properties_init(&obj->std, type);
     obj->std.ce = type;
@@ -209,6 +209,7 @@ void opencv_video_capture_init(int module_number){
            zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     opencv_video_capture_object_handlers.clone_obj = NULL;
     opencv_video_capture_object_handlers.free_obj = opencv_video_capture_free_obj;
+    opencv_video_capture_object_handlers.offset = XtOffsetOf(opencv_video_capture_object, std);
 }
 
 void opencv_videoio_init(int module_number){

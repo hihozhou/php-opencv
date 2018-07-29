@@ -28,8 +28,8 @@ using namespace cv::face;
 #define Z_PHP_FACEMARK_LBF_OBJ_P(zv)  get_facemark_lbf_obj(Z_OBJ_P(zv))
 
 typedef struct _opencv_facemark_lbf_object{
-    zend_object std;
     Ptr<FacemarkLBF> Facemark;
+    zend_object std;
 }opencv_facemark_lbf_object;
 
 
@@ -178,9 +178,9 @@ const zend_function_entry opencv_facemark_lbf_methods[] = {
  */
 zend_object* opencv_facemark_lbf_handler(zend_class_entry *type)
 {
-    size_t size = sizeof(opencv_facemark_lbf_object);
+    size_t size = sizeof(opencv_facemark_lbf_object)+zend_object_properties_size(type);
     opencv_facemark_lbf_object *obj = (opencv_facemark_lbf_object *)ecalloc(1,size);
-    memset(obj, 0, sizeof(opencv_facemark_lbf_object));
+    memset(obj, 0, size);
     zend_object_std_init(&obj->std, type);
     object_properties_init(&obj->std, type);
     obj->std.ce = type;
@@ -207,6 +207,7 @@ void opencv_facemark_lbf_init(int module_number){
            zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     opencv_facemark_lbf_object_handlers.clone_obj = NULL;
     opencv_facemark_lbf_object_handlers.free_obj = opencv_facemark_lbf_free_obj;
+    opencv_facemark_lbf_object_handlers.offset = XtOffsetOf(opencv_facemark_lbf_object, std);
 }
 
 

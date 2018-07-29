@@ -30,9 +30,9 @@ zend_class_entry *opencv_mat_ce;
  */
 zend_object* opencv_mat_create_handler(zend_class_entry *type)
 {
-    int size = sizeof(opencv_mat_object);
+    int size = sizeof(opencv_mat_object)+zend_object_properties_size(type);
     opencv_mat_object *obj = (opencv_mat_object *)ecalloc(1,size);
-    memset(obj, 0, sizeof(opencv_mat_object));
+    memset(obj, 0, size);
     zend_object_std_init(&obj->std, type);
     object_properties_init(&obj->std, type);
     obj->std.ce = type;
@@ -671,6 +671,33 @@ PHP_METHOD(opencv_mat, divide)
     RETURN_ZVAL(&instance,0,0); //return php Mat object
 }
 
+/**
+ * Mat->reshape()
+ * @param execute_data
+ * @param return_value
+ */
+PHP_METHOD(opencv_mat, reshape)
+{
+    zval instance;
+    long cn;
+    long rows = 0;
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l|l", &cn, &rows) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    object_init_ex(&instance, opencv_mat_ce);
+
+    opencv_mat_object *new_obj = Z_PHP_MAT_OBJ_P(&instance);
+    opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
+
+    Mat im = obj->mat->reshape(cn, rows);
+    new_obj->mat=new Mat(im);
+
+    opencv_mat_update_property_by_c_mat(&instance, new_obj->mat);
+
+    RETURN_ZVAL(&instance,0,0); //return php Mat object
+}
+
 
 
 /**
@@ -779,6 +806,7 @@ const zend_function_entry opencv_mat_methods[] = {
         PHP_MALIAS(opencv_mat, convertTo ,convert_to, opencv_mat_convert_to_arginfo, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, plus, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, divide, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_mat, reshape, NULL, ZEND_ACC_PUBLIC)
         PHP_MALIAS(opencv_mat, setTo ,set_to, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_mat, add , NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
         PHP_ME(opencv_mat, subtract , NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
@@ -827,6 +855,7 @@ void opencv_mat_init(void){
 
     zend_declare_property_null(opencv_mat_ce,"type",sizeof("type") - 1,ZEND_ACC_PRIVATE);//private Mat->type
     opencv_mat_object_handlers.free_obj = opencv_mat_free_obj;
+    opencv_mat_object_handlers.offset = XtOffsetOf(opencv_mat_object, std);
 }
 
 

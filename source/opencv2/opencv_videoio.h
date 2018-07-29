@@ -22,8 +22,8 @@ extern zend_class_entry *opencv_video_capture_ce;
 #define Z_PHP_VIDEO_CAPTURE_P(zv)  get_video_capture_obj(Z_OBJ_P(zv))
 
 typedef struct _opencv_video_capture_object{
-    zend_object std;
     VideoCapture *videoCapture;
+    zend_object std;
 }opencv_video_capture_object;
 
 extern void opencv_videoio_init(int module_number);

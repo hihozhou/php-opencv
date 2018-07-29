@@ -32,8 +32,8 @@ extern void opencv_ml_sample_types_init(int module_number);
 extern zend_class_entry *opencv_k_nearest_ce;
 
 typedef struct _opencv_k_nearest_object{
-    zend_object std;
     Ptr<cv::ml::KNearest> KNearest;
+    zend_object std;
 }opencv_k_nearest_object;
 
 #define Z_PHP_K_NEAREST_OBJ_P(zv)  get_opencv_k_nearest_object(Z_OBJ_P(zv))

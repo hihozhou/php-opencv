@@ -25,8 +25,8 @@ extern zend_class_entry *opencv_cascade_classifier_ce;
 #define Z_PHP_CASCADE_CLASSIFIER_OBJ_P(zv)  get_cascade_classifier_obj(Z_OBJ_P(zv))
 
 typedef struct _opencv_cascade_classifier_object{
-    zend_object std;
     CascadeClassifier *cascadeClassifier;
+    zend_object std;
 }opencv_cascade_classifier_object;
 
 extern void opencv_objdetect_init(int module_number);

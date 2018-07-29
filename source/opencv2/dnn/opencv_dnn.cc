@@ -188,6 +188,39 @@ PHP_METHOD(opencv_dnn_net, forward)
     RETURN_ZVAL(&instance,0,0); //return php Mat object
 }
 
+PHP_METHOD(opencv_dnn_net, getLayerNames)
+{
+    std::vector<String> layers;
+    zval arr_zval;
+
+    opencv_dnn_net_object *obj = Z_PHP_DNN_NET_OBJ_P(getThis());
+    layers = obj->DNNNet.getLayerNames();
+
+    array_init_size(&arr_zval, layers.size());
+
+
+    for(std::vector<int>::size_type i = 0; i != layers.size(); i++) {
+        add_index_string(&arr_zval, i, layers[i].c_str());
+    }
+
+    RETURN_ZVAL(&arr_zval,0,0);
+}
+
+PHP_METHOD(opencv_dnn_net, getLayersCount)
+{
+    char *type;
+    size_t type_len;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &type, &type_len) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    opencv_dnn_net_object *obj = Z_PHP_DNN_NET_OBJ_P(getThis());
+    long count = obj->DNNNet.getLayersCount(type);
+    
+    RETURN_LONG(count);
+}
+
 
 /**
  * opencv_dnn_net_methods[]
@@ -195,6 +228,8 @@ PHP_METHOD(opencv_dnn_net, forward)
 const zend_function_entry opencv_dnn_net_methods[] = {
         PHP_ME(opencv_dnn_net, setInput, NULL, ZEND_ACC_PUBLIC)
         PHP_ME(opencv_dnn_net, forward, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_dnn_net, getLayerNames, NULL, ZEND_ACC_PUBLIC)
+        PHP_ME(opencv_dnn_net, getLayersCount, NULL, ZEND_ACC_PUBLIC)
         PHP_FE_END
 };
 /* }}} */

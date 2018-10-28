@@ -48,7 +48,7 @@ include_directories(${PHP_SOURCE}/pear)
 include_directories(${PHP_SOURCE}/TSRM)
 include_directories(${PHP_SOURCE})
 
-add_custom_target(makefile COMMAND phpize && ./configure --with-php-config=/usr/bin/php-config  &&  $(MAKE) clean &&  $(MAKE)
+add_custom_target(php-nodebug COMMAND phpize && ./configure --with-php-config=/usr/bin/php-config  &&  $(MAKE) clean &&  $(MAKE)
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 add_custom_target(php-debug COMMAND /etc/php/php-debug/bin/phpize && ./configure --with-php-config=/etc/php/php-debug/bin/php-config --enable-debug  &&  $(MAKE) clean && $(MAKE)
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})

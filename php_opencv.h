@@ -41,8 +41,8 @@ extern zend_module_entry opencv_module_entry;
 
 #include <iostream>
 //include opencv code
-#include <opencv2/core/core.hpp>
-#include<opencv2/highgui/highgui.hpp>
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
 
 using namespace cv;
 

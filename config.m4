@@ -64,13 +64,13 @@ if test "$PHP_OPENCV" != "no"; then
     if test -f "$PKG_CONFIG"; then
           AC_MSG_RESULT(found)
           AC_MSG_CHECKING(for opencv)
-          if $PKG_CONFIG --exists opencv; then
-              if $PKG_CONFIG --atleast-version=3.3.0 opencv; then
+          if $PKG_CONFIG --exists opencv4; then
+              if $PKG_CONFIG --atleast-version=3.3.0 opencv4; then
                   opencv_version=`$PKG_CONFIG --modversion opencv`
                   AC_MSG_RESULT([found $opencv_version])
                   dnl Add c++ opencv libs and includes by pkg-config
-                  OPENCV_LIBS=`$PKG_CONFIG --libs opencv`
-                  OPENCV_INCS=`$PKG_CONFIG --cflags opencv`
+                  OPENCV_LIBS=`$PKG_CONFIG --libs opencv4`
+                  OPENCV_INCS=`$PKG_CONFIG --cflags opencv4`
                   PHP_EVAL_INCLINE($OPENCV_INCS)
                   PHP_EVAL_LIBLINE($OPENCV_LIBS, OPENCV_SHARED_LIBADD)
                   AC_DEFINE(HAVE_OPENCV, 1, [whether opencv exists in the system])

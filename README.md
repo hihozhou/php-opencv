@@ -10,7 +10,7 @@
 
 ## Requirements
 
-- OpenCV 3.3.0+
+- OpenCV 4.0.0+
 - PHP7.0+
 
 

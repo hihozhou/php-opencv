@@ -95,8 +95,12 @@ PHP_METHOD(opencv_mat, print)
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "|l", &type) == FAILURE) {
         RETURN_NULL();
     }
+
     opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
-    std::cout << format(*(obj->mat),int(type)) << std::endl;
+    //long转cv::Formatter::FormatType类型
+    cv::Formatter::FormatType formatType = static_cast<cv::Formatter::FormatType>((int)type);
+    std::cout << format(*(obj->mat), formatType) << std::endl;
+
     RETURN_NULL();
 }
 

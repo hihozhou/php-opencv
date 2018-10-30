@@ -40,13 +40,16 @@ set(SOURCE_FILES opencv.cc
 
 add_executable(opencv ${SOURCE_FILES})
 
-set(PHP_SOURCE /home/hiho/Sources/php-7.0.15)
+set(PHP_SOURCE /home/hiho/Source/php-7.2.10)
 include_directories(${PHP_SOURCE}/main)
 include_directories(${PHP_SOURCE}/Zend)
 include_directories(${PHP_SOURCE}/sapi)
 include_directories(${PHP_SOURCE}/pear)
 include_directories(${PHP_SOURCE}/TSRM)
 include_directories(${PHP_SOURCE})
+
+find_package( OpenCV REQUIRED )#找到opencv源
+target_link_libraries( opencv ${OpenCV_LIBS} )
 
 add_custom_target(php-nodebug COMMAND phpize && ./configure --with-php-config=/usr/bin/php-config  &&  $(MAKE) clean &&  $(MAKE)
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})

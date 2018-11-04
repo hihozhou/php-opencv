@@ -6,8 +6,8 @@ MAINTAINER hihzhou <hihzohou@gmail.com>
 RUN apt-get update \
 && export DEBIAN_FRONTEND=noninteractive \
 && apt-get install -y  pkg-config cmake git php-cli php-dev qt5-default \
-git clone --depth 1 https://github.com/opencv/opencv.git \
-cd opencv \
+&& git clone --depth 1 https://github.com/opencv/opencv.git \
+&& cd opencv \
 && mkdir build \
 && cd build \
 && cmake -D CMAKE_BUILD_TYPE=RELEASE \

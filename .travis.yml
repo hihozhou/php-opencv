@@ -4,7 +4,7 @@ services:
   - docker
 
 before_install:
-  - docker pull ubuntu:18.04
+  - docker pull hihozhou/opencv:latest
 
 script:
   - docker build .

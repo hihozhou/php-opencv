@@ -22,4 +22,13 @@ RUN apt-get update \
 -D WITH_QT=ON \
 -D WITH_OPENGL=ON  .. \
 && make \
-&& make install
+&& make install \
+&& cd ../../
+
+RUN sh -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf' && ldconfig && echo "OpenCV installed."
+
+RUN git clone https://github.com/php-opencv/php-opencv.git
+
+RUN cd php-opencv && phpize && ./configure --with-php-config=/usr/bin/php-config && make && make test
+
+

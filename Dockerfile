@@ -21,7 +21,7 @@ RUN apt-get update \
 -D BUILD_TESTS=OFF \
 -D WITH_QT=ON \
 -D WITH_OPENGL=ON  .. \
-&& make \
+&& make -j6 \
 && make install \
 && cd ../../
 

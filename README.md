@@ -17,6 +17,16 @@
 
 ## Installation
 
+### Use OpenCV docker(commendatory)
+
+If you don't know how to install OpenCV, you can use my OpenCV docker image(only 300M, including opencv_contrib).
+
+```bash
+docker pull hihozhou/opencv
+```
+
+### Compile and install php-opencv extension
+
 ```bash
 git clone https://github.com/hihozhou/php-opencv.git
 cd php-opencv

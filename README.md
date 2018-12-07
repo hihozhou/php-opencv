@@ -4,8 +4,7 @@
 
 
 ## Document
-- [PHP OpenCV Doc](http://phpopencv.org/zh-cn/docs/)
-- [PHP OpenCV Api](http://phpopencv.org/zh-cn/api/)
+- [PHP OpenCV Document](https://docs.opencv.org)
 
 
 ## Requirements
@@ -152,8 +151,7 @@ result:
 
 ## Contributors
 
-[@hihozhou](https://github.com/hihozhou)  
-[@MaleicAcid](https://github.com/MaleicAcid)
+This project exists thanks to all the people who contribute. [[Contribute](https://github.com/hihozhou/php-opencv/graphs/contributors)].
     
 ## 感谢
 

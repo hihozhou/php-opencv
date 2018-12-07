@@ -25,14 +25,15 @@ zend_object_handlers opencv_mat_object_handlers;
 zend_class_entry *opencv_mat_ce;
 
 /**
+ *
  * @param type
  * @return
  */
 zend_object* opencv_mat_create_handler(zend_class_entry *type)
 {
-    int size = sizeof(opencv_mat_object);
+    int size = sizeof(opencv_mat_object) + zend_object_properties_size(type);
     opencv_mat_object *obj = (opencv_mat_object *)ecalloc(1,size);
-    memset(obj, 0, sizeof(opencv_mat_object));
+    memset(obj, 0, size);
     zend_object_std_init(&obj->std, type);
     object_properties_init(&obj->std, type);
     obj->std.ce = type;
@@ -429,16 +430,16 @@ PHP_METHOD(opencv_mat, at)
             default:
                 switch (this_object->mat->channels()){
                     case 1:
-                        this_object->mat->at<uchar>((int)row,(int)col) = saturate_cast<char>(value);
+                        this_object->mat->at<uchar>((int)row,(int)col) = saturate_cast<uchar>(value);
                         break;
                     case 2:
-                        this_object->mat->at<Vec2b>((int)row,(int)col)[channel]=saturate_cast<char>(value);
+                        this_object->mat->at<Vec2b>((int)row,(int)col)[channel]=saturate_cast<uchar>(value);
                         break;
                     case 3:
-                        this_object->mat->at<Vec3b>((int)row,(int)col)[channel]=saturate_cast<char>(value);
+                        this_object->mat->at<Vec3b>((int)row,(int)col)[channel]=saturate_cast<uchar>(value);
                         break;
                     case 4:
-                        this_object->mat->at<Vec4b>((int)row,(int)col)[channel]=saturate_cast<char>(value);
+                        this_object->mat->at<Vec4b>((int)row,(int)col)[channel]=saturate_cast<uchar>(value);
                         break;
                     default:
                         opencv_throw_exception("Get Mat px only channel in 1,2,3,4.");
@@ -702,7 +703,7 @@ void opencv_mat_write_property(zval *object, zval *member, zval *value, void **c
  */
 void opencv_mat_init(void){
     zend_class_entry ce;
-    INIT_NS_CLASS_ENTRY(ce,OPENCV_NS, "Mat", opencv_mat_methods);
+    INIT_NS_CLASS_ENTRY(ce,OPENCV_NS, "Mat", opencv_mat_methods);//定义Mat对象
     opencv_mat_ce = zend_register_internal_class(&ce);
 
     opencv_mat_ce->create_object = opencv_mat_create_handler;

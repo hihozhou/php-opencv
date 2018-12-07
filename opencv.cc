@@ -115,7 +115,7 @@ PHP_MINIT_FUNCTION(opencv)
     opencv_imgcodecs_init(module_number);
     opencv_highgui_init(module_number);
     opencv_exception_init();
-    opencv_mat_init();
+    opencv_mat_init();//Opencv Mat 逻辑
     opencv_type_init(module_number);
     opencv_imgproc_init(module_number);
 	opencv_core_init(module_number);

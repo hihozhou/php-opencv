@@ -4,7 +4,7 @@
 
 
 ## Document
-- [PHP OpenCV Document](https://docs.opencv.org)
+- [PHP OpenCV Document](https://doc.phpopencv.org)
 
 
 ## Requirements

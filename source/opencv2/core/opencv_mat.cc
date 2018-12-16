@@ -67,7 +67,12 @@ PHP_METHOD(opencv_mat, __construct)
     long rows, cols, type;
     zval *scalar_zval = NULL;
     Scalar scalar;
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "lll|O", &rows, &cols, &type, &scalar_zval,opencv_scalar_ce) == FAILURE) {
+    if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_THROW, ZEND_NUM_ARGS(), "lll|O",
+            &rows,
+            &cols,
+            &type,
+            &scalar_zval,opencv_scalar_ce
+            ) == FAILURE) {
         RETURN_NULL();
     }
 

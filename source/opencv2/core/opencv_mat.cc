@@ -278,7 +278,7 @@ PHP_METHOD(opencv_mat, col)
     opencv_mat_object *new_obj = Z_PHP_MAT_OBJ_P(&instance);
 
     opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
-    Mat im = obj->mat->col(x);
+    Mat im = obj->mat->col((int)x);
     new_obj->mat=new Mat(im);
 
     opencv_mat_update_property_by_c_mat(&instance, new_obj->mat);
@@ -381,27 +381,28 @@ PHP_METHOD(opencv_mat, copy_to)
 PHP_METHOD(opencv_mat, at)
 {
     long row, col, channel;
-    zval *value_zval = NULL;
+    zval *value_zval = nullptr;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "lll|z", &row, &col, &channel, &value_zval) == FAILURE) {
+    if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_THROW, ZEND_NUM_ARGS(), "lll|z", &row, &col, &channel, &value_zval) == FAILURE) {
         RETURN_NULL();
     }
     opencv_mat_object *this_object = Z_PHP_MAT_OBJ_P(getThis());
-    if(value_zval == NULL){
+
+    if(channel<0 || channel> this_object->mat->channels()-1){
+        opencv_throw_exception("Invalid channel value, channel value starts from 0");
+    }
+
+    if(value_zval == nullptr){
         //get px value
         switch (this_object->mat->channels()){
             case 1:
-                this_object->mat->at<uchar>((int)row,(int)col);
-                break;
+            RETURN_LONG(this_object->mat->at<uchar>((int)row,(int)col));
             case 2:
             RETURN_LONG(this_object->mat->at<Vec2b>((int)row,(int)col)[channel]);
-                break;
             case 3:
             RETURN_LONG(this_object->mat->at<Vec3b>((int)row,(int)col)[channel]);
-                break;
             case 4:
             RETURN_LONG(this_object->mat->at<Vec4b>((int)row,(int)col)[channel]);
-                break;
             default:
                 opencv_throw_exception("Get Mat px only channel in 1,2,3,4.");
                 break;

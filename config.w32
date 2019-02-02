@@ -10,29 +10,17 @@ ARG_WITH("opencv", "for opencv support", "no");
 //当使用--with-opencv或--enable-opencv的时候PHP_OPENCV为yes，否则为no
 if (PHP_OPENCV != "no") {
     //检查opencv链接库，如果存在返回路径
-   CHECK_LIB("opencv_world400d.lib;opencv_world400.lib", "opencv","D:\\opencv\\build\\x64\\vc15\\lib");
-   CHECK_HEADER_ADD_INCLUDE("opencv2/opencv.hpp", "CFLAGS_OPENCV", "D:\\opencv\\build\\include");
-   //ERRPR(CFLAGS_OPENCV);
-	EXTENSION("opencv", "opencv.cc \
-                             source/opencv2/core/opencv_mat.cc \
-                             source/opencv2/core/opencv_utility.cc \
-                             source/opencv2/opencv_imgcodecs.cc \
-                             opencv_exception.cc \
-                             source/opencv2/core/hal/opencv_interface.cc \
-                             source/opencv2/opencv_highgui.cc \
-                             source/opencv2/imgcodecs/opencv_imgcodecs_c.cc \
-                             source/opencv2/core/opencv_type.cc \
-                             source/opencv2/opencv_core.cc \
-                             source/opencv2/opencv_imgproc.cc \
-                             source/opencv2/core/opencv_base.cc \
-                             source/opencv2/core/opencv_persistence.cc \
-                             source/opencv2/opencv_objdetect.cc \
-                             source/opencv2/opencv_videoio.cc \
-                             source/opencv2/opencv_face.cc \
-                             source/opencv2/face/opencv_facerec.cc \
-                             source/opencv2/core/opencv_cvdef.cc \
-                             source/opencv2/opencv_ml.cc"
-                             );
+    CHECK_LIB("opencv_world400d.lib;opencv_world400.lib", "opencv","D:\\opencv\\build\\x64\\vc15\\lib");
+    CHECK_HEADER_ADD_INCLUDE("opencv2/opencv.hpp", "CFLAGS_OPENCV", "D:\\opencv\\build\\include");
+    //ERRPR(CFLAGS_OPENCV);
+	//EXTENSION("opencv", "opencv.cc opencv_exception.cc",null,"/D _XKEYCHECK_H /D /EHsc");
+    //ADD_SOURCES(configure_module_dirname + "/source/opencv2/core/hal","opencv_interface.cc");
+    //ADD_SOURCES(configure_module_dirname + "/source/opencv2/core","opencv_base.cc opencv_cvdef.cc opencv_mat.cc opencv_persistence.cc \
+    //opencv_type.cc opencv_utility.cc");
+    //ADD_SOURCES(configure_module_dirname + "/source/opencv2/face","opencv_facerec.cc");
+    //ADD_SOURCES(configure_module_dirname + "/source/opencv2","opencv_core.cc opencv_face.cc opencv_highgui.cc opencv_imgcodecs.cc \
+    //opencv_imgproc.cc opencv_ml.cc opencv_objdetect.cc opencv_videoio.cc");
+
 }
 
 

@@ -21,10 +21,11 @@
 
 extern "C" {
     #include "php.h"
-    #ifdef ZTS
-    #include "TSRM.h"
-    #endif
 }
+
+#ifdef ZTS
+#include "TSRM.h"
+#endif
 
 extern zend_module_entry opencv_module_entry;
 #define phpext_opencv_ptr &opencv_module_entry
@@ -50,7 +51,7 @@ using namespace cv;
 #define OPENCV_FACE_NS ZEND_NS_NAME(OPENCV_NS,"Face")
 #define OPENCV_ML_NS ZEND_NS_NAME(OPENCV_NS,"ML")
 
-#define OPENCV_CONNECT(text1,text2) text1##text2
+#define OPENCV_CONNECT(text1, text2) text1##text2
 
 
 //#define OPENCV_BEGIN_ARG_INFO		ZEND_BEGIN_ARG_INFO
@@ -76,7 +77,7 @@ ZEND_END_MODULE_GLOBALS(opencv)
 ZEND_TSRMLS_CACHE_EXTERN()
 #endif
 
-#endif	/* PHP_OPENCV_H */
+#endif    /* PHP_OPENCV_H */
 
 
 /*

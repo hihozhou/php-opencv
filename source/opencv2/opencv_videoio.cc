@@ -89,6 +89,11 @@ PHP_METHOD(opencv_video_capture, __construct)
     obj->videoCapture = videoCapture;
 }
 
+/**
+ * 打开视频，当为参数为整形时候，打开指定设备，当是字符串时候，打开目录的文件
+ * @param execute_data
+ * @param return_value
+ */
 PHP_METHOD(opencv_video_capture, open)
 {
     zval *zval1 = NULL;
@@ -127,6 +132,7 @@ PHP_METHOD(opencv_video_capture, open)
             }
             break;
         case IS_REFERENCE:
+            //引用类型，获取引用真是的value，再判断一次
             zval1 = Z_REFVAL_P(zval1);
             goto again;
             break;

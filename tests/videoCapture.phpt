@@ -8,13 +8,11 @@ use CV\VideoCapture;
 
 $video=new VideoCapture();
 var_dump($video->isOpened());
-$video->open(0);
+//$video->open(0);
 var_dump($video);
-var_dump(is_bool($video->isOpened()));
 
 ?>
 --EXPECT--
 bool(false)
 object(CV\VideoCapture)#1 (0) {
 }
-bool(true)

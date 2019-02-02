@@ -1,0 +1,58 @@
+cmake_minimum_required(VERSION 3.5)
+project(opencv)
+
+set(CMAKE_CXX_STANDARD 11)
+
+set(SOURCE_FILES opencv.cc
+        php_opencv.h
+        source/opencv2/core/opencv_mat.cc
+        source/opencv2/core/hal/opencv_interface.cc
+        source/opencv2/core/opencv_mat.h
+        source/opencv2/imgcodecs/opencv_imgcodecs_c.cc
+        source/opencv2/opencv_highgui.cc
+        opencv_exception.cc
+        opencv_exception.h
+        source/opencv2/opencv_imgcodecs.cc
+        source/opencv2/opencv_imgcodecs.h
+        source/opencv2/opencv_highgui.h
+        source/opencv2/core/opencv_type.cc
+        source/opencv2/opencv_imgproc.cc
+        source/opencv2/opencv_core.h
+        source/opencv2/opencv_core.cc
+        source/opencv2/core/opencv_base.h
+        source/opencv2/core/opencv_base.cc
+        source/opencv2/core/opencv_persistence.h
+        source/opencv2/core/opencv_persistence.cc
+        source/opencv2/opencv_objdetect.h
+        source/opencv2/opencv_objdetect.cc
+        source/opencv2/opencv_videoio.cc
+        source/opencv2/opencv_videoio.h
+        source/opencv2/opencv_face.cc
+        source/opencv2/opencv_face.h
+        source/opencv2/face/opencv_facerec.cc
+        source/opencv2/face/opencv_facerec.h
+        source/opencv2/core/opencv_utility.cc
+        source/opencv2/core/opencv_utility.h
+        source/opencv2/opencv_ml.h
+        source/opencv2/opencv_ml.cc
+        source/opencv2/core/opencv_cvdef.h
+        source/opencv2/core/opencv_cvdef.cc)
+
+add_executable(opencv ${SOURCE_FILES})
+
+set(PHP_SOURCE F:/www/php-sdk-binary-tools/phpdev/vc15/x64/php-7.2.12-src)
+include_directories(${PHP_SOURCE}/main)
+include_directories(${PHP_SOURCE}/Zend)
+include_directories(${PHP_SOURCE}/sapi)
+include_directories(${PHP_SOURCE}/pear)
+include_directories(${PHP_SOURCE}/TSRM)
+include_directories(${PHP_SOURCE})
+
+set(OpenCV_DIR D:/opencv/build)
+find_package( OpenCV REQUIRED )#找到opencv源
+target_link_libraries( opencv ${OpenCV_LIBS} )
+
+add_custom_target(php-nodebug COMMAND phpize && ./configure --with-php-config=/usr/bin/php-config  &&  $(MAKE) clean &&  $(MAKE)
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+add_custom_target(php-debug COMMAND /etc/php/php-debug/bin/phpize && ./configure --with-php-config=/etc/php/php-debug/bin/php-config --enable-debug  &&  $(MAKE) clean && $(MAKE)
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})

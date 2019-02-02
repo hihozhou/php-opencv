@@ -65,7 +65,7 @@ void opencv_mat_update_property_by_c_mat(zval *z,Mat *mat){
 PHP_METHOD(opencv_mat, __construct)
 {
     long rows, cols, type;
-    zval *scalar_zval = NULL;
+    zval *scalar_zval = nullptr;
     Scalar scalar;
     if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_THROW, ZEND_NUM_ARGS(), "lll|O",
             &rows,
@@ -77,7 +77,7 @@ PHP_METHOD(opencv_mat, __construct)
     }
 
     opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
-    if(scalar_zval != NULL){
+    if(scalar_zval != nullptr){
         opencv_scalar_object *scalar_object = Z_PHP_SCALAR_OBJ_P(scalar_zval);
         scalar = *(scalar_object->scalar);
     }else{
@@ -255,7 +255,7 @@ PHP_METHOD(opencv_mat, row)
     opencv_mat_object *new_obj = Z_PHP_MAT_OBJ_P(&instance);
 
     opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(getThis());
-    Mat im = obj->mat->row(y);
+    Mat im = obj->mat->row((int)y);
     new_obj->mat=new Mat(im);
     opencv_mat_update_property_by_c_mat(&instance, new_obj->mat);
 
@@ -308,8 +308,8 @@ PHP_METHOD(opencv_mat, get_image_roi)
     try {
         Mat roi = (*obj->mat)(*rect_object->rect);
         new_obj->mat = new Mat(roi);
-    }catch (Exception exception){
-        const char* err_msg = exception.what();
+    }catch (Exception &e){
+        const char* err_msg = e.what();
         opencv_throw_exception(err_msg);//throw exception
         RETURN_NULL();
     }
@@ -331,7 +331,7 @@ ZEND_END_ARG_INFO()
  */
 PHP_METHOD(opencv_mat, copy_to)
 {
-    zval *m_zval, *mask_zval = NULL;
+    zval *m_zval, *mask_zval = nullptr;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "z|O", &m_zval, opencv_mat_ce, &mask_zval, opencv_mat_ce) == FAILURE) {
         RETURN_NULL();
@@ -355,14 +355,14 @@ PHP_METHOD(opencv_mat, copy_to)
     }
     opencv_mat_object *this_object = Z_PHP_MAT_OBJ_P(getThis());
     try {
-        if(mask_zval != NULL){
+        if(mask_zval != nullptr){
             opencv_mat_object *mask_object = Z_PHP_MAT_OBJ_P(mask_zval);
             this_object->mat->copyTo(*m_object->mat, *mask_object->mat);
         }else{
             this_object->mat->copyTo(*m_object->mat);
         }
         opencv_mat_update_property_by_c_mat(m_real_zval, m_object->mat);
-    }catch (Exception exception){
+    }catch (Exception &exception){
         const char* err_msg = exception.what();
         opencv_throw_exception(err_msg);//throw exception
     }
@@ -509,7 +509,7 @@ PHP_METHOD(opencv_mat, size)
     try {
         Size size = obj->mat->size();
         size_object->size = new Size(size);
-    }catch (Exception e){
+    }catch (Exception &e){
         opencv_throw_exception(e.what());
         RETURN_NULL();
     }
@@ -715,7 +715,7 @@ void opencv_mat_init(void){
     opencv_mat_ce->create_object = opencv_mat_create_handler;
     memcpy(&opencv_mat_object_handlers,
            zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-    opencv_mat_object_handlers.clone_obj = NULL;
+    opencv_mat_object_handlers.clone_obj = nullptr;
     opencv_mat_object_handlers.write_property = opencv_mat_write_property;
 
     zend_declare_property_null(opencv_mat_ce,"type",sizeof("type") - 1,ZEND_ACC_PRIVATE);//private Mat->type

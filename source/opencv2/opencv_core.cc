@@ -138,6 +138,7 @@ PHP_FUNCTION(opencv_add_weighted){
 
 
 /**
+ * 矩阵数据按通道切割，CV\split(Mat $mat)，返回一个存在切割后矩阵的数组
  * CV\split
  * @param execute_data
  * @param return_value
@@ -147,18 +148,21 @@ PHP_FUNCTION(opencv_split){
     long dtype = -1;
     zval *src_zval;
 
+    //传入一个Mat对象
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "O", &src_zval, opencv_mat_ce) == FAILURE) {
         RETURN_NULL();
     }
     opencv_mat_object *src_obj = Z_PHP_MAT_OBJ_P(src_zval);
     std::vector<Mat> channels;
-    split(*src_obj->mat,channels);
+    split(*src_obj->mat,channels);//使用split方法讲mat切割放在vector中
     zval return_val,blue_zval,green_zval,red_zval;
     Mat blue,green,red;
     array_init(&return_val);
 
 
+    //遍历切割后得到的vector
     for(unsigned long i=0; i < channels.size(); i++){
+        //创建对象
         zval OPENCV_CONNECT(zval,i);
         Mat OPENCV_CONNECT(mat,i);
         opencv_mat_object *OPENCV_CONNECT(mat_object,i);
@@ -167,7 +171,7 @@ PHP_FUNCTION(opencv_split){
         OPENCV_CONNECT(mat,i) = channels.at(i);
         OPENCV_CONNECT(mat_object,i)->mat = new Mat(OPENCV_CONNECT(mat,i));
         opencv_mat_update_property_by_c_mat(&OPENCV_CONNECT(zval,i),OPENCV_CONNECT(mat_object,i)->mat);
-        add_next_index_zval(&return_val,&OPENCV_CONNECT(zval,i));
+        add_next_index_zval(&return_val,&OPENCV_CONNECT(zval,i));//存放在返回的数组中
     }
 
     RETURN_ZVAL(&return_val,0,0);

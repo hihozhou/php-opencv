@@ -68,7 +68,7 @@ PHP_FUNCTION(opencv_imwrite){
     char *filename;
     long filename_len;
     zval *object;
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "sO", &filename,&filename_len, &object,opencv_mat_ce) == FAILURE) {
+    if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_THROW, ZEND_NUM_ARGS(), "sO", &filename,&filename_len, &object,opencv_mat_ce) == FAILURE) {
         RETURN_NULL();
     }
     opencv_mat_object *obj = Z_PHP_MAT_OBJ_P(object);

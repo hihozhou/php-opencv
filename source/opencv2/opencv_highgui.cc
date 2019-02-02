@@ -133,7 +133,7 @@ opencv_fcall_info_cb * opencv_fcall_info_cb_create(zend_fcall_info *fci_ptr, zen
     Z_TRY_ADDREF(cb->fci->function_name);//todo 滑动调或窗口销毁是释放内存
     cb->fci->param_count = 0;
     cb->fci->no_separation = 1;
-    cb->fci->retval = NULL;
+    cb->fci->retval = nullptr;
 
     return cb;
 }

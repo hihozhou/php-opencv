@@ -10,7 +10,7 @@ $video=new VideoCapture();
 var_dump($video->isOpened());
 $video->open(0);
 var_dump($video);
-var_dump($video->isOpened());
+var_dump(is_bool($video->isOpened()));
 
 ?>
 --EXPECT--

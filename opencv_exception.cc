@@ -24,7 +24,7 @@
 
 zend_class_entry *opencv_exception_ce;
 
-void opencv_exception_init(void)
+void opencv_exception_init(int module_number)
 {
     zend_class_entry ce;
     INIT_NS_CLASS_ENTRY(ce, OPENCV_NS, "Exception", NULL);

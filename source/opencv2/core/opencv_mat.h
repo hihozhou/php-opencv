@@ -21,7 +21,7 @@
 
 //todo Mat object noly unchar,need to support double,int,float
 
-extern void opencv_mat_init(void);
+extern void opencv_mat_init(int module_number);
 
 extern zend_class_entry *opencv_mat_ce;
 

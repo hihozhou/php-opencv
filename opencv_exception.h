@@ -22,7 +22,7 @@
 
 extern zend_class_entry *opencv_exception_ce;
 
-extern void opencv_exception_init(void);
+extern void opencv_exception_init(int module_number);
 
 PHP_OPENCV_API extern void opencv_throw_exception(const char *error_message);
 

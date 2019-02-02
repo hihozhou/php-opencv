@@ -37,3 +37,4 @@ tests/*/*.sh
 
 .idea
 cmake-build-debug
+CMakeLists.txt

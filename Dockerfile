@@ -7,4 +7,5 @@ RUN git clone https://github.com/hihozhou/php-opencv.git \
 && phpize \
 && ./configure --with-php-config=/usr/bin/php-config \
 && make \
-&& make test
+&& make test \
+&& make install

@@ -707,7 +707,7 @@ void opencv_mat_write_property(zval *object, zval *member, zval *value, void **c
 /**
  * Mat Init
  */
-void opencv_mat_init(void){
+void opencv_mat_init(int module_number){
     zend_class_entry ce;
     INIT_NS_CLASS_ENTRY(ce,OPENCV_NS, "Mat", opencv_mat_methods);//定义Mat对象
     opencv_mat_ce = zend_register_internal_class(&ce);

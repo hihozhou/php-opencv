@@ -10,11 +10,12 @@ ARG_WITH("opencv", "for opencv support", "no");
 //当使用--with-opencv或--enable-opencv的时候PHP_OPENCV为yes，否则为no
 if (PHP_OPENCV != "no") {
     //检查opencv链接库，如果存在返回路径
-    CHECK_LIB("opencv_world400d.lib;opencv_world400.lib", "opencv","D:\\opencv\\build\\x64\\vc15\\lib");
-    CHECK_HEADER_ADD_INCLUDE("opencv2/opencv.hpp", "CFLAGS_OPENCV", "D:\\opencv\\build\\include");
+    //CHECK_LIB("opencv_world400d.lib;opencv_world400.lib", "opencv","D:\\opencv\\build\\x64\\vc15\\lib");
+    //CHECK_HEADER_ADD_INCLUDE("opencv2/opencv.hpp", "CFLAGS_OPENCV", "D:\\opencv\\build\\include");
     //ERRPR(CFLAGS_OPENCV);
-	//EXTENSION("opencv", "opencv.cc opencv_exception.cc",null,"/D _XKEYCHECK_H /D /EHsc");
-	EXTENSION("opencv", "opencv.cc",null,"/D _XKEYCHECK_H /D /EHsc");
+    EXTENSION("opencv", "opencv.cc opencv_exception.cc","yes","/D _XKEYCHECK_H /D EHsc");
+    //防止编译链接问题
+    ADD_FLAG("CFLAGS_OPENCV", "/D ZEND_WIN32_FORCE_INLINE /GF");
     //ADD_SOURCES(configure_module_dirname + "/source/opencv2/core/hal","opencv_interface.cc");
     //ADD_SOURCES(configure_module_dirname + "/source/opencv2/core","opencv_base.cc opencv_cvdef.cc opencv_mat.cc opencv_persistence.cc \
     //opencv_type.cc opencv_utility.cc");

@@ -27,4 +27,4 @@ extern void opencv_exception_init(int module_number);
 PHP_OPENCV_API extern void opencv_throw_exception(const char *error_message);
 
 
-#endif //OPENCV_OPENCV_EXCEPTION_H
+#endif //PHP_OPENCV_EXCEPTION_H

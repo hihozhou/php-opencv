@@ -22,8 +22,15 @@
 extern "C" {
 	#include "php.h"
 }
+
+
+
 #include "php_ini.h"
 #include "ext/standard/info.h"
+
+
+
+
 #include "php_opencv.h"
 //#include "source/opencv2/opencv_imgcodecs.h"
 //#include "source/opencv2/opencv_highgui.h"
@@ -31,7 +38,7 @@ extern "C" {
 //#include "source/opencv2/core/opencv_type.h"
 //#include "source/opencv2/core/opencv_mat.h"
 //#include "source/opencv2/core/hal/opencv_interface.h"
-//#include "opencv_exception.h"
+#include "opencv_exception.h"
 //#include "source/opencv2/opencv_core.h"
 //#include "source/opencv2/core/opencv_base.h"
 //#include "source/opencv2/core/opencv_persistence.h"
@@ -41,6 +48,8 @@ extern "C" {
 //#include "source/opencv2/core/opencv_utility.h"
 //#include "source/opencv2/opencv_ml.h"
 //#include "source/opencv2/core/opencv_cvdef.h"
+
+
 
 /* If you declare any globals in php_opencv.h uncomment this:
 ZEND_DECLARE_MODULE_GLOBALS(opencv)
@@ -84,8 +93,11 @@ PHP_FUNCTION(confirm_opencv_compiled)
 
 PHP_FUNCTION(opencv_test)
 {
-    std::cout<<"This C++ output!"<<std::endl;
+//    std::cout<<"This C++ output!"<<std::endl;
     php_printf("This is opencv extension!");
+//    Mat mat = cv::imread("C:\\Users\\hiho\\Desktop\\test.jpg");
+//    cv::imshow("test",mat);
+//    cv::waitKey(0);
 	RETURN_TRUE;
 }
 
@@ -121,7 +133,7 @@ PHP_MINIT_FUNCTION(opencv)
 //    opencv_interface_init(module_number);
 //    opencv_imgcodecs_init(module_number);
 //    opencv_highgui_init(module_number);
-//    opencv_exception_init(module_number);
+    opencv_exception_init(module_number);
 //    opencv_mat_init(module_number);//Opencv Mat 逻辑
 //    opencv_type_init(module_number);
 //    opencv_imgproc_init(module_number);

@@ -16,11 +16,14 @@
 
 /* $Id$ */
 
+#pragma once
+
 #ifndef PHP_OPENCV_H
 #define PHP_OPENCV_H
 
 extern "C" {
     #include "php.h"
+
 }
 
 #ifdef ZTS
@@ -40,19 +43,18 @@ extern zend_module_entry opencv_module_entry;
 #	define PHP_OPENCV_API
 #endif
 
-//#include <iostream>
+#include <iostream>
 //include opencv code
-//#include <opencv2/core.hpp>
-//#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
 
-//using namespace cv;
-
+using namespace cv;
 
 #define OPENCV_NS "CV"
 #define OPENCV_FACE_NS ZEND_NS_NAME(OPENCV_NS,"Face")
 #define OPENCV_ML_NS ZEND_NS_NAME(OPENCV_NS,"ML")
 
-#define OPENCV_CONNECT(text1, text2) text1##text2
+#define OPENCV_CONNECT(text1,text2) text1##text2
 
 
 //#define OPENCV_BEGIN_ARG_INFO		ZEND_BEGIN_ARG_INFO

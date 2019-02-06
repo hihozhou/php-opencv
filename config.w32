@@ -17,9 +17,15 @@ if (PHP_OPENCV != "no") {
     CHECK_LIB("opencv_world400d.lib;opencv_world400.lib", "opencv","D:\\opencv\\build\\x64\\vc15\\lib");
     CHECK_HEADER_ADD_INCLUDE("opencv2/opencv.hpp", "CFLAGS_OPENCV", "D:\\opencv\\build\\include");
 
-    EXTENSION("opencv", "opencv.cc opencv_exception.cc source/opencv2/core/hal/opencv_interface.cc","yes");
+    opencv_source_file="opencv.cc \
+                opencv_exception.cc \
+                source/opencv2/core/hal/opencv_interface.cc \
+                source/opencv2/core/opencv_base.cc"
 
-    //ADD_SOURCES(configure_module_dirname + "/source/opencv2/core/hal","opencv_interface.cc");
+    EXTENSION("opencv", opencv_source_file,"yes");
+
+    //ADD_SOURCES(configure_module_dirname + "/source/opencv2/core/hal","opencv_interface.cc","opencv");
+    //ADD_SOURCES(configure_module_dirname + "/source/opencv2/core","opencv_base.cc opencv_cvdef.cc","opencv");
     //ADD_SOURCES(configure_module_dirname + "/source/opencv2/core","opencv_base.cc opencv_cvdef.cc opencv_mat.cc opencv_persistence.cc \
     //opencv_type.cc opencv_utility.cc");
     //ADD_SOURCES(configure_module_dirname + "/source/opencv2/face","opencv_facerec.cc");

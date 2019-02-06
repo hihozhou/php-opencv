@@ -21,6 +21,8 @@
 #include <algorithm>
 #include <iostream>
 
+
+
 zend_class_entry *opencv_point_ce;
 zend_class_entry *opencv_scalar_ce;
 zend_class_entry *opencv_size_ce;

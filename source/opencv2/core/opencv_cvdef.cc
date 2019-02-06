@@ -18,6 +18,7 @@
 
 #include "../../../php_opencv.h"
 #include "opencv_cvdef.h"
+#include <opencv2/core/cvdef.h>
 
 void opencv_cvdef_init(int module_number){
     opencv_cvdef_fundamental_constants_init(module_number);

@@ -17,6 +17,10 @@
 #ifndef PHP_OPENCV_TYPE_H
 #define PHP_OPENCV_TYPE_H
 
+#include <opencv2/core.hpp>
+
+using namespace cv;
+
 void opencv_type_init(int module_number);
 
 extern zend_class_entry *opencv_point_ce;

@@ -32,7 +32,7 @@ extern "C" {
 //#include "source/opencv2/opencv_imgcodecs.h"
 //#include "source/opencv2/opencv_highgui.h"
 //#include "source/opencv2/opencv_imgproc.h"
-//#include "source/opencv2/core/opencv_type.h"
+#include "source/opencv2/core/opencv_type.h"
 //#include "source/opencv2/core/opencv_mat.h"
 #include "source/opencv2/core/hal/opencv_interface.h"
 #include "opencv_exception.h"
@@ -44,7 +44,7 @@ extern "C" {
 //#include "source/opencv2/opencv_face.h"
 //#include "source/opencv2/core/opencv_utility.h"
 //#include "source/opencv2/opencv_ml.h"
-//#include "source/opencv2/core/opencv_cvdef.h"
+#include "source/opencv2/core/opencv_cvdef.h"
 
 #include <iostream>
 //include opencv code
@@ -139,7 +139,7 @@ PHP_MINIT_FUNCTION(opencv)
 //    opencv_highgui_init(module_number);
     opencv_exception_init(module_number);
 //    opencv_mat_init(module_number);//Opencv Mat 逻辑
-//    opencv_type_init(module_number);
+    opencv_type_init(module_number);
 //    opencv_imgproc_init(module_number);
 //	opencv_core_init(module_number);
     opencv_border_types_init(module_number);
@@ -148,7 +148,7 @@ PHP_MINIT_FUNCTION(opencv)
 //	opencv_videoio_init(module_number);
 //    opencv_face_init(module_number);
 //	opencv_ml_init(module_number);
-//    opencv_cvdef_init(module_number);
+    opencv_cvdef_init(module_number);
 
 	return SUCCESS;
 }

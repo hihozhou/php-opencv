@@ -20,7 +20,9 @@ if (PHP_OPENCV != "no") {
     opencv_source_file="opencv.cc \
                 opencv_exception.cc \
                 source/opencv2/core/hal/opencv_interface.cc \
-                source/opencv2/core/opencv_base.cc"
+                source/opencv2/core/opencv_base.cc \
+                source/opencv2/core/opencv_cvdef.cc \
+                source/opencv2/core/opencv_type.cc"
 
     EXTENSION("opencv", opencv_source_file,"yes");
 

@@ -33,12 +33,12 @@ extern "C" {
 //#include "source/opencv2/opencv_highgui.h"
 //#include "source/opencv2/opencv_imgproc.h"
 #include "source/opencv2/core/opencv_type.h"
-//#include "source/opencv2/core/opencv_mat.h"
+#include "source/opencv2/core/opencv_mat.h"
 #include "source/opencv2/core/hal/opencv_interface.h"
 #include "opencv_exception.h"
 //#include "source/opencv2/opencv_core.h"
 #include "source/opencv2/core/opencv_base.h"
-//#include "source/opencv2/core/opencv_persistence.h"
+#include "source/opencv2/core/opencv_persistence.h"
 //#include "source/opencv2/opencv_objdetect.h"
 //#include "source/opencv2/opencv_videoio.h"
 //#include "source/opencv2/opencv_face.h"
@@ -138,12 +138,12 @@ PHP_MINIT_FUNCTION(opencv)
 //    opencv_imgcodecs_init(module_number);
 //    opencv_highgui_init(module_number);
     opencv_exception_init(module_number);
-//    opencv_mat_init(module_number);//Opencv Mat 逻辑
+    opencv_mat_init(module_number);//Opencv Mat 逻辑
     opencv_type_init(module_number);
 //    opencv_imgproc_init(module_number);
 //	opencv_core_init(module_number);
     opencv_border_types_init(module_number);
-//	opencv_file_storage_init(module_number);
+	opencv_file_storage_init(module_number);
 //	opencv_objdetect_init(module_number);
 //	opencv_videoio_init(module_number);
 //    opencv_face_init(module_number);
@@ -207,13 +207,13 @@ PHP_MINFO_FUNCTION(opencv)
 const zend_function_entry opencv_functions[] = {
 	PHP_FE(confirm_opencv_compiled,	NULL)		/* For testing, remove later. */
 	PHP_FE(opencv_test,	NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, CV_8UC, ZEND_FN(opencv_cv_8uc), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, CV_8SC, ZEND_FN(opencv_cv_8sc), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, CV_16UC, ZEND_FN(opencv_cv_16uc), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, CV_16SC, ZEND_FN(opencv_cv_16sc), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, CV_32SC, ZEND_FN(opencv_cv_32sc), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, CV_32FC, ZEND_FN(opencv_cv_32fc), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, CV_64FC, ZEND_FN(opencv_cv_64fc), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, CV_8UC, ZEND_FN(opencv_cv_8uc), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, CV_8SC, ZEND_FN(opencv_cv_8sc), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, CV_16UC, ZEND_FN(opencv_cv_16uc), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, CV_16SC, ZEND_FN(opencv_cv_16sc), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, CV_32SC, ZEND_FN(opencv_cv_32sc), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, CV_32FC, ZEND_FN(opencv_cv_32fc), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, CV_64FC, ZEND_FN(opencv_cv_64fc), NULL)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, imread, ZEND_FN(opencv_imread), NULL)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, imwrite, ZEND_FN(opencv_imwrite), NULL)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, imshow, ZEND_FN(opencv_imshow), NULL)

@@ -18,6 +18,9 @@
 #define PHP_OPENCV_MAT_H
 
 #include "../../../php_opencv.h"
+#include <opencv2/core.hpp>
+
+using namespace cv;
 
 //todo Mat object noly unchar,need to support double,int,float
 

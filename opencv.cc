@@ -42,7 +42,7 @@ extern "C" {
 //#include "source/opencv2/opencv_objdetect.h"
 //#include "source/opencv2/opencv_videoio.h"
 //#include "source/opencv2/opencv_face.h"
-//#include "source/opencv2/core/opencv_utility.h"
+#include "source/opencv2/core/opencv_utility.h"
 //#include "source/opencv2/opencv_ml.h"
 #include "source/opencv2/core/opencv_cvdef.h"
 
@@ -260,8 +260,8 @@ const zend_function_entry opencv_functions[] = {
 //    ZEND_NS_NAMED_FE(OPENCV_NS, threshold, ZEND_FN(opencv_threshold), opencv_threshold_arginfo)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, morphologyEx, ZEND_FN(opencv_morphology_ex), opencv_morphology_ex_arginfo)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, LUT, ZEND_FN(opencv_lut), opencv_lut_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, getTickCount, ZEND_FN(opencv_get_tick_count), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, getTickFrequency, ZEND_FN(opencv_get_tick_frequency), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, getTickCount, ZEND_FN(opencv_get_tick_count), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, getTickFrequency, ZEND_FN(opencv_get_tick_frequency), NULL)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, floodFill, ZEND_FN(opencv_flood_fill), opencv_flood_fill_arginfo)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, setMouseCallback, ZEND_FN(opencv_set_mouse_callback), NULL)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, adaptiveThreshold, ZEND_FN(opencv_adaptive_threshold), opencv_adaptive_threshold_arginfo)

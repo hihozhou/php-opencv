@@ -18,6 +18,9 @@
 
 #include "../../../php_opencv.h"
 #include "opencv_utility.h"
+#include <opencv2/core.hpp>
+
+using namespace cv;
 
 void opencv_utility_init(int module_number){
 

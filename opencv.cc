@@ -29,22 +29,29 @@ extern "C" {
 #include "ext/standard/info.h"
 
 #include "php_opencv.h"
-#include "source/opencv2/opencv_imgcodecs.h"
-#include "source/opencv2/opencv_highgui.h"
-#include "source/opencv2/opencv_imgproc.h"
-#include "source/opencv2/core/opencv_type.h"
-#include "source/opencv2/core/opencv_mat.h"
+//#include "source/opencv2/opencv_imgcodecs.h"
+//#include "source/opencv2/opencv_highgui.h"
+//#include "source/opencv2/opencv_imgproc.h"
+//#include "source/opencv2/core/opencv_type.h"
+//#include "source/opencv2/core/opencv_mat.h"
 #include "source/opencv2/core/hal/opencv_interface.h"
 #include "opencv_exception.h"
-#include "source/opencv2/opencv_core.h"
-#include "source/opencv2/core/opencv_base.h"
-#include "source/opencv2/core/opencv_persistence.h"
-#include "source/opencv2/opencv_objdetect.h"
-#include "source/opencv2/opencv_videoio.h"
-#include "source/opencv2/opencv_face.h"
-#include "source/opencv2/core/opencv_utility.h"
-#include "source/opencv2/opencv_ml.h"
-#include "source/opencv2/core/opencv_cvdef.h"
+//#include "source/opencv2/opencv_core.h"
+//#include "source/opencv2/core/opencv_base.h"
+//#include "source/opencv2/core/opencv_persistence.h"
+//#include "source/opencv2/opencv_objdetect.h"
+//#include "source/opencv2/opencv_videoio.h"
+//#include "source/opencv2/opencv_face.h"
+//#include "source/opencv2/core/opencv_utility.h"
+//#include "source/opencv2/opencv_ml.h"
+//#include "source/opencv2/core/opencv_cvdef.h"
+
+#include <iostream>
+//include opencv code
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+
+using namespace cv;
 
 
 
@@ -128,20 +135,20 @@ PHP_MINIT_FUNCTION(opencv)
 	*/
 	//module_number注册常量的宏需要，如：REGISTER_NS_LONG_CONSTANT
     opencv_interface_init(module_number);
-    opencv_imgcodecs_init(module_number);
-    opencv_highgui_init(module_number);
+//    opencv_imgcodecs_init(module_number);
+//    opencv_highgui_init(module_number);
     opencv_exception_init(module_number);
-    opencv_mat_init(module_number);//Opencv Mat 逻辑
-    opencv_type_init(module_number);
-    opencv_imgproc_init(module_number);
-	opencv_core_init(module_number);
-    opencv_border_types_init(module_number);
-	opencv_file_storage_init(module_number);
-	opencv_objdetect_init(module_number);
-	opencv_videoio_init(module_number);
-    opencv_face_init(module_number);
-	opencv_ml_init(module_number);
-    opencv_cvdef_init(module_number);
+//    opencv_mat_init(module_number);//Opencv Mat 逻辑
+//    opencv_type_init(module_number);
+//    opencv_imgproc_init(module_number);
+//	opencv_core_init(module_number);
+//    opencv_border_types_init(module_number);
+//	opencv_file_storage_init(module_number);
+//	opencv_objdetect_init(module_number);
+//	opencv_videoio_init(module_number);
+//    opencv_face_init(module_number);
+//	opencv_ml_init(module_number);
+//    opencv_cvdef_init(module_number);
 
 	return SUCCESS;
 }

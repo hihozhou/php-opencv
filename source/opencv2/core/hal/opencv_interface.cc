@@ -16,6 +16,7 @@
 
 #include "../../../../php_opencv.h"
 #include "opencv_interface.h"
+#include <opencv2/core/hal/interface.h>
 
 
 void opencv_interface_init(int module_number)

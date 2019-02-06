@@ -43,12 +43,7 @@ extern zend_module_entry opencv_module_entry;
 #	define PHP_OPENCV_API
 #endif
 
-#include <iostream>
-//include opencv code
-#include <opencv2/core.hpp>
-#include <opencv2/highgui.hpp>
 
-using namespace cv;
 
 #define OPENCV_NS "CV"
 #define OPENCV_FACE_NS ZEND_NS_NAME(OPENCV_NS,"Face")

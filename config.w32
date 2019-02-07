@@ -25,7 +25,9 @@ if (PHP_OPENCV != "no") {
                 source/opencv2/core/opencv_type.cc \
                 source/opencv2/core/opencv_utility.cc \
                 source/opencv2/core/opencv_persistence.cc \
-                source/opencv2/core/opencv_mat.cc"
+                source/opencv2/core/opencv_mat.cc \
+                source/opencv2/face/opencv_facerec.cc \
+                source/opencv2/opencv_face.cc"
 
     EXTENSION("opencv", opencv_source_file,"yes");
 

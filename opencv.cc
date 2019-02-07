@@ -41,7 +41,7 @@ extern "C" {
 #include "source/opencv2/core/opencv_persistence.h"
 //#include "source/opencv2/opencv_objdetect.h"
 //#include "source/opencv2/opencv_videoio.h"
-//#include "source/opencv2/opencv_face.h"
+#include "source/opencv2/opencv_face.h"
 #include "source/opencv2/core/opencv_utility.h"
 //#include "source/opencv2/opencv_ml.h"
 #include "source/opencv2/core/opencv_cvdef.h"
@@ -146,7 +146,7 @@ PHP_MINIT_FUNCTION(opencv)
 	opencv_file_storage_init(module_number);
 //	opencv_objdetect_init(module_number);
 //	opencv_videoio_init(module_number);
-//    opencv_face_init(module_number);
+    opencv_face_init(module_number);
 //	opencv_ml_init(module_number);
     opencv_cvdef_init(module_number);
 

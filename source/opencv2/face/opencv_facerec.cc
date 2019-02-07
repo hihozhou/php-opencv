@@ -21,6 +21,7 @@
 #include "../opencv_face.h"
 #include "../core/opencv_mat.h"
 #include "../../../opencv_exception.h"
+#include <opencv2/core.hpp>
 #include <opencv2/face.hpp>
 using namespace cv::face;
 

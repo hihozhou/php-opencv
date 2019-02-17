@@ -29,7 +29,7 @@ extern "C" {
 #include "ext/standard/info.h"
 
 #include "php_opencv.h"
-//#include "source/opencv2/opencv_imgcodecs.h"
+#include "source/opencv2/opencv_imgcodecs.h"
 #include "source/opencv2/opencv_highgui.h"
 //#include "source/opencv2/opencv_imgproc.h"
 #include "source/opencv2/core/opencv_type.h"
@@ -135,7 +135,7 @@ PHP_MINIT_FUNCTION(opencv)
 	*/
 	//module_number注册常量的宏需要，如：REGISTER_NS_LONG_CONSTANT
     opencv_interface_init(module_number);
-//    opencv_imgcodecs_init(module_number);
+    opencv_imgcodecs_init(module_number);
     opencv_highgui_init(module_number);
     opencv_exception_init(module_number);
     opencv_mat_init(module_number);//Opencv Mat 逻辑
@@ -214,8 +214,8 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, CV_32SC, ZEND_FN(opencv_cv_32sc), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, CV_32FC, ZEND_FN(opencv_cv_32fc), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, CV_64FC, ZEND_FN(opencv_cv_64fc), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, imread, ZEND_FN(opencv_imread), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, imwrite, ZEND_FN(opencv_imwrite), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, imread, ZEND_FN(opencv_imread), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, imwrite, ZEND_FN(opencv_imwrite), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, imshow, ZEND_FN(opencv_imshow), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, waitKey, ZEND_FN(opencv_wait_key), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, moveWindow, ZEND_FN(opencv_move_window), NULL)

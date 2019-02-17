@@ -19,6 +19,8 @@
 #include "core/opencv_mat.h"
 #include "opencv_objdetect.h"
 
+using namespace cv;
+
 zend_class_entry *opencv_cascade_classifier_ce;
 
 zend_object_handlers opencv_cascade_classifier_object_handlers;

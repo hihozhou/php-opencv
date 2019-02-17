@@ -40,7 +40,7 @@ extern "C" {
 #include "source/opencv2/core/opencv_base.h"
 #include "source/opencv2/core/opencv_persistence.h"
 #include "source/opencv2/opencv_objdetect.h"
-//#include "source/opencv2/opencv_videoio.h"
+#include "source/opencv2/opencv_videoio.h"
 #include "source/opencv2/opencv_face.h"
 #include "source/opencv2/core/opencv_utility.h"
 #include "source/opencv2/opencv_ml.h"
@@ -145,7 +145,7 @@ PHP_MINIT_FUNCTION(opencv)
     opencv_border_types_init(module_number);
 	opencv_file_storage_init(module_number);
 	opencv_objdetect_init(module_number);
-//	opencv_videoio_init(module_number);
+	opencv_videoio_init(module_number);
     opencv_face_init(module_number);
 	opencv_ml_init(module_number);
     opencv_cvdef_init(module_number);
@@ -235,42 +235,42 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, destroyWindow, ZEND_FN(opencv_destroy_window), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, getOptimalDFTSize, ZEND_FN(opencv_get_optimal_dft_size), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, copyMakeBorder, ZEND_FN(opencv_copy_make_border), opencv_copy_make_border_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, dft, ZEND_FN(opencv_dft), opencv_dft_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, magnitude, ZEND_FN(opencv_magnitude), opencv_magnitude_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, add, ZEND_FN(opencv_add), opencv_add_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, log, ZEND_FN(opencv_log), opencv_log_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, normalize, ZEND_FN(opencv_normalize), opencv_normalize_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, equalizeHist, ZEND_FN(opencv_equalize_hist), opencv_equalize_hist_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, resize, ZEND_FN(opencv_resize), opencv_resize_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, putText, ZEND_FN(opencv_put_text), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, absdiff, ZEND_FN(opencv_absdiff), opencv_absdiff_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, getTrackBarPos, ZEND_FN(opencv_get_track_bar_pos), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, blur, ZEND_FN(opencv_blur), opencv_blur_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, GaussianBlur, ZEND_FN(opencv_gaussian_blur), opencv_gaussian_blur_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, medianBlur, ZEND_FN(opencv_median_blur), opencv_median_blur_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, bilateralFilter, ZEND_FN(opencv_bilateral_filter), opencv_bilateral_filter_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, dilate, ZEND_FN(opencv_dilate), opencv_dilate_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, erode, ZEND_FN(opencv_erode), opencv_erode_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, filter2D, ZEND_FN(opencv_filter2D), opencv_filter2D_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, Sobel, ZEND_FN(opencv_sobel), opencv_sobel_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, Scharr, ZEND_FN(opencv_scharr), opencv_scharr_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, Laplacian, ZEND_FN(opencv_laplacian), opencv_laplacian_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, convertScaleAbs, ZEND_FN(opencv_convert_scale_abs), opencv_convert_scale_abs_arginfo)
-//	ZEND_NS_NAMED_FE(OPENCV_NS, getStructuringElement, ZEND_FN(opencv_get_structuring_element), opencv_get_structuring_element_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, threshold, ZEND_FN(opencv_threshold), opencv_threshold_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, morphologyEx, ZEND_FN(opencv_morphology_ex), opencv_morphology_ex_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, LUT, ZEND_FN(opencv_lut), opencv_lut_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, dft, ZEND_FN(opencv_dft), opencv_dft_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, magnitude, ZEND_FN(opencv_magnitude), opencv_magnitude_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, add, ZEND_FN(opencv_add), opencv_add_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, log, ZEND_FN(opencv_log), opencv_log_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, normalize, ZEND_FN(opencv_normalize), opencv_normalize_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, equalizeHist, ZEND_FN(opencv_equalize_hist), opencv_equalize_hist_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, resize, ZEND_FN(opencv_resize), opencv_resize_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, putText, ZEND_FN(opencv_put_text), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, absdiff, ZEND_FN(opencv_absdiff), opencv_absdiff_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, getTrackBarPos, ZEND_FN(opencv_get_track_bar_pos), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, blur, ZEND_FN(opencv_blur), opencv_blur_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, GaussianBlur, ZEND_FN(opencv_gaussian_blur), opencv_gaussian_blur_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, medianBlur, ZEND_FN(opencv_median_blur), opencv_median_blur_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, bilateralFilter, ZEND_FN(opencv_bilateral_filter), opencv_bilateral_filter_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, dilate, ZEND_FN(opencv_dilate), opencv_dilate_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, erode, ZEND_FN(opencv_erode), opencv_erode_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, filter2D, ZEND_FN(opencv_filter2D), opencv_filter2D_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, Sobel, ZEND_FN(opencv_sobel), opencv_sobel_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, Scharr, ZEND_FN(opencv_scharr), opencv_scharr_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, Laplacian, ZEND_FN(opencv_laplacian), opencv_laplacian_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, convertScaleAbs, ZEND_FN(opencv_convert_scale_abs), opencv_convert_scale_abs_arginfo)
+	ZEND_NS_NAMED_FE(OPENCV_NS, getStructuringElement, ZEND_FN(opencv_get_structuring_element), opencv_get_structuring_element_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, threshold, ZEND_FN(opencv_threshold), opencv_threshold_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, morphologyEx, ZEND_FN(opencv_morphology_ex), opencv_morphology_ex_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, LUT, ZEND_FN(opencv_lut), opencv_lut_arginfo)
     ZEND_NS_NAMED_FE(OPENCV_NS, getTickCount, ZEND_FN(opencv_get_tick_count), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, getTickFrequency, ZEND_FN(opencv_get_tick_frequency), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, floodFill, ZEND_FN(opencv_flood_fill), opencv_flood_fill_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, setMouseCallback, ZEND_FN(opencv_set_mouse_callback), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, adaptiveThreshold, ZEND_FN(opencv_adaptive_threshold), opencv_adaptive_threshold_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, findContoursWithoutHierarchy, ZEND_FN(opencv_find_contours_without_hierarchy), opencv_find_contours_without_hierarchy_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, drawContours, ZEND_FN(opencv_draw_contours), opencv_draw_contours_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, boundingRect, ZEND_FN(opencv_bounding_rect), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, getRotationMatrix2D, ZEND_FN(opencv_get_rotation_matrix2D), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, warpAffine, ZEND_FN(opencv_warp_affine), opencv_warp_affine_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, getRectSubPix, ZEND_FN(opencv_get_rect_sub_pix), opencv_get_rect_sub_pix_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, floodFill, ZEND_FN(opencv_flood_fill), opencv_flood_fill_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, setMouseCallback, ZEND_FN(opencv_set_mouse_callback), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, adaptiveThreshold, ZEND_FN(opencv_adaptive_threshold), opencv_adaptive_threshold_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, findContoursWithoutHierarchy, ZEND_FN(opencv_find_contours_without_hierarchy), opencv_find_contours_without_hierarchy_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, drawContours, ZEND_FN(opencv_draw_contours), opencv_draw_contours_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, boundingRect, ZEND_FN(opencv_bounding_rect), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, getRotationMatrix2D, ZEND_FN(opencv_get_rotation_matrix2D), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, warpAffine, ZEND_FN(opencv_warp_affine), opencv_warp_affine_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, getRectSubPix, ZEND_FN(opencv_get_rect_sub_pix), opencv_get_rect_sub_pix_arginfo)
 	PHP_FE_END	/* Must be the last line in opencv_functions[] */
 };
 /* }}} */

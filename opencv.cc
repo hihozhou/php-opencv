@@ -30,13 +30,13 @@ extern "C" {
 
 #include "php_opencv.h"
 //#include "source/opencv2/opencv_imgcodecs.h"
-//#include "source/opencv2/opencv_highgui.h"
+#include "source/opencv2/opencv_highgui.h"
 //#include "source/opencv2/opencv_imgproc.h"
 #include "source/opencv2/core/opencv_type.h"
 #include "source/opencv2/core/opencv_mat.h"
 #include "source/opencv2/core/hal/opencv_interface.h"
 #include "opencv_exception.h"
-//#include "source/opencv2/opencv_core.h"
+#include "source/opencv2/opencv_core.h"
 #include "source/opencv2/core/opencv_base.h"
 #include "source/opencv2/core/opencv_persistence.h"
 //#include "source/opencv2/opencv_objdetect.h"
@@ -136,12 +136,12 @@ PHP_MINIT_FUNCTION(opencv)
 	//module_number注册常量的宏需要，如：REGISTER_NS_LONG_CONSTANT
     opencv_interface_init(module_number);
 //    opencv_imgcodecs_init(module_number);
-//    opencv_highgui_init(module_number);
+    opencv_highgui_init(module_number);
     opencv_exception_init(module_number);
     opencv_mat_init(module_number);//Opencv Mat 逻辑
     opencv_type_init(module_number);
 //    opencv_imgproc_init(module_number);
-//	opencv_core_init(module_number);
+	opencv_core_init(module_number);
     opencv_border_types_init(module_number);
 	opencv_file_storage_init(module_number);
 //	opencv_objdetect_init(module_number);
@@ -216,10 +216,10 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, CV_64FC, ZEND_FN(opencv_cv_64fc), NULL)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, imread, ZEND_FN(opencv_imread), NULL)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, imwrite, ZEND_FN(opencv_imwrite), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, imshow, ZEND_FN(opencv_imshow), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, waitKey, ZEND_FN(opencv_wait_key), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, moveWindow, ZEND_FN(opencv_move_window), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, namedWindow, ZEND_FN(opencv_named_window), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, imshow, ZEND_FN(opencv_imshow), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, waitKey, ZEND_FN(opencv_wait_key), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, moveWindow, ZEND_FN(opencv_move_window), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, namedWindow, ZEND_FN(opencv_named_window), NULL)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, cvtColor, ZEND_FN(opencv_cv_t_color), NULL)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, ellipse, ZEND_FN(opencv_ellipse), NULL)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, circle, ZEND_FN(opencv_circle), NULL)
@@ -231,8 +231,8 @@ const zend_function_entry opencv_functions[] = {
 //    ZEND_NS_NAMED_FE(OPENCV_NS, addWeighted, ZEND_FN(opencv_add_weighted), opencv_add_weighted_arginfo)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, split, ZEND_FN(opencv_split), NULL)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, merge, ZEND_FN(opencv_merge), opencv_merge_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, createTrackbar, ZEND_FN(opencv_create_trackbar), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, destroyWindow, ZEND_FN(opencv_destroy_window), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, createTrackbar, ZEND_FN(opencv_create_trackbar), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, destroyWindow, ZEND_FN(opencv_destroy_window), NULL)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, getOptimalDFTSize, ZEND_FN(opencv_get_optimal_dft_size), NULL)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, copyMakeBorder, ZEND_FN(opencv_copy_make_border), opencv_copy_make_border_arginfo)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, dft, ZEND_FN(opencv_dft), opencv_dft_arginfo)

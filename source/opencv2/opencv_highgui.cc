@@ -20,6 +20,8 @@
 #include "core/opencv_mat.h"
 #include "../../opencv_exception.h"
 
+#include <opencv2/highgui.hpp>
+using namespace cv;
 
 
 /**

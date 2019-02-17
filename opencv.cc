@@ -31,7 +31,7 @@ extern "C" {
 #include "php_opencv.h"
 #include "source/opencv2/opencv_imgcodecs.h"
 #include "source/opencv2/opencv_highgui.h"
-//#include "source/opencv2/opencv_imgproc.h"
+#include "source/opencv2/opencv_imgproc.h"
 #include "source/opencv2/core/opencv_type.h"
 #include "source/opencv2/core/opencv_mat.h"
 #include "source/opencv2/core/hal/opencv_interface.h"
@@ -43,7 +43,7 @@ extern "C" {
 //#include "source/opencv2/opencv_videoio.h"
 #include "source/opencv2/opencv_face.h"
 #include "source/opencv2/core/opencv_utility.h"
-//#include "source/opencv2/opencv_ml.h"
+#include "source/opencv2/opencv_ml.h"
 #include "source/opencv2/core/opencv_cvdef.h"
 
 #include <iostream>
@@ -140,14 +140,14 @@ PHP_MINIT_FUNCTION(opencv)
     opencv_exception_init(module_number);
     opencv_mat_init(module_number);//Opencv Mat 逻辑
     opencv_type_init(module_number);
-//    opencv_imgproc_init(module_number);
+    opencv_imgproc_init(module_number);
 	opencv_core_init(module_number);
     opencv_border_types_init(module_number);
 	opencv_file_storage_init(module_number);
 //	opencv_objdetect_init(module_number);
 //	opencv_videoio_init(module_number);
     opencv_face_init(module_number);
-//	opencv_ml_init(module_number);
+	opencv_ml_init(module_number);
     opencv_cvdef_init(module_number);
 
 	return SUCCESS;
@@ -220,21 +220,21 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, waitKey, ZEND_FN(opencv_wait_key), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, moveWindow, ZEND_FN(opencv_move_window), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, namedWindow, ZEND_FN(opencv_named_window), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, cvtColor, ZEND_FN(opencv_cv_t_color), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, ellipse, ZEND_FN(opencv_ellipse), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, circle, ZEND_FN(opencv_circle), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, fillPoly, ZEND_FN(opencv_fill_poly), opencv_fill_poly_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, line, ZEND_FN(opencv_line), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, rectangle, ZEND_FN(opencv_rectangle), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, rectangleByPoint, ZEND_FN(opencv_rectangle_by_point), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, rectangleByRect, ZEND_FN(opencv_rectangle_by_rect), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, addWeighted, ZEND_FN(opencv_add_weighted), opencv_add_weighted_arginfo)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, split, ZEND_FN(opencv_split), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, merge, ZEND_FN(opencv_merge), opencv_merge_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, cvtColor, ZEND_FN(opencv_cv_t_color), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, ellipse, ZEND_FN(opencv_ellipse), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, circle, ZEND_FN(opencv_circle), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, fillPoly, ZEND_FN(opencv_fill_poly), opencv_fill_poly_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, line, ZEND_FN(opencv_line), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, rectangle, ZEND_FN(opencv_rectangle), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, rectangleByPoint, ZEND_FN(opencv_rectangle_by_point), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, rectangleByRect, ZEND_FN(opencv_rectangle_by_rect), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, addWeighted, ZEND_FN(opencv_add_weighted), opencv_add_weighted_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, split, ZEND_FN(opencv_split), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, merge, ZEND_FN(opencv_merge), opencv_merge_arginfo)
     ZEND_NS_NAMED_FE(OPENCV_NS, createTrackbar, ZEND_FN(opencv_create_trackbar), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, destroyWindow, ZEND_FN(opencv_destroy_window), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, getOptimalDFTSize, ZEND_FN(opencv_get_optimal_dft_size), NULL)
-//    ZEND_NS_NAMED_FE(OPENCV_NS, copyMakeBorder, ZEND_FN(opencv_copy_make_border), opencv_copy_make_border_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, getOptimalDFTSize, ZEND_FN(opencv_get_optimal_dft_size), NULL)
+    ZEND_NS_NAMED_FE(OPENCV_NS, copyMakeBorder, ZEND_FN(opencv_copy_make_border), opencv_copy_make_border_arginfo)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, dft, ZEND_FN(opencv_dft), opencv_dft_arginfo)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, magnitude, ZEND_FN(opencv_magnitude), opencv_magnitude_arginfo)
 //    ZEND_NS_NAMED_FE(OPENCV_NS, add, ZEND_FN(opencv_add), opencv_add_arginfo)

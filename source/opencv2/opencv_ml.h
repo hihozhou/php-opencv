@@ -18,6 +18,7 @@
 #define PHP_OPENCV_ML_H
 
 #include <opencv2/ml.hpp>
+using namespace cv::ml;
 
 extern void opencv_ml_init(int module_number);
 extern void opencv_k_nearest_init(int module_number);

@@ -15,10 +15,9 @@
  */
 
 #include "../../php_opencv.h"
-#include <opencv2/objdetect.hpp>
-#include "opencv_objdetect.h"
 #include "core/opencv_type.h"
 #include "core/opencv_mat.h"
+#include "opencv_objdetect.h"
 
 zend_class_entry *opencv_cascade_classifier_ce;
 

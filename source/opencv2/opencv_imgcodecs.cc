@@ -19,6 +19,9 @@
 #include "opencv_imgcodecs.h"
 #include "core/opencv_mat.h"
 #include "../../opencv_exception.h"
+#include <opencv2/imgcodecs.hpp>
+
+using namespace cv;
 
 
 

@@ -156,5 +156,6 @@ This project exists thanks to all the people who contribute. [[Contribute](https
 ## 感谢
 
 感谢[韩天峰](https://github.com/matyhtf)老大的指导，  
-感谢[盘古大叔](https://github.com/pangudashu)的[php7-internal](https://github.com/pangudashu/php7-internal)项目以及平常的指导，  
+感谢[韩天峰](https://github.com/matyhtf)老大的指导，
+感谢[盘古大叔](https://github.com/pangudashu)的[php7-internal](https://github.com/pangudashu/php7-internal)项目以及平常的指导，
 感谢`木桶技术升级交流群`和`黑夜路人技术群`、以及`PHP内核交流`的群友对技术的帮助。

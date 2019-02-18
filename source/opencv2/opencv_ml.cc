@@ -15,10 +15,11 @@
  */
 
 #include "../../php_opencv.h"
-#include "opencv_ml.h"
+//todo 如果需要引入core/opencv_mat.h文件必须在放在本文件头的前面，重复引用问题
 #include "core/opencv_mat.h"
+#include "opencv_ml.h"
 
-using namespace cv::ml;
+
 
 void opencv_ml_init(int module_number){
     opencv_ml_constants_init(module_number);

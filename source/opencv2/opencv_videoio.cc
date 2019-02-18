@@ -14,9 +14,11 @@
  +----------------------------------------------------------------------+
  */
 #include "../../php_opencv.h"
-#include "opencv_videoio.h"
 #include "../../opencv_exception.h"
 #include "core/opencv_mat.h"
+#include "opencv_videoio.h"
+
+using namespace cv;
 
 zend_class_entry *opencv_video_capture_ce;
 

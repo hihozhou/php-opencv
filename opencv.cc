@@ -17,15 +17,17 @@
 
 /* $Id$ */
 
-extern "C" {
-	#ifdef HAVE_CONFIG_H
+#ifdef HAVE_CONFIG_H
 	#include "config.h"
-	#endif
+#endif
 
+extern "C" {
 	#include "php.h"
-	#include "php_ini.h"
-	#include "ext/standard/info.h"
 }
+
+#include "php_ini.h"
+#include "ext/standard/info.h"
+
 #include "php_opencv.h"
 #include "source/opencv2/opencv_imgcodecs.h"
 #include "source/opencv2/opencv_highgui.h"
@@ -43,6 +45,15 @@ extern "C" {
 #include "source/opencv2/core/opencv_utility.h"
 #include "source/opencv2/opencv_ml.h"
 #include "source/opencv2/core/opencv_cvdef.h"
+
+#include <iostream>
+//include opencv code
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+
+using namespace cv;
+
+
 
 /* If you declare any globals in php_opencv.h uncomment this:
 ZEND_DECLARE_MODULE_GLOBALS(opencv)
@@ -81,6 +92,17 @@ PHP_FUNCTION(confirm_opencv_compiled)
 	strg = strpprintf(0, "Congratulations! You have successfully modified ext/%.78s/config.m4. Module %.78s is now compiled into PHP.", "opencv", arg);
 
 	RETURN_STR(strg);
+}
+
+
+PHP_FUNCTION(opencv_test)
+{
+    std::cout<<"This C++ output!"<<std::endl;
+    php_printf("This is opencv extension!");
+    Mat mat = cv::imread("C:\\Users\\hiho\\Desktop\\test.jpg");
+    cv::imshow("test",mat);
+    cv::waitKey(0);
+	RETURN_TRUE;
 }
 
 
@@ -184,6 +206,7 @@ PHP_MINFO_FUNCTION(opencv)
  */
 const zend_function_entry opencv_functions[] = {
 	PHP_FE(confirm_opencv_compiled,	NULL)		/* For testing, remove later. */
+	PHP_FE(opencv_test,	NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, CV_8UC, ZEND_FN(opencv_cv_8uc), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, CV_8SC, ZEND_FN(opencv_cv_8sc), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, CV_16UC, ZEND_FN(opencv_cv_16uc), NULL)

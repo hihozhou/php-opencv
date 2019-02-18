@@ -18,6 +18,9 @@
 #define PHP_OPENCV_PERSISTENCE_H
 
 #include "../../../php_opencv.h"
+#include <opencv2/core.hpp>
+
+using namespace cv;
 
 extern zend_class_entry *opencv_file_storage_ce;
 

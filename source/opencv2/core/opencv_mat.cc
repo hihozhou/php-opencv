@@ -16,9 +16,10 @@
 
 
 #include "../../../php_opencv.h"
-#include "opencv_mat.h"
 #include "opencv_type.h"
 #include "../../../opencv_exception.h"
+#include "opencv_mat.h"
+#include <iostream>
 
 zend_object_handlers opencv_mat_object_handlers;
 

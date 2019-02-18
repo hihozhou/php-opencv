@@ -17,6 +17,8 @@
 #ifndef PHP_OPENCV_VIDEOIO_H
 #define PHP_OPENCV_VIDEOIO_H
 
+#include <opencv2/videoio.hpp>
+
 extern zend_class_entry *opencv_video_capture_ce;
 
 #define Z_PHP_VIDEO_CAPTURE_P(zv)  get_video_capture_obj(Z_OBJ_P(zv))

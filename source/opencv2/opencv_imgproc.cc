@@ -21,6 +21,7 @@
 #include "core/opencv_type.h"
 #include "../../opencv_exception.h"
 
+using namespace cv;
 
 void opencv_imgproc_init(int module_number) {
     opencv_color_conversion_code_init(module_number);
@@ -147,6 +148,12 @@ PHP_FUNCTION (opencv_fill_poly) {
         RETURN_NULL();
     }
 
+#ifdef PHP_WIN32
+    //todo windwo报错问题
+    opencv_throw_exception("fillPoly function not support Window system.");
+    RETURN_NULL();
+#else
+
     long ncontours = 1;
     unsigned long point_count = zend_hash_num_elements(Z_ARRVAL_P(points_zval));
     Point root_points[ncontours][point_count];
@@ -154,19 +161,19 @@ PHP_FUNCTION (opencv_fill_poly) {
     zend_ulong _h;
     zval *array_val_zval;
     ZEND_HASH_FOREACH_NUM_KEY_VAL(Z_ARRVAL_P(points_zval), _h, array_val_zval)
-            {
-                again1:
-                if (Z_TYPE_P(array_val_zval) == IS_OBJECT && Z_OBJCE_P(array_val_zval) == opencv_point_ce) {
-                    point_object = Z_PHP_POINT_OBJ_P(array_val_zval);
-                    root_points[0][_h] = *point_object->point;
-                } else if (Z_TYPE_P(array_val_zval) == IS_REFERENCE) {
-                    array_val_zval = Z_REFVAL_P(array_val_zval);
-                    goto again1;
-                } else {
-                    opencv_throw_exception("points array value just Point object.");
-                    RETURN_NULL();
-                }
-            }
+                        {
+                            again1:
+                        if (Z_TYPE_P(array_val_zval) == IS_OBJECT && Z_OBJCE_P(array_val_zval) == opencv_point_ce) {
+                                point_object = Z_PHP_POINT_OBJ_P(array_val_zval);
+                                root_points[0][_h] = *point_object->point;
+                            } else if (Z_TYPE_P(array_val_zval) == IS_REFERENCE) {
+                                array_val_zval = Z_REFVAL_P(array_val_zval);
+                                goto again1;
+                            } else {
+                                    opencv_throw_exception("points array value just Point object.");
+                                    RETURN_NULL();
+                            }
+                        }
     ZEND_HASH_FOREACH_END();
 
     const Point *pts[ncontours];
@@ -181,15 +188,15 @@ PHP_FUNCTION (opencv_fill_poly) {
             // is Point object
             offset_object = Z_PHP_POINT_OBJ_P(offset_point_real_zval);
         } else {
-            // isn't Point object
-            zval_ptr_dtor(offset_point_real_zval);
-            zval instance;
-            object_init_ex(&instance, opencv_point_ce);
-            ZVAL_COPY_VALUE(offset_point_real_zval, &instance);// Cover dst_real_zval by Point object
-            offset_object = Z_PHP_POINT_OBJ_P(offset_point_real_zval);
+                // isn't Point object
+                zval_ptr_dtor(offset_point_real_zval);
+                zval instance;
+                object_init_ex(&instance, opencv_point_ce);
+                ZVAL_COPY_VALUE(offset_point_real_zval, &instance);// Cover dst_real_zval by Point object
+                offset_object = Z_PHP_POINT_OBJ_P(offset_point_real_zval);
         }
     } else {
-        offset = Point();
+            offset = Point();
     }
 
     opencv_mat_object *mat_obj = Z_PHP_MAT_OBJ_P(img_zval);
@@ -202,6 +209,9 @@ PHP_FUNCTION (opencv_fill_poly) {
     }
 
     RETURN_NULL();
+#endif
+
+
 }
 
 

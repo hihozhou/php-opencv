@@ -17,7 +17,6 @@
 #ifndef PHP_OPENCV_OBJDETECT_H
 #define PHP_OPENCV_OBJDETECT_H
 
-#include "../../php_opencv.h"
 #include <opencv2/objdetect.hpp>
 
 extern zend_class_entry *opencv_cascade_classifier_ce;

@@ -39,7 +39,6 @@ if test "$PHP_OPENCV" != "no"; then
     opencv_exception.cc \
     source/opencv2/core/hal/opencv_interface.cc \
     source/opencv2/opencv_highgui.cc \
-    source/opencv2/imgcodecs/opencv_imgcodecs_c.cc \
     source/opencv2/core/opencv_type.cc \
     source/opencv2/opencv_core.cc \
     source/opencv2/opencv_imgproc.cc \

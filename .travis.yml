@@ -15,6 +15,5 @@ before_install:
   - docker pull hihozhou/opencv:latest
 
 
-
 script:
-  - ./travis/compile.sh
+  - php -v

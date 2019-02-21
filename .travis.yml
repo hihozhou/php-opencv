@@ -1,10 +1,20 @@
 sudo: required
 
+language: php
+
+php:
+  - 7.0
+  - 7.1
+  - 7.2
+  - 7.3
+
 services:
   - docker
 
 before_install:
   - docker pull hihozhou/opencv:latest
 
+
+
 script:
-  - docker build .
+  - ./travis/compile.sh

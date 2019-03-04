@@ -1353,7 +1353,7 @@ PHP_FUNCTION (opencv_get_rotation_matrix2D) {
 
     opencv_mat_update_property_by_c_mat(&instance, instance_object->mat);
 
-    RETURN_ZVAL(&instance, 0, 0); //return php Rect object
+    RETURN_ZVAL(&instance, 0, 0); //return php Mat object
 
 }
 
@@ -1448,6 +1448,83 @@ PHP_FUNCTION (opencv_get_rect_sub_pix) {
     opencv_mat_update_property_by_c_mat(patch_real_zval, patch_object->mat);
 
     RETURN_NULL();
+
+}
+
+/**
+ * @see cv::getPerspectiveTransform
+ * @param execute_data
+ * @param return_value
+ */
+PHP_FUNCTION(opencv_get_perspective_transform){
+
+    zval *src_zval,*dst_zval;
+    long solveMethod = DECOMP_LU;
+
+    if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_THROW, ZEND_NUM_ARGS(), "aa|l",
+                                 &src_zval ,
+                                 &dst_zval ,
+                                 &solveMethod
+    ) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    zend_ulong _h;
+    zval *array_val_zval;
+    std::vector<cv::Point2f> src_points, dst_points;
+    opencv_point_object *point_object;
+    //src point数组
+    unsigned long src_count = zend_hash_num_elements(Z_ARRVAL_P(src_zval));//获取数组长度
+    src_points.reserve(src_count);//指定长度
+    ZEND_HASH_FOREACH_NUM_KEY_VAL(Z_ARRVAL_P(src_zval), _h, array_val_zval)
+            {//get point arrays
+                again1:
+                if (Z_TYPE_P(array_val_zval) == IS_OBJECT && Z_OBJCE_P(array_val_zval) == opencv_point_ce) {
+                    point_object = Z_PHP_POINT_OBJ_P(array_val_zval);
+                    src_points.push_back(*point_object->point);
+                } else if (Z_TYPE_P(array_val_zval) == IS_REFERENCE) {
+                    array_val_zval = Z_REFVAL_P(array_val_zval);
+                    goto again1;
+                } else {
+                    opencv_throw_exception("The parameter src can only be a Point object two bit array.");
+                    RETURN_NULL();
+                }
+            }
+    ZEND_HASH_FOREACH_END();
+
+    //dst point数组
+    unsigned long dst_count = zend_hash_num_elements(Z_ARRVAL_P(src_zval));//获取数组长度
+    dst_points.reserve(dst_count);//指定长度
+    ZEND_HASH_FOREACH_NUM_KEY_VAL(Z_ARRVAL_P(src_zval), _h, array_val_zval)
+            {//get point arrays
+                again2:
+                if (Z_TYPE_P(array_val_zval) == IS_OBJECT && Z_OBJCE_P(array_val_zval) == opencv_point_ce) {
+                    point_object = Z_PHP_POINT_OBJ_P(array_val_zval);
+                    dst_points.push_back(*point_object->point);
+                } else if (Z_TYPE_P(array_val_zval) == IS_REFERENCE) {
+                    array_val_zval = Z_REFVAL_P(array_val_zval);
+                    goto again2;
+                } else {
+                    opencv_throw_exception("The parameter dst can only be a Point object two bit array.");
+                    RETURN_NULL();
+                }
+            }
+    ZEND_HASH_FOREACH_END();
+
+    try {
+        Mat mat = getPerspectiveTransform(src_points, dst_points);
+        zval instance;
+        object_init_ex(&instance, opencv_mat_ce);
+        opencv_mat_object *instance_object = Z_PHP_MAT_OBJ_P(&instance);
+
+        instance_object->mat = new Mat(mat);
+
+        opencv_mat_update_property_by_c_mat(&instance, instance_object->mat);
+
+        RETURN_ZVAL(&instance, 0, 0); //return php Mat object
+    } catch (Exception e) {
+        opencv_throw_exception(e.what());
+    }
 
 }
 

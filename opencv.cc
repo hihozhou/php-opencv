@@ -271,6 +271,7 @@ const zend_function_entry opencv_functions[] = {
     ZEND_NS_NAMED_FE(OPENCV_NS, getRotationMatrix2D, ZEND_FN(opencv_get_rotation_matrix2D), NULL)
     ZEND_NS_NAMED_FE(OPENCV_NS, warpAffine, ZEND_FN(opencv_warp_affine), opencv_warp_affine_arginfo)
     ZEND_NS_NAMED_FE(OPENCV_NS, getRectSubPix, ZEND_FN(opencv_get_rect_sub_pix), opencv_get_rect_sub_pix_arginfo)
+    ZEND_NS_NAMED_FE(OPENCV_NS, getPerspectiveTransform, ZEND_FN(opencv_get_perspective_transform), opencv_get_perspective_transform_arginfo)
 	PHP_FE_END	/* Must be the last line in opencv_functions[] */
 };
 /* }}} */

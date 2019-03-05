@@ -1512,7 +1512,7 @@ PHP_FUNCTION(opencv_get_perspective_transform){
     ZEND_HASH_FOREACH_END();
 
     try {
-        Mat mat = getPerspectiveTransform(src_points, dst_points);
+        Mat mat = getPerspectiveTransform(src_points, dst_points, (int)solveMethod);
         zval instance;
         object_init_ex(&instance, opencv_mat_ce);
         opencv_mat_object *instance_object = Z_PHP_MAT_OBJ_P(&instance);

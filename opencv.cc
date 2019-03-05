@@ -143,6 +143,7 @@ PHP_MINIT_FUNCTION(opencv)
     opencv_imgproc_init(module_number);
 	opencv_core_init(module_number);
     opencv_border_types_init(module_number);
+	opencv_decomp_types_init(module_number);
 	opencv_file_storage_init(module_number);
 	opencv_objdetect_init(module_number);
 	opencv_videoio_init(module_number);

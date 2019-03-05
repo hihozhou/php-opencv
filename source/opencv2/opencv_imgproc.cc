@@ -20,6 +20,7 @@
 #include "core/opencv_mat.h"
 #include "core/opencv_type.h"
 #include "../../opencv_exception.h"
+#include <opencv2/highgui.hpp>
 
 using namespace cv;
 
@@ -1493,9 +1494,9 @@ PHP_FUNCTION(opencv_get_perspective_transform){
     ZEND_HASH_FOREACH_END();
 
     //dst point数组
-    unsigned long dst_count = zend_hash_num_elements(Z_ARRVAL_P(src_zval));//获取数组长度
+    unsigned long dst_count = zend_hash_num_elements(Z_ARRVAL_P(dst_zval));//获取数组长度
     dst_points.reserve(dst_count);//指定长度
-    ZEND_HASH_FOREACH_NUM_KEY_VAL(Z_ARRVAL_P(src_zval), _h, array_val_zval)
+    ZEND_HASH_FOREACH_NUM_KEY_VAL(Z_ARRVAL_P(dst_zval), _h, array_val_zval)
             {//get point arrays
                 again2:
                 if (Z_TYPE_P(array_val_zval) == IS_OBJECT && Z_OBJCE_P(array_val_zval) == opencv_point_ce) {
@@ -1525,6 +1526,63 @@ PHP_FUNCTION(opencv_get_perspective_transform){
     } catch (Exception e) {
         opencv_throw_exception(e.what());
     }
+
+}
+
+
+PHP_FUNCTION(opencv_warp_perspective){
+
+    zval *src_zval, *dst_zval, *M_zval, *dsize_zval, *border_value_zval = nullptr;
+    long flags = INTER_LINEAR ,borderMode = BORDER_CONSTANT;
+
+    if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_THROW, ZEND_NUM_ARGS(), "OzOO|llO",
+                                 &src_zval ,opencv_mat_ce,
+                                 &dst_zval ,
+                                 &M_zval ,opencv_mat_ce,
+                                 &dsize_zval ,opencv_size_ce,
+                                 &flags,
+                                 &borderMode,
+                                 &border_value_zval, opencv_scalar_ce
+    ) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    Scalar borderValue = Scalar();
+    if (border_value_zval != nullptr) {
+        opencv_scalar_object *border_value_object = Z_PHP_SCALAR_OBJ_P(border_value_zval);
+        borderValue = *border_value_object->scalar;
+    }
+
+    opencv_mat_object *src_object = Z_PHP_MAT_OBJ_P(src_zval);
+    opencv_mat_object *M_object = Z_PHP_MAT_OBJ_P(M_zval);
+    opencv_size_object *dsize_object = Z_PHP_SIZE_OBJ_P(dsize_zval);
+
+    opencv_mat_object *dst_object;
+    zval *dst_real_zval = Z_REFVAL_P(dst_zval);
+
+    if (Z_TYPE_P(dst_real_zval) == IS_OBJECT && Z_OBJCE_P(dst_real_zval) == opencv_mat_ce) {
+        // is Point object
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    } else {
+        // isn't Mat object
+        zval_ptr_dtor(dst_real_zval);
+        zval instance;
+        object_init_ex(&instance, opencv_mat_ce);
+        ZVAL_COPY_VALUE(dst_real_zval, &instance);// Cover dst_real_zval by Mat object
+        dst_object = Z_PHP_MAT_OBJ_P(dst_real_zval);
+    }
+    try{
+        Mat dst;
+        warpPerspective(*src_object->mat, dst, *M_object->mat, *dsize_object->size, (int) flags, (int) borderMode, borderValue);
+        dst_object->mat = new Mat(dst);
+        opencv_mat_update_property_by_c_mat(dst_real_zval, dst_object->mat);
+
+        RETURN_NULL();
+
+    } catch (Exception e) {
+        opencv_throw_exception(e.what());
+    }
+
 
 }
 

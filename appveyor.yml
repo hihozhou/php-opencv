@@ -1,0 +1,10 @@
+version: 1.0.{build}
+
+platform:
+  - x64
+
+install:
+  - cmd: echo "Install OpenCV..."
+
+build_script:
+  - cmd: cmake --version

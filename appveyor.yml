@@ -8,6 +8,7 @@ install:
 
 build_script:
   - cmd: cmake --version
+  - cmd: php -v
 
 environment:
   BIN_SDK_VER: 2.1.2 # 定义php-sdk-binary-tools 版本

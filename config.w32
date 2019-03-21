@@ -19,22 +19,23 @@ if (PHP_OPENCV != "no") {
 
     opencv_source_file="opencv.cc \
                 opencv_exception.cc \
-                source/opencv2/core/hal/opencv_interface.cc \
-                source/opencv2/core/opencv_base.cc \
-                source/opencv2/core/opencv_cvdef.cc \
-                source/opencv2/core/opencv_type.cc \
-                source/opencv2/core/opencv_utility.cc \
-                source/opencv2/core/opencv_persistence.cc \
-                source/opencv2/core/opencv_mat.cc \
-                source/opencv2/face/opencv_facerec.cc \
-                source/opencv2/opencv_face.cc \
-                source/opencv2/opencv_core.cc \
-                source/opencv2/opencv_highgui.cc \
-                source/opencv2/opencv_imgcodecs.cc \
-                source/opencv2/opencv_imgproc.cc \
-                source/opencv2/opencv_ml.cc \
-                source/opencv2/opencv_objdetect.cc \
-                source/opencv2/opencv_videoio.cc"
+                source\\opencv2\\core\\hal\\opencv_interface.cc \
+                source\\opencv2\\core\\opencv_base.cc \
+                source\\opencv2\\core\\opencv_cvdef.cc \
+                source\\opencv2\\core\\opencv_type.cc \
+                source\\opencv2\\core\\opencv_utility.cc \
+                source\\opencv2\\core\\opencv_persistence.cc \
+                source\\opencv2\\core\\opencv_mat.cc \
+                source\\opencv2\\face\\opencv_facerec.cc \
+                source\\opencv2\\opencv_face.cc \
+                source\\opencv2\\opencv_core.cc \
+                source\\opencv2\\opencv_highgui.cc \
+                source\\opencv2\\opencv_imgcodecs.cc \
+                source\\opencv2\\opencv_imgproc.cc \
+                source\\opencv2\\opencv_ml.cc \
+                source\\opencv2\\opencv_objdetect.cc \
+                source\\opencv2\\opencv_videoio.cc"
+
 
     EXTENSION("opencv", opencv_source_file,"yes");
 

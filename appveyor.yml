@@ -8,14 +8,9 @@ clone_folder:  c:\projects\php-opencv
 install:
   ps: |
     echo "Install OpenCV..."
-    git clone https://github.com/opencv/opencv.git --depth 1
+    git clone https://github.com/opencv/opencv.git --branch $env:OPENCV_VERSION --depth 1
+    git clone https://github.com/opencv/opencv_contrib.git --branch $env:OPENCV_VERSION --depth 1
     cd opencv
-    git checkout $env:OPENCV_VERSION
-    cd ..
-    git clone https://github.com/opencv/opencv_contrib.git --depth 1
-    cd opencv_contrib
-    git checkout $env:OPENCV_VERSION
-    cd ../opencv
     mkdir build
     cd build
     pwd

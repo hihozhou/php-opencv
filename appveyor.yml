@@ -3,14 +3,26 @@ version: 1.0.{build}
 platform:
   - x64
 
+
 install:
   - cmd: echo "Install OpenCV..."
+  - cmd: git clone https://github.com/opencv/opencv.git --depth 1
+  - cmd: cd opencv
+  - cmd: git checkout $env:OPENCV_VERSION
+  - cmd: cd ..
+  - cmd: git clone https://github.com/opencv/opencv_contrib.git --depth 1
+  - cmd: cd opencv_contrib
+  - cmd: git checkout $env:OPENCV_VERSION
+  - cmd: ../opencv
+  - cmd: mkdir build && cd build
+  - cmd: pwd
+  - cmd: cmake -D CMAKE_BUILD_TYPE=RELEASE  -G "Visual Studio 15 2017 Win64" -D INSTALL_C_EXAMPLES=OFF -D INSTALL_PYTHON_EXAMPLES=OFF -D BUILD_EXAMPLES=OFF -D BUILD_JAVA=OFF -D BUILD_TESTS=OFF -D BUILD_DOCS=OFF -D BUILD_opencv_world=ON -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules ..
 
 build_script:
   - cmd: cmake --version
-  - cmd: php -v
 
 environment:
+  OPENCV_VERSION: 4.0.0 # OpenCV 版本
   BIN_SDK_VER: 2.1.2 # 定义php-sdk-binary-tools 版本
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017

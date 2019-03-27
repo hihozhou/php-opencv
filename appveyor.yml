@@ -14,7 +14,7 @@ install:
     mkdir build
     cd build
     pwd
-    cmake -D CMAKE_BUILD_TYPE=RELEASE  -G "Visual Studio 15 2017 Win64" -D INSTALL_C_EXAMPLES=OFF -D INSTALL_PYTHON_EXAMPLES=OFF -D BUILD_EXAMPLES=OFF -D BUILD_JAVA=OFF -D BUILD_opencv_python2=OFF -D BUILD_opencv_python3=OFF -D BUILD_TESTS=OFF -D BUILD_DOCS=OFF -D BUILD_opencv_world=ON -D OPENCV_EXTRA_MODULES_PATH=c:/projects/php-opencv/opencv_contrib/modules ..  2>&1
+    cmake -D CMAKE_BUILD_TYPE=RELEASE  -G "Visual Studio 15 2017 Win64" -D INSTALL_C_EXAMPLES=OFF -D OPENCV_PYTHON_SKIP_DETECTION=ON -D INSTALL_PYTHON_EXAMPLES=OFF -D BUILD_EXAMPLES=OFF -D BUILD_JAVA=OFF -D BUILD_opencv_python2=OFF -D BUILD_opencv_python3=OFF -D BUILD_TESTS=OFF -D BUILD_DOCS=OFF -D BUILD_opencv_world=ON -D OPENCV_EXTRA_MODULES_PATH=c:/projects/php-opencv/opencv_contrib/modules ..  2>&1
 
 build_script:
   - cmd: cmake --version

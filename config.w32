@@ -15,7 +15,7 @@ if (PHP_OPENCV != "no") {
 
     //检查opencv链接库，如果存在返回路径
     CHECK_LIB("opencv_world400d.lib;opencv_world400.lib", "opencv","D:\\opencv\\build\\x64\\vc15\\lib");
-    CHECK_HEADER_ADD_INCLUDE("opencv2/opencv.hpp", "CFLAGS_OPENCV", "D:\\opencv\\build\\include");
+    CHECK_HEADER_ADD_INCLUDE("opencv2\\opencv.hpp", "CFLAGS_OPENCV", "D:\\opencv\\build\\include");
 
     opencv_source_file="opencv.cc \
                 opencv_exception.cc \

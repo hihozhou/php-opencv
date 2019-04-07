@@ -268,4 +268,23 @@ ZEND_END_ARG_INFO()
 PHP_FUNCTION(opencv_get_rect_sub_pix);
 
 
+ZEND_BEGIN_ARG_INFO_EX(opencv_get_perspective_transform_arginfo, 0, 0, 5)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(0, dst)
+                ZEND_ARG_INFO(0, solveMethod)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_get_perspective_transform);
+
+ZEND_BEGIN_ARG_INFO_EX(opencv_warp_perspective_arginfo, 0, 0, 7)
+                ZEND_ARG_INFO(0, src)
+                ZEND_ARG_INFO(1, dst)
+                ZEND_ARG_INFO(0, M)
+                ZEND_ARG_INFO(0, dsize)
+                ZEND_ARG_INFO(0, flags)
+                ZEND_ARG_INFO(0, borderMode)
+                ZEND_ARG_INFO(0, borderValue)
+ZEND_END_ARG_INFO()
+PHP_FUNCTION(opencv_warp_perspective);
+
+
 #endif //OPENCV_OPENCV_IMGPROC_H

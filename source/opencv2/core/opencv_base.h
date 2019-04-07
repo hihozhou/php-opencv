@@ -18,4 +18,5 @@
 #define PHP_OPENCV_BASE_H
 
 extern void opencv_border_types_init(int module_number);
+extern void opencv_decomp_types_init(int module_number);
 #endif //OPENCV_BASE_H

@@ -41,17 +41,17 @@ extern "C" {
 #include "source\\opencv2\\core\\opencv_base.h"
 
 // files need to chek
-//#include "source\\opencv2\\core\\opencv_persistence.h"
-//#include "source\\opencv2\\opencv_objdetect.h"
-//#include "source\\opencv2\\opencv_videoio.h"
-//#include "source\\opencv2\\opencv_ml.h"
-//#include "source\\opencv2\\core\\opencv_type.h"
-//#include "source\\opencv2\\core\\opencv_mat.h"
+#include "source\\opencv2\\core\\opencv_persistence.h"
+#include "source\\opencv2\\opencv_objdetect.h"
+#include "source\\opencv2\\opencv_videoio.h"
+#include "source\\opencv2\\opencv_ml.h"
+#include "source\\opencv2\\core\\opencv_type.h"
+#include "source\\opencv2\\core\\opencv_mat.h"
 
 #include <iostream>
 //include opencv code
-//#include <opencv2/core.hpp>
-//#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
 
 
 using namespace cv;

@@ -32,7 +32,7 @@ extern zend_class_entry *opencv_mat_ce;
 
 typedef struct _opencv_mat_object{
     zend_object std;
-    struct Mat *mat;
+    class Mat *mat;
 }opencv_mat_object;
 
 

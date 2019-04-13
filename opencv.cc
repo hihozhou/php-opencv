@@ -23,33 +23,36 @@
 
 extern "C" {
 	#include "php.h"
-}
+};
 
 #include "php_ini.h"
-#include "ext/standard/info.h"
+#include "ext\\standard\\info.h"
 
 #include "php_opencv.h"
 #include "source\\opencv2\\opencv_imgcodecs.h"
 #include "source\\opencv2\\opencv_highgui.h"
 #include "source\\opencv2\\opencv_imgproc.h"
-#include "source\\opencv2\\core\\opencv_type.h"
-#include "source\\opencv2\\core\\opencv_mat.h"
+#include "source\\opencv2\\core\\opencv_cvdef.h"
+#include "source\\opencv2\\opencv_face.h"
+#include "source\\opencv2\\core\\opencv_utility.h"
 #include "source\\opencv2\\core\\hal\\opencv_interface.h"
 #include "opencv_exception.h"
 #include "source\\opencv2\\opencv_core.h"
 #include "source\\opencv2\\core\\opencv_base.h"
-#include "source\\opencv2\\core\\opencv_persistence.h"
-#include "source\\opencv2\\opencv_objdetect.h"
-#include "source\\opencv2\\opencv_videoio.h"
-#include "source\\opencv2\\opencv_face.h"
-#include "source\\opencv2\\core\\opencv_utility.h"
-#include "source\\opencv2\\opencv_ml.h"
-#include "source\\opencv2\\core\\opencv_cvdef.h"
+
+// files need to chek
+//#include "source\\opencv2\\core\\opencv_persistence.h"
+//#include "source\\opencv2\\opencv_objdetect.h"
+//#include "source\\opencv2\\opencv_videoio.h"
+//#include "source\\opencv2\\opencv_ml.h"
+//#include "source\\opencv2\\core\\opencv_type.h"
+//#include "source\\opencv2\\core\\opencv_mat.h"
 
 #include <iostream>
 //include opencv code
-#include <opencv2/core.hpp>
-#include <opencv2/highgui.hpp>
+//#include <opencv2/core.hpp>
+//#include <opencv2/highgui.hpp>
+
 
 using namespace cv;
 

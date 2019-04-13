@@ -24,7 +24,7 @@
 extern "C" {
     #include "php.h"
 
-}
+};
 
 #ifdef ZTS
 #include "TSRM.h"

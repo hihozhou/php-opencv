@@ -40,7 +40,7 @@ set(SOURCE_FILES opencv.cc
 
 add_executable(opencv ${SOURCE_FILES})
 
-set(PHP_SOURCE F:/www/php-sdk-binary-tools/phpdev/vc15/x64/php-7.2.12-src)
+set(PHP_SOURCE C:/www/php-sdk-binary-tools/phpdev/vc15/x64/php)
 include_directories(${PHP_SOURCE}/main)
 include_directories(${PHP_SOURCE}/Zend)
 include_directories(${PHP_SOURCE}/sapi)
@@ -48,7 +48,7 @@ include_directories(${PHP_SOURCE}/pear)
 include_directories(${PHP_SOURCE}/TSRM)
 include_directories(${PHP_SOURCE})
 
-set(OpenCV_DIR D:/opencv/build)
+set(OpenCV_DIR C:/opencv/build)
 find_package( OpenCV REQUIRED )#找到opencv源
 target_link_libraries( opencv ${OpenCV_LIBS} )
 

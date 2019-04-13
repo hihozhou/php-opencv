@@ -28,10 +28,10 @@ typedef struct _opencv_video_capture_object{
     VideoCapture *videoCapture;
 }opencv_video_capture_object;
 
-extern void opencv_videoio_init(int module_number){};
+extern void opencv_videoio_init(int module_number);
 
 static inline opencv_video_capture_object* get_video_capture_obj(zend_object *obj) {
     return (opencv_video_capture_object*)((char*)(obj) - XtOffsetOf(opencv_video_capture_object, std));
-};
+}
 
 #endif //PHP_OPENCV_VIDEOIO_H

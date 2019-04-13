@@ -39,28 +39,28 @@ extern zend_class_entry *opencv_rotated_rect_ce;
 
 typedef struct _opencv_point_object{
     zend_object std;
-    Point *point;
+    struct Point *point;
 }opencv_point_object;
 
 typedef struct _opencv_scalar_object{
     zend_object std;
-    Scalar *scalar;
+    struct Scalar *scalar;
 }opencv_scalar_object;
 
 typedef struct _opencv_size_object{
     zend_object std;
-    Size *size;
+    struct Size *size;
 }opencv_size_object;
 
 typedef struct _opencv_rect_object{
     zend_object std;
-    Rect *rect;
+    struct Rect *rect;
 }opencv_rect_object;
 
 
 typedef struct _opencv_rotated_rect_object{
     zend_object std;
-    RotatedRect *rotatedRect;
+    struct RotatedRect *rotatedRect;
 }opencv_rotated_rect_object;
 
 /**

@@ -26,7 +26,7 @@ extern zend_class_entry *opencv_file_storage_ce;
 
 typedef struct _opencv_file_storage_object{
     zend_object std;
-    struct FileStorage *fileStorage;
+    class FileStorage *fileStorage;
 }opencv_file_storage_object;
 
 #define Z_PHP_FILE_STORAGE_OBJ_P(zv)  get_file_storage_obj(Z_OBJ_P(zv))

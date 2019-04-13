@@ -25,7 +25,7 @@ extern zend_class_entry *opencv_video_capture_ce;
 
 typedef struct _opencv_video_capture_object{
     zend_object std;
-    VideoCapture *videoCapture;
+    struct VideoCapture *videoCapture;
 }opencv_video_capture_object;
 
 extern void opencv_videoio_init(int module_number);

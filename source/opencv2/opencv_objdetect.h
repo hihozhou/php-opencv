@@ -25,7 +25,7 @@ extern zend_class_entry *opencv_cascade_classifier_ce;
 
 typedef struct _opencv_cascade_classifier_object{
     zend_object std;
-    CascadeClassifier *cascadeClassifier;
+    struct CascadeClassifier *cascadeClassifier;
 }opencv_cascade_classifier_object;
 
 extern void opencv_objdetect_init(int module_number);

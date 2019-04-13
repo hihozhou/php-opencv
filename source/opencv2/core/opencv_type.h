@@ -69,26 +69,26 @@ typedef struct _opencv_rotated_rect_object{
  */
 static inline opencv_point_object* get_point_obj(zend_object *obj) {
     return (opencv_point_object*)((char*)(obj) - XtOffsetOf(opencv_point_object, std));
-}
+};
 
 
 static inline opencv_scalar_object* get_scalar_obj(zend_object *obj) {
     return (opencv_scalar_object*)((char*)(obj) - XtOffsetOf(opencv_scalar_object, std));
-}
+};
 
 
 static inline opencv_size_object* get_size_obj(zend_object *obj) {
     return (opencv_size_object*)((char*)(obj) - XtOffsetOf(opencv_size_object, std));
-}
+};
 
 
 static inline opencv_rect_object* get_rect_obj(zend_object *obj) {
     return (opencv_rect_object*)((char*)(obj) - XtOffsetOf(opencv_rect_object, std));
-}
+};
 
 static inline opencv_rotated_rect_object* get_rotated_rect_obj(zend_object *obj) {
     return (opencv_rotated_rect_object*)((char*)(obj) - XtOffsetOf(opencv_rotated_rect_object, std));
-}
+};
 
 
 void opencv_size_update_property_by_c_size(zval *z, Size *size);

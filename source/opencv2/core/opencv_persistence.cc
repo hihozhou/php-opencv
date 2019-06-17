@@ -239,8 +239,9 @@ const zend_function_entry opencv_file_storage_methods[] = {
 /* }}} */
 
 zval *opencv_file_storage_read_property(zval *object, zval *member, int type, void **cache_slot, zval *rv){
+ 	 zend_string *str = zval_get_string(member);
 //    std::cout<<"opencv_file_storage_read_property"<<std::endl;
-    return std_object_handlers.read_property(object, member, type, cache_slot, rv);
+    return std_object_handlers.read_property(object, str, type, cache_slot, rv);
 
 }
 

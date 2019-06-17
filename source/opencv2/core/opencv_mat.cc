@@ -32,7 +32,7 @@ zend_class_entry *opencv_mat_ce;
  */
 zend_object* opencv_mat_create_handler(zend_class_entry *type)
 {
-    int size = sizeof(opencv_mat_object) + zend_object_properties_size(type);
+    static_cast<int> size = sizeof(opencv_mat_object) + zend_object_properties_size(type);
     opencv_mat_object *obj = (opencv_mat_object *)ecalloc(1,size);
     memset(obj, 0, size);
     zend_object_std_init(&obj->std, type);

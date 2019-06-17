@@ -124,7 +124,7 @@ void opencv_point_write_property(zval *object, zval *member, zval *value, void *
         obj->point->y=(int)zval_get_long(value);
     }
     zend_string_release(str);//free zend_string not memberName(zend_string->val)
-    std_object_handlers.write_property(object,member,value,cache_slot);
+    std_object_handlers.write_property(object,str,value,cache_slot);
 
 }
 
@@ -347,7 +347,7 @@ void opencv_size_write_property(zval *object, zval *member, zval *value, void **
         obj->size->height=(int)zval_get_long(value);
     }
     zend_string_release(str);//free zend_string not memberName(zend_string->val)
-    std_object_handlers.write_property(object,member,value,cache_slot);
+    std_object_handlers.write_property(object,str,value,cache_slot);
 
 }
 
@@ -542,7 +542,7 @@ void opencv_rect_write_property(zval *object, zval *member, zval *value, void **
         obj->rect->height=(int)zval_get_long(value);
     }
     zend_string_release(str);//free zend_string not memberName(zend_string->val)
-    std_object_handlers.write_property(object,member,value,cache_slot);
+    std_object_handlers.write_property(object,str,value,cache_slot);
 
 }
 
@@ -617,7 +617,7 @@ void opencv_rotated_rect_write_property(zval *object, zval *member, zval *value,
         }
     }
     zend_string_release(str);//free zend_string not memberName(zend_string->val)
-    std_object_handlers.write_property(object,member,value,cache_slot);
+    std_object_handlers.write_property(object,str,value,cache_slot);
 
 }
 

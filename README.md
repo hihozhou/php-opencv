@@ -5,9 +5,6 @@
 [![Build Status](https://travis-ci.org/hihozhou/php-opencv.svg?branch=master)](https://travis-ci.org/hihozhou/php-opencv) [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.0-8892BF.svg)](https://php.net/)
 
 
-> **⚠️⚠️ NO LONGER IN ACTIVE DEVELOPMENT | 项目不再维护 ⚠️⚠️** 
-
->Due to personal scheduling reasons, the project has been suspended for maintenance and it is hoped that the project code will provide useful value.
 
 ## Document
 - [PHP OpenCV Document](https://doc.phpopencv.org)
